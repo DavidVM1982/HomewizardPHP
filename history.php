@@ -37,4 +37,5 @@ echo "</tbody></table></div>";
 $result->free();
 $db->close();
 include "footer.php";
+?>r.php";
 ?>

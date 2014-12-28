@@ -1,10 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Homewizard to SQL</title>
-</head>
-<body>
 <?php
 include "parameters.php";
 /* Sensors */
@@ -47,7 +40,7 @@ if (!$data) {
 			       		$time = $devicehistory['t'];
 						$status = $device['type'].$devicehistory['status'];
 						$sql = "INSERT IGNORE INTO history (`id_sensor`, `time`, `status`) values ($id_sensor, '$time', '$status')";
-						echo $id_sensor.'-'.$time.': '.$status.'<br/>';
+						//echo $id_sensor.'-'.$time.': '.$status.'<br/>';
 						if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
 				    }
 				}
@@ -147,15 +140,6 @@ if (!$datas) {
 	  $sql = "INSERT IGNORE INTO wind (`timestamp`, `wi`, `gu`, `dir`) values ('$time', '$windspeed', '$gust', '$direction') ";
 	  if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
   }
-
-}
-
-
-?>
-</body>
-</html>  }
-
-}
 
 }
 ?>

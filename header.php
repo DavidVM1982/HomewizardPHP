@@ -20,4 +20,5 @@ $actual_page = substr("$_SERVER[REQUEST_URI]", -8);
 if (!isset($_POST['schakel']) && !isset($_POST['set_temp']) && $actual_page=="ndex.php") {print '<a href="javascript:history.go(0)" class="abutton">Home</a>';} else {print '<a href="index.php" class="abutton">Home</a>';}
 if ($actual_page=="tory.php") {print '<a href="javascript:history.go(0)" class="abutton">History</a>';} else {print '<a href="history.php" class="abutton">History</a>';}
 if ($actual_page=="ings.php") {print '<a href="javascript:history.go(0)" class="abutton">Settings</a>';} else {print '<a href="settings.php" class="abutton">Settings</a>';}
+?>;} else {print '<a href="settings.php" class="abutton">Settings</a>';}
 ?>
