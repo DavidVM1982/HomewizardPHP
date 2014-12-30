@@ -24,6 +24,7 @@ PHP 5+ and MySQL 5+
 <b>v20141230</b>
 + Added scenes to home screen
 + Implemented bootstrap CSS for responsive design
++ Moved settings from parameters.php to database
 
 <b>v20141228</b>
 + First Release
