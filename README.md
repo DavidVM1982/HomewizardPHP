@@ -15,7 +15,7 @@ Installation:
 Updating:
 - update database with each update script
 - replace files except parameters.php (look for changes/additions in it)
-- 
+
 Version History:
 v20141228
 - First Release
