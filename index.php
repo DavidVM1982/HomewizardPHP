@@ -198,4 +198,60 @@ value.html(range.attr('value'));
 range.on('input', function(){
     value.html(this.value);
 }); 
+</script>rmometer['hu'].'</td>';
+	print '<td>'.$thermometer['te-'].'</td>';
+	print '<td>'.$thermometer['te-t'].'</td>';
+	print '<td>'.$thermometer['te+'].'</td>';
+	print '<td>'.$thermometer['te+t'].'</td></tr>';
+}
+echo "</table></div>";
+}
+//--RAINMETERS--
+$rainmeters =  $data['response']['rainmeters'];
+if(!empty($rainmeters)) {
+echo "<div class='col-sm-6'><h2>Rain</h2>";
+flush();
+echo "<table width='100%'>";
+
+foreach($rainmeters as $rainmeter){
+	print '<tr><th>Naam</th><th>mm</th><th>3h</th></tr>';
+	print '<tr>';
+	print '<td>'.$rainmeter['name'].'</td>';
+	print '<td>'.$rainmeter['mm'].' mm</td>';
+	print '<td>'.$rainmeter['3h'].' mm</td></tr>';
+}
+echo "</table></div>";
+}
+//--WINDMETERS--
+if(isset($data['response']['windmeters']['0']['ws'])) {
+$windmeters =  $data['response']['windmeters'];
+echo "<div class='col-sm-6'><h2>Wind</h2>";
+flush();
+echo "<table width='100%'>";
+foreach($windmeters as $windmeter){
+	print '<tr><th>Naam</th><th>ws</th><th>gu</th><th>dir</th><th>wc</th><th>te</th><th>ws-</th><th>ws+</th></tr>';
+	print '<tr>';
+	print '<td>'.$windmeter['name'].'</td>';
+	print '<td>'.$windmeter['ws'].' km/u</td>';
+	print '<td>'.$windmeter['gu'].' km/u</td>';
+	print '<td>'.$windmeter['dir'].' °</td>';
+	print '<td>'.$windmeter['wc'].' °C</td>';
+	print '<td>'.$windmeter['te'].' °C</td>';
+	print '<td>'.$windmeter['ws-'].' km/u</td>';
+	print '<td>'.$windmeter['ws+'].' km/u</td></tr>';
+}
+echo "</table></div>";
+}
+}
+include "footer.php";
+?>
+<script language="javascript">
+var range = $('.input-range'),
+    value = $('.range-value');
+    
+value.html(range.attr('value'));
+
+range.on('input', function(){
+    value.html(this.value);
+}); 
 </script>

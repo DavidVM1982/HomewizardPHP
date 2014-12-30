@@ -28,4 +28,11 @@ $result->free();
 $db->close();
 
 include "footer.php";
+?>}
+echo "</tbody></table></div>";
+
+$result->free();
+$db->close();
+
+include "footer.php";
 ?>

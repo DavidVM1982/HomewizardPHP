@@ -21,4 +21,12 @@ if (!isset($_POST['schakel']) && !isset($_POST['set_temp']) && $actual_page=="nd
 if ($actual_page=="tory.php") {print '<a href="javascript:history.go(0)" class="abutton">History</a>';} else {print '<a href="history.php" class="abutton">History</a>';}
 if ($actual_page=="ings.php") {print '<a href="javascript:history.go(0)" class="abutton">Settings</a>';} else {print '<a href="settings.php" class="abutton">Settings</a>';}
 ?>;} else {print '<a href="settings.php" class="abutton">Settings</a>';}
+?>ass="btn btn-default" role="button">History</a>';} else {print '<a href="history.php" class="btn btn-default" role="button">History</a>';}
+print '<a href="temp.php" class="btn btn-default" role="button">Temperature</a>
+<a href="rain.php" class="btn btn-default" role="button">Rain</a>
+<a href="wind.php" class="btn btn-default" role="button">Wind</a>';
+if ($actual_page=="ings.php") {print '<a href="javascript:history.go(0)" class="btn btn-default" role="button">Settings</a>';} else {print '<a href="settings.php" class="btn btn-default" role="button">Settings</a>';}
+print '</div>';
 ?>
+</div>
+<div class="row">

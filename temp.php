@@ -27,4 +27,10 @@ $result->free();
 $db->close();
 echo "</tbody></table></div>";
 include "footer.php";
+?>r>';
+}
+$result->free();
+$db->close();
+echo "</tbody></table></div></div></div>";
+include "footer.php";
 ?>
