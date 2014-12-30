@@ -16,7 +16,7 @@ Updating:
 - update database with each update script
 - replace files except parameters.php (look for changes/additions in it)
 
-Version History:
+Version History:<br/>
 v20141228
 - First Release
 - View and switch switches and radiator valves
