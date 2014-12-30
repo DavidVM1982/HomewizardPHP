@@ -16,8 +16,9 @@ Updating:
 - update database with each update script in /database
 - replace files except parameters.php (look for changes/additions in it)
 
-Version History:<br/>
-v20141228
+Version History: (reversed order)<br/>
+
+<b>v20141228</b>
 - First Release
 - View and switch switches and radiator valves
 - View live status of sensors
