@@ -1,6 +1,6 @@
 HomewizardPHP
 =============
-Homewizard API for storing and retrieving data of the Homewizard (http://www.homewizard.be).
+Homewizard API for storing and retrieving data of the Homewizard (http://www.homewizard.be).<br/>
 See version history below for possibilities. 
 
 Requirements:
