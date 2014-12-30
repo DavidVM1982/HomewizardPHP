@@ -13,7 +13,7 @@ Installation:
 - Create cron_job for history_to_sql.php for automatic import of data.
 
 Updating:
-- update database with each update script
+- update database with each update script in /database
 - replace files except parameters.php (look for changes/additions in it)
 
 Version History:<br/>
