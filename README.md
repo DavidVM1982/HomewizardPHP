@@ -17,14 +17,18 @@ PHP 5+ and MySQL 5+
 - replace files except parameters.php (look for changes/additions in it)
 
 <b>Version History: (reversed order)</b><br/>
++ New feature
+- Removed feature
+! Update/bugfix
+
 <b>v20141230</b>
-- Added scenes to home screen
-- Implemented bootstrap CSS for responsive design
++ Added scenes to home screen
++ Implemented bootstrap CSS for responsive design
 
 <b>v20141228</b>
-- First Release
-- View and switch switches and radiator valves
-- View live status of sensors
-- View history of sensors
-- View live status of temperature, rain and windmeters
-- View history of temperature, rain and windmeters
++ First Release
++ View and switch switches and radiator valves
++ View live status of sensors
++ View history of sensors
++ View live status of temperature, rain and windmeters
++ View history of temperature, rain and windmeters
