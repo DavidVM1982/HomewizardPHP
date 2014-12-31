@@ -1,5 +1,5 @@
 <?php include "header.php"; ?>
-<div class="history">
+<div class="history"><div class="span_3"><br/><br/>
 <form method="post" name="filter" id="filter">
 <select name="filter">
 <option <?php if(isset($_POST['filter'])) { if($_POST['filter']=='All') print 'selected';} ?>>All
@@ -20,7 +20,7 @@ if(isset($_POST['filter'])) {
 if($authenticated==true) {
 	$sql .= " ORDER BY h.time DESC LIMIT 0,100";
 	} else {
-		print "<br/>History shows 20 oldest events<br/>to non authenticated users<br/>The owner of the installation<br/>views 100 most recent";
+		print "<br/><p class='error'>History shows 20 oldest events when not logged in</p>";
 		$sql .= " ORDER BY h.time ASC LIMIT 0,20";
 	}
 
@@ -33,9 +33,8 @@ while($row = $result->fetch_assoc()){
 	<td>'.$row['omschrijving'].'</td>
 	</tr>';
 }
-echo "</tbody></table></div>";
+echo "</tbody></table></div></div>";
 $result->free();
 $db->close();
 include "footer.php";
-?>r.php";
 ?>
