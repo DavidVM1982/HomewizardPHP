@@ -21,6 +21,11 @@ PHP 5+ and MySQL 5+
  -- Removed feature<br/>
  !! Update/bugfix<br/>
 
+<b>v20141231</b><br/>
+-- removed bootstrap CSS and created own responsive design
+++ Much nicer interface
+!! removed everything from parameters.php. Now only contains databaseconnection. 
+
 <b>v20141230</b><br/>
 ++ Added scenes to home screen<br/>
 ++ Implemented bootstrap CSS for responsive design<br/>
