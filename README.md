@@ -22,6 +22,9 @@ PHP 5+ and MySQL 5+
  !! Update/bugfix<br/>
 
 <b>v20141231</b><br/>
+!! Fixed issue in radiotor optionlist only showing values from list. And form submits on change instead of extra button.<br/>
+
+<b>v20141231</b><br/>
 -- removed bootstrap CSS and created own responsive design<br/>
 ++ Much nicer interface<br/>
 !! removed everything from parameters.php. Now only contains databaseconnection.<br/>
