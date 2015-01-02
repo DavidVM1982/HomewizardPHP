@@ -21,7 +21,7 @@ PHP 5+ and MySQL 5+
  -- Removed feature<br/>
  !! Update/bugfix<br/>
 
-<b>v20141231</b><br/>
+<b>v20150102</b><br/>
 !! Fixed issue in radiotor optionlist only showing values from list. And form submits on change instead of extra button.<br/>
 
 <b>v20141231</b><br/>
