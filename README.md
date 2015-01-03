@@ -25,6 +25,7 @@ PHP 5+ and MySQL 5+
 ++ DIVS for sensors, temperature, rain and wind clickable links.<br/>
 ++ Switches and sensors in database to sync favorites, grouped display etc.<br/>
 ++ Ability to force update/import data to history.<br/>
+++ Added support for dimmers.<br/>
 
 <b>v20150102</b><br/>
 !! Fixed issue in radiotor optionlist only showing values from list. And form submits on change instead of extra button.<br/>
