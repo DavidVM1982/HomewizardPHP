@@ -28,7 +28,7 @@ PHP 5+ and MySQL 5+
 ++ Added support for dimmers.<br/>
 
 <b>v20150102</b><br/>
-!! Fixed issue in radiotor optionlist only showing values from list. And form submits on change instead of extra button.<br/>
+!! Fixed issue in radiator optionlist only showing values from list. And form submits on change instead of extra button.<br/>
 
 <b>v20141231</b><br/>
 -- removed bootstrap CSS and created own responsive design<br/>
