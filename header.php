@@ -1,4 +1,9 @@
-<?php include "parameters.php"; 
+<?php 
+$time = microtime();
+$time = explode(' ', $time);
+$time = $time[1] + $time[0];
+$start = $time;
+include "parameters.php"; 
 $sql="select variable, value from settings order by variable asc";
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	$acceptedips = array();
@@ -32,31 +37,32 @@ if($authenticated==true && $debug=='yes') {
 <meta http-equiv="expires" content="Tue, 01 Jan 2014 1:00:00 GMT" />
 <meta http-equiv="pragma" content="no-cache" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<script language="javascript"> 
+function toggle(showHideDiv, switchTextDiv) {
+	var ele = document.getElementById(showHideDiv);
+	var text = document.getElementById(switchTextDiv);
+	if(ele.style.display == "block") {
+    		ele.style.display = "none";
+		text.innerHTML = "show";
+  	}
+	else {
+		ele.style.display = "block";
+		text.innerHTML = "hide";
+	}
+} 
+</script>
 <title>HomewizardPHP</title>
 <link href="css/index.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
-<!-- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
-<div class="row">
 
 <?php 
 $actual_page = "ndex.php";
-if(isset($_SERVER["REQUEST_URI"])) $actual_page = substr('$_SERVER["REQUEST_URI"]', -8);
-print '<div class="abutton-group">';
-if (!isset($_POST['schakel']) && !isset($_POST['set_temp']) && $actual_page=="ndex.php") {print '
-<a href="javascript:history.go(0)" class="abutton">Home</a>';} else {print '
-<a href="index.php" class="abutton">Home</a>';}
-if ($actual_page=="tory.php") {print '
-<a href="javascript:history.go(0)" class="abutton">History</a>';} else {print '
-<a href="history.php" class="abutton">History</a>';}
-print '
-<a href="temp.php" class="abutton">Temperature</a>
-<a href="rain.php" class="abutton">Rain</a>
-<a href="wind.php" class="abutton">Wind</a>';
-if ($actual_page=="ings.php") {print '
-<a href="javascript:history.go(0)" class="abutton">Settings</a>';} else {print '
-<a href="settings.php" class="abutton">Settings</a>';}
+if(isset($_SERVER['PHP_SELF'])) $actual_page = substr($_SERVER['PHP_SELF'], -9);
+print '<div class="row">';
+
+if ($actual_page!="index.php") {
+	print '<a href="index.php" class="abutton">Home</a>';
+}
 print '</div>';
 ?>
-</div>

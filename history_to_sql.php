@@ -1,5 +1,28 @@
 <?php
 include "parameters.php";
+$sql="select variable, value from settings order by variable asc";
+	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+	$acceptedips = array();
+	while($row = $result->fetch_assoc()){
+		if (strpos($row['variable'], 'acceptedip') === 0) { 
+			array_push($acceptedips, $row['value']);
+		} else {
+			$$row['variable'] = $row['value'];
+		}
+	}
+	$result->free();
+$authenticated = false;
+if(in_array($_SERVER['REMOTE_ADDR'], $acceptedips)) $authenticated = true; 
+session_start();
+if(isset($_SESSION['authenticated'])) {
+	if ($_SESSION['authenticated'] == true) {
+		$authenticated = true;
+	}
+}
+if($authenticated==true && $debug=='yes') {
+	error_reporting(E_ALL); 
+	ini_set("display_errors", "on");
+}
 /* Sensors */
 $data = null;
 try {
@@ -11,44 +34,57 @@ try {
 if (!$data) {
   echo "No information available...";
 } else {
-  echo 'Importing Sensors<br/>';
-  $types = array_keys($data['response']);
-  foreach ($types as $type) {
-    $devices = $data['response'][$type];
-    if (count($devices) > 0) { 
-      if($type=="kakusensors") {
-		    foreach($devices as $device){ 
-        		//print_r($device);
-				$id_sensor = $device['id'];
-				$namedevice = $device['name'];
-				$type = $device['type'];
-				$sql = "INSERT INTO sensors (`id_sensor`, `name`, `type`) values ($id_sensor, '$namedevice', '$type') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type'";
-				echo $id_sensor.'-'.$namedevice.': '.$type.'<br/>';
-				if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
-				$datahistory = null;
-				try {
-				  $jsonhistory = file_get_contents($jsonurl.'kks/get/'.$id_sensor.'/log');  
-				  $datahistory = json_decode($jsonhistory,true); 
-				} catch (Exception $e) {  
-				  echo $e->getMessage();
+	$types = array_keys($data['response']);
+	foreach ($types as $type) {
+		$devices = $data['response'][$type];
+		if (count($devices) > 0) { 
+			if($type=="kakusensors") {
+				foreach($devices as $device){ 
+					//print_r($device);
+					$id_sensor = $device['id'];
+					$namedevice = $device['name'];
+					$favorite = $device['favorite'];
+					$type = $device['type'];
+					$sql = "INSERT INTO sensors (`id_sensor`, `name`, `type`, `favorite`) values ($id_sensor, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type', `favorite`= '$favorite'";
+					echo $id_sensor.'-'.$namedevice.': '.$type.'<br/>';
+					if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
+					$datahistory = null;
+					try {
+						$jsonhistory = file_get_contents($jsonurl.'kks/get/'.$id_sensor.'/log');  
+						$datahistory = json_decode($jsonhistory,true); 
+					} catch (Exception $e) {  
+						echo $e->getMessage();
+					}
+					if (!$datahistory) {
+						echo "No information available...";
+					} else {
+				    	$deviceshistory = $datahistory['response']; 
+						foreach($deviceshistory as $devicehistory){  
+			       			$time = $devicehistory['t'];
+							$status = $device['type'].$devicehistory['status'];
+							$sql = "INSERT IGNORE INTO history (`id_sensor`, `time`, `status`) values ($id_sensor, '$time', '$status')";
+							//echo $id_sensor.'-'.$time.': '.$status.'<br/>';
+							if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
+				    	}
+					}
+					echo '<hr>';
 				}
-				if (!$datahistory) {
-				  echo "No information available...";
-				} else {
-				    $deviceshistory = $datahistory['response']; 
-					foreach($deviceshistory as $devicehistory){  
-			       		$time = $devicehistory['t'];
-						$status = $device['type'].$devicehistory['status'];
-						$sql = "INSERT IGNORE INTO history (`id_sensor`, `time`, `status`) values ($id_sensor, '$time', '$status')";
-						//echo $id_sensor.'-'.$time.': '.$status.'<br/>';
-						if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
-				    }
+			}
+			if($type=="switches") {
+				foreach($devices as $device){ 
+					//print_r($device);
+					$id_switch = $device['id'];
+					$namedevice = $device['name'];
+					$favorite = $device['favorite'];
+					$type = $device['type'];
+					$sql = "INSERT INTO switches (`id_switch`, `name`, `type`, `favorite`) values ($id_switch, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type', `favorite`= '$favorite'";
+					echo $id_switch.'-'.$namedevice.': '.$type.'<br/>';
+					if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
+					echo '<hr>';
 				}
-				echo '<hr>';
 			}
 		}
 	}
-}
 }
 
 /* Temperature */
