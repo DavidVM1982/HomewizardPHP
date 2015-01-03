@@ -22,8 +22,8 @@ PHP 5+ and MySQL 5+
  !! Update/bugfix<br/>
 
 <b>v20150103</b> coming soon<br/>
-++ DIVS for sensors, temperature, rain and wind clickable links. 
-++ Switches in database to sync favorites. 
+++ DIVS for sensors, temperature, rain and wind clickable links.<br/>
+++ Switches in database to sync favorites.<br/>
 
 <b>v20150102</b><br/>
 !! Fixed issue in radiotor optionlist only showing values from list. And form submits on change instead of extra button.<br/>
