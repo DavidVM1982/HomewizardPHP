@@ -21,7 +21,7 @@ PHP 5+ and MySQL 5+
  -- Removed feature<br/>
  !! Update/bugfix<br/>
 
-<b>v20150103</b><br/>
+<b>v20150103</b> coming soon<br/>
 ++ DIVS for sensors, temperature, rain and wind clickable links. 
 ++ Switches in database to sync favorites. 
 
