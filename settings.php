@@ -7,13 +7,27 @@ $showupdatesensors  = false;
 $showeditswitches = false;
 $showeditsensors = false;
 
-if(isset($_POST['parameters'])) {$showmenu=false;$showparameters = true;}
-if(isset($_POST['updatesensors'])) {$showmenu=false;$showupdatesensors = true;}
-if(isset($_POST['editswitches'])) {$showmenu=false;$showeditswitches = true;}
-if(isset($_POST['editsensors'])) {$showmenu=false;$showeditsensors = true;}
+if(isset($_POST['parameters'])) $showparameters = true;
+if(isset($_POST['updatesensors'])) $showupdatesensors = true;
+if(isset($_POST['editswitches'])) $showeditswitches = true;
+if(isset($_POST['editsensors'])) $showeditsensors = true;
 
 if(isset($_POST['logout'])) {session_destroy();$authenticated = false;header("location:settings.php");exit();}
 
+if(isset($_POST['deleteswitch'])) { 
+	$id_switch=($_POST['id_switch']);
+	$sql="delete from switches where id_switch = $id_switch";
+	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
+	$showmenu=false;
+	$showeditswitches=true;
+}
+if(isset($_POST['deletesensor'])) { 
+	$id_sensor=($_POST['id_sensor']);
+	$sql="delete from sensors where id_sensor = $id_sensor";
+	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
+	$showmenu=false;
+	$showeditsensors=true;
+}
 if(isset($_POST['editswitch'])) { 
 	$id_switch=($_POST['id_switch']);
 	$volgorde=($_POST['volgorde']);
@@ -70,6 +84,7 @@ if($showmenu==true) {
 	<form method="post"><input type="submit" name="editsensors" value="Edit sensors" class="abutton"/></form><br/>
 	<form method="post"><input type="submit" name="editswitches" value="Edit switches" class="abutton"/></form><br/>
 	<form method="post"><input type="submit" name="updateswitches" value="Update switches, sensors, history" class="abutton"/></form><br/>
+	</form><br/>
 	';
 }
 if($showparameters==true) {
@@ -87,7 +102,7 @@ if($showeditswitches==true) {
 	$sql="select id_switch, name, type, favorite, volgorde from switches order by type asc, volgorde asc, favorite desc, name asc";
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	while($row = $result->fetch_assoc()){
-		echo '<form method="post"><tr><td>'.$row['id_switch'].'</td><td>'.$row['name'].'</td><td>'.$row['type'].'</td><td>'.$row['favorite'].'</td><td><input type="hidden" name="id_switch" id="id_switch" value="'.$row['id_switch'].'"/><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/></td><td><input type="submit" name="editswitch" value="update" class="abutton"></td></tr></form>';
+		echo '<form method="post"><tr><td>'.$row['id_switch'].'</td><td>'.$row['name'].'</td><td>'.$row['type'].'</td><td>'.$row['favorite'].'</td><td><input type="hidden" name="id_switch" id="id_switch" value="'.$row['id_switch'].'"/><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/></td><td><input type="submit" name="editswitch" value="Update" class="abutton"><input type="submit" name="deleteswitch" value="Delete" class="abutton"></td></tr></form>';
 	}
 	$result->free();
 	echo '</tbody></table></center>';
@@ -97,7 +112,7 @@ if($showeditsensors==true) {
 	$sql="select id_sensor, name, type, favorite, volgorde from sensors order by volgorde asc, favorite desc, name asc";
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	while($row = $result->fetch_assoc()){
-		echo '<form method="post"><tr><td>'.$row['id_sensor'].'</td><td>'.$row['name'].'</td><td>'.$row['type'].'</td><td>'.$row['favorite'].'</td><td><input type="hidden" name="id_sensor" id="id_sensor" value="'.$row['id_sensor'].'"/><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/></td><td><input type="submit" name="editsensor" value="update" class="abutton"></td></tr></form>';
+		echo '<form method="post"><tr><td>'.$row['id_sensor'].'</td><td>'.$row['name'].'</td><td>'.$row['type'].'</td><td>'.$row['favorite'].'</td><td><input type="hidden" name="id_sensor" id="id_sensor" value="'.$row['id_sensor'].'"/><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/></td><td><input type="submit" name="editsensor" value="Update" class="abutton"><input type="submit" name="deletesensor" value="Delete" class="abutton"></td></tr></form>';
 	}
 	$result->free();
 	echo '</tbody></table></center>';
@@ -108,6 +123,19 @@ if($showmenu==false) {
 	print '<br/><br/><br/><form method="post"><input type="submit" name="settings" value="settings" class="abutton"/></form>';
 } else {
 	print '<br/><br/><br/><form method="post"><input type="submit" name="logout" value="logout" class="abutton"/></form>';
+}
+if($showparameters==true) {
+print '</div><div class="row"><div class="span_3"><h2>Explanation of parameters</h2>
+<table align="center"><tbody>
+<tr><td valign="top"><b>acceptedip</b></td><td>&nbsp;</td><td align="left">Should be localhost to allow automatic history_to_sql cron job</td></tr>
+<tr><td valign="top"><b>acceptedip2</b></td><td>&nbsp;</td><td align="left">IP adres of home, to bypass login user/passw.<br/>You may add as many \'acceptedip3\', 4,... as you wish.</td></tr>
+<tr><td valign="top"><b>debug</b></td><td>&nbsp;</td><td align="left">Yes: show json reply, post data, php faults</td></tr>
+<tr><td valign="top"><b>detailscenes</b></td><td>&nbsp;</td><td align="left">Yes: show details of scenes<br/>No: Don\'t show details of scenes<br/>Optional: details are queried but hidden until name of scene is clicked.<br/><i>Warning: Details could be slow if many scenes.</i></td></tr>
+<tr><td valign="top"><b>jsonurl</b></td><td>&nbsp;</td><td align="left">Full url of the homewizard with a trailing slash.<br/>Ex: http://adres:port/password/</td></tr>
+<tr><td valign="top"><b>secretpassword</b></td><td>&nbsp;</td><td align="left">Login password</td></tr>
+<tr><td valign="top"><b>secretusername</b></td><td>&nbsp;</td><td align="left">Login username</td></tr>
+</tbody></table>
+</div></div>';	
 }
 } else {
 	print '<br/><br/>Log in:<br/><br/>';

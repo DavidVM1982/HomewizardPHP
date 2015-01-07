@@ -67,8 +67,8 @@ while($row = $result->fetch_assoc()){
 	$group = $row['volgorde'];
 	if($data['response']['switches'][$row['id_switch']]['status']=="on") {$switchon = "off";} else {$switchon = "on";}
 	print '
-	<tr ><td align="right" '.$tdstyle.'>'.$data['response']['switches'][$row['id_switch']]['name'].'</td>
-	<td width="70px" '.$tdstyle.' ><form method="post" action="#"><input type="hidden" name="switch" value="'.$row['id_switch'].'"/><input type="hidden" name="schakel" value="'.$switchon.'"/>';
+	<tr ><form method="post" action="#"><td align="right" '.$tdstyle.'>'.$data['response']['switches'][$row['id_switch']]['name'].'</td>
+	<td width="70px" '.$tdstyle.' ><input type="hidden" name="switch" value="'.$row['id_switch'].'"/><input type="hidden" name="schakel" value="'.$switchon.'"/>';
 	if($row['type']=='switch') {
 		print '
 		<div class="slider">	
@@ -92,7 +92,7 @@ while($row = $result->fetch_assoc()){
 		<option>100</option>
 	</select>';
 	}
-	print '</form></td></tr>';
+	print '</td></form></tr>';
 }
 $result->free();
 echo "</tbody></table></div>";
@@ -104,40 +104,47 @@ if(!empty($scenes)) {
 <div class='span_1'><div onclick='window.location="index.php"'><h2>Scenes</h2></div>
 <?php
 foreach($scenes as $scene){
-	echo '<table width="100%"><thead><tr><th colspan="2">'.$scene['name'].'</th>
+	echo '<table width="100%"><thead><tr><th colspan="2">';
+	if($detailscenes=='optional') {print '<a href="#" onclick="toggle_visibility(\'scene'.$scene['id'].'\');" style="text-decoration:none">'.$scene['name'].'</a>';} else {print $scene['name'];}
+	print '</th>
 	<th width="50px"><form method="post" action="#"><input type="hidden" name="scene" value="'.$scene['id'].'"/><input type="hidden" name="schakelscene" value="on"/><input type="submit" value="ON" class="abutton"/></form></th>
 	<th width="50px"><form method="post" action="#"><input type="hidden" name="scene" value="'.$scene['id'].'"/><input type="hidden" name="schakelscene" value="off"/><input type="submit" value="OFF" class="abutton"/></form></th>
-	</tr></thead><tbody>';
-	$datascene = null;
-	$datascenes = null;
-	try {
-		$jsonscene = file_get_contents($jsonurl.'gp/get/'.$scene['id']);
-		$datascenes = json_decode($jsonscene,true);
-	} catch (Exception $e) {
-		echo $e->getMessage();
-	}
-	if (!$datascenes) {
-		echo "No information available...";
-	} else {
-		foreach($datascenes['response'] as $datascene) {
-		print '<tr><td align="right" width="60px">'.$datascene['type'].'&nbsp;&nbsp;</td><td align="left">&nbsp;'.$datascene['name'].'</td><td>'.$datascene['onstatus'].'</td><td>'.$datascene['offstatus'].'</td></tr>';
+	</tr></thead>';
+	if(($detailscenes=='yes') || ($detailscenes=='optional')) {
+		if($detailscenes=='optional') {print '<tbody id="scene'.$scene['id'].'" style="display:none">';} else {print '<tbody>';}
+		$datascene = null;
+		$datascenes = null;
+		try {
+			$jsonscene = file_get_contents($jsonurl.'gp/get/'.$scene['id']);
+			$datascenes = json_decode($jsonscene,true);
+			if($debug=='yes') print_r($datascenes);
+		} catch (Exception $e) {
+			echo $e->getMessage();
 		}
+		if (!$datascenes) {
+			echo "No information available...";
+		} else {
+			foreach($datascenes['response'] as $datascene) {
+			print '<tr><td align="right" width="60px">'.$datascene['type'].'&nbsp;&nbsp;</td><td align="left">&nbsp;'.$datascene['name'].'</td><td>'.$datascene['onstatus'].'</td><td>'.$datascene['offstatus'].'</td></tr>';
+			}
+		}
+		echo '</tbody>';
 	}
-	echo '</tbody></table>';
+	print '</table>';
 }
 echo "</div>";
 }
 
 //---RADIATORS---
-if(!empty($switches)) {
 $sql="select id_switch, volgorde from switches where type like 'radiator' order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
-$group = 0;
+if($result->num_rows>0) {
+	$group = 0;
 ?>
 <div class='span_1'><div onclick="window.location='index.php'"><h2>Radiators</h2></div>
 <?php
 flush();
-echo "<table align='center'><tbody>";
+echo '<table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$tdstyle = '';
 	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black"';
@@ -262,4 +269,18 @@ echo "</table></div></div>";
 }
 }
 $db->close();
+?>
+<script type="text/javascript">
+<!--
+    function toggle_visibility(id) {
+       var e = document.getElementById(id);
+       if(e.style.display == 'inherit')
+          e.style.display = 'none';
+       else
+          e.style.display = 'inherit';
+    }
+//-->
+</script>
+<tbody style="visibility:collapse">
+<?php
 include "footer.php";?>
