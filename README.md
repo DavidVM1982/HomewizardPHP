@@ -22,6 +22,10 @@ PHP 5+ and MySQL 5+
  !! Update/bugfix<br/>
 
 <b>v20150103</b><br/>
+!! Order in database connection within parameters.php
+++ Details of scenes yes, no, optional in settings. 
+
+<b>v20150103</b><br/>
 ++ DIVS for sensors, temperature, rain and wind clickable links.<br/>
 ++ Switches and sensors in database to sync favorites, grouped display etc.<br/>
 ++ Ability to force update/import data to history.<br/>
