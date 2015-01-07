@@ -26,7 +26,7 @@ PHP 5+ and MySQL 5+
 ++ Details of scenes yes, no, optional in settings. 
 
 <b>v20150103</b><br/>
-++ DIVS for sensors, temperature, rain and wind clickable links.<br/>
+++ DIVS for sensors, temperature, rain and wind clickable links. Settings are hidden behind the footer.<br/>
 ++ Switches and sensors in database to sync favorites, grouped display etc.<br/>
 ++ Ability to force update/import data to history.<br/>
 ++ Added support for dimmers.<br/>
