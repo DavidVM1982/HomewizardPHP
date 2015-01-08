@@ -4,6 +4,8 @@ $time = explode(' ', $time);
 $time = $time[1] + $time[0];
 $start = $time;
 include "parameters.php"; 
+setlocale(LC_ALL,'nl_NL.UTF-8');
+putenv( "PHP_TZ=Europe/Amterdam" );
 $sql="select variable, value from settings order by variable asc";
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	$acceptedips = array();

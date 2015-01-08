@@ -13,7 +13,7 @@ $sql="select variable, value from settings order by variable asc";
 	$result->free();
 $authenticated = false;
 if(in_array($_SERVER['REMOTE_ADDR'], $acceptedips)) $authenticated = true; 
-session_start();
+//session_start();
 if(isset($_SESSION['authenticated'])) {
 	if ($_SESSION['authenticated'] == true) {
 		$authenticated = true;

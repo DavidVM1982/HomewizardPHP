@@ -37,12 +37,12 @@ if($authenticated==true) {
 	}
 
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
-echo '<table id="table" align="center"><thead><tr><th>Time</th><th>Sensor</th><th>Status</th></tr></thead><tbody>';
+echo '<table id="table" align="center"><thead><tr><th>Tijd</th><th>Sensor</th><th>Status</th></tr></thead><tbody>';
 while($row = $result->fetch_assoc()){
 	echo '<tr>
-	<td width="120px" align="right">'.date('D d/m H:i', strtotime($row['time'])).'&nbsp;</td>
-	<td>'.$row['name'].'</td>
-	<td>'.$row['omschrijving'].'</td>
+	<td width="120px" align="right">'.strftime("%a %e %b %H:%M",strtotime($row['time'])).'&nbsp;</td>
+	<td>&nbsp;'.$row['name'].'&nbsp;</td>
+	<td>&nbsp;'.$row['omschrijving'].'</td>
 	</tr>';
 }
 echo "</tbody></table></div></div>";
