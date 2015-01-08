@@ -30,7 +30,7 @@ INSERT IGNORE INTO `settings` (`variable`, `value`) VALUES
 ('debug', 'no'),
 ('detailscenes', 'no'),
 ('jsonurl', 'http://addres:port/password/'),
-('secretpassword', '1598'),
+('secretpassword', '5678'),
 ('secretusername', '1234');
 
 CREATE TABLE IF NOT EXISTS `statusses` (
