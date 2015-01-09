@@ -26,7 +26,5 @@ while($row = $result->fetch_assoc()){
 echo "</tbody></table></div></div>";
 
 $result->free();
-$db->close();
-
 include "footer.php";
 ?>

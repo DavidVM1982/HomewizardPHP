@@ -61,10 +61,10 @@ function toggle(showHideDiv, switchTextDiv) {
 <?php 
 $actual_page = "ndex.php";
 if(isset($_SERVER['PHP_SELF'])) $actual_page = substr($_SERVER['PHP_SELF'], -9);
-print '<div class="row">';
+print '<section class="row">';
 
 if ($actual_page!="index.php") {
 	print '<a href="index.php" class="abutton">Home</a>';
 }
-print '</div>';
+print '</section>';
 ?>

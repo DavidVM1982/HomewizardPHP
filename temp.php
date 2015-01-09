@@ -27,7 +27,6 @@ while($row = $result->fetch_assoc()){
 	</tr>';
 }
 $result->free();
-$db->close();
 echo "</tbody></table></div></div></div>";
 include "footer.php";
 ?>

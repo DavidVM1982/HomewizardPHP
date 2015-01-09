@@ -1,10 +1,10 @@
-html{min-height:100%;position:relative}
-body {-webkit-user-select:none;cursor:default;font-size:12px;font-family:"Lucida Sans","Verdana",Arial,Helvetica,sans-serif;line-height:10px;font-weight:200;padding:0px;text-align:center;margin:0 auto;width:100%;max-width:1200px;height: 100%;min-height:640px;color:#444; background-color:#444;
+html{min-height:100%;}
+body {-webkit-user-select:none;cursor:default;font-size:12px;font-family:"Lucida Sans","Verdana",Arial,Helvetica,sans-serif;line-height:10px;font-weight:200;padding:0px;text-align:center;margin:0 auto;width:100%;height: 100%;min-height:640px;*/color:#444; background-color:#444;
 background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#444) );
 background: -moz-linear-gradient(-90deg, #ccc, #444);
 filter:  progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ccc', endColorstr='#444'); background-repeat: no-repeat;background-attachment: fixed;} 
 
-.row {clear:both; padding-bottom:6px;z-index:1;}
+.row {/*clear:both; */padding-bottom:6px;}
 .footer {clear:both; padding-top:40px; padding-bottom:40px; width:310px; margin:0 auto; margin-top:40px}
 .history {width:310px; margin:0 auto;}
 p.error {line-height:20px; color:#F00; }
@@ -18,17 +18,17 @@ a:hover {text-decoration:underline;color:#444}
 a:active {text-decoration:underline;color:#444}
 
 .abutton {background: #cacaca;background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#aaa) );background: -moz-linear-gradient(-90deg, #fff, #aaa);filter:  progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#fff', endColorstr='#aaa');border:0px solid #aaa;display:inline-block;padding:9px 0px; text-decoration:none; margin:0; width:20%; min-width:52px; box-shadow:0px 0px 0px 1px #999 inset;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;}
-
+.abuttonsomfy {border:0px solid #f00;padding:0px 0px; text-decoration:none; margin:0; width:150px; font-size:0px;}
 .abutton:hover {text-decoration:none !important;}
 .abuttonhistory{width:150px;}
 select.abutton {height:31px; padding-left:20px; margin-bottom:8px;-webkit-appearance: none;-moz-appearance: none;appearance: none;text-indent:0.01px; text-overflow:'';-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;}
 table{ text-align:center;}
 table, td{padding:0px 0px 0px 0px;font: 14px/26px Arial, sans-serif;}
 
-.span_3 {width:100%;min-width:254px;float:left;border:1px solid #ccc;background:#cacaca;background:-webkit-gradient(linear,left top,left bottom,from(#fafafa),to(#cacaca));background:-moz-linear-gradient(-90deg,#fafafa,#cacaca);filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#fafafa',endColorstr='#cacaca');padding-bottom:20px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px;margin:0.2%;overflow: auto; z-index:2;}
-.span_2 {width: 49%;min-width:254px;float:left;border:1px solid #ccc;background:#cacaca;background:-webkit-gradient(linear,left top,left bottom,from(#fafafa), to(#cacaca));background:-moz-linear-gradient(-90deg,#fafafa,#cacaca);filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#fafafa',endColorstr='#cacaca');padding-bottom:20px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px;margin:0.2%;overflow: auto;z-index:2;}
-.span_1 {width: 32.7%;min-width:254px;float:left;border:1px solid #ccc;background: #cacaca;background: -webkit-gradient(linear, left top, left bottom, from(#fafafa), to(#cacaca) );background: -moz-linear-gradient(-90deg, #fafafa, #cacaca);filter:  progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#fafafa',endColorstr='#cacaca');padding-bottom:20px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px;margin:0.2%;overflow: auto; z-index:2}
-@media only screen and (max-width: 847px) {
+.span_3 {width:100%;min-width:254px;display: inline-block;border:1px solid #ccc;background:#cacaca;background:-webkit-gradient(linear,left top,left bottom,from(#fafafa),to(#cacaca));background:-moz-linear-gradient(-90deg,#fafafa,#cacaca);filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#fafafa',endColorstr='#cacaca');padding-bottom:20px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px;margin:0.2%;overflow: auto; z-index:2;}
+.span_2 {width: 49%;min-width:254px;display: inline-block;;border:1px solid #ccc;background:#cacaca;background:-webkit-gradient(linear,left top,left bottom,from(#fafafa), to(#cacaca));background:-moz-linear-gradient(-90deg,#fafafa,#cacaca);filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#fafafa',endColorstr='#cacaca');padding-bottom:20px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px;margin:0.2%;overflow: auto;z-index:2;}
+.span_1 {width: 32.7%;min-width:254px; max-width:350px;display: inline-block;border:1px solid #ccc;background: #cacaca;background: -webkit-gradient(linear, left top, left bottom, from(#fafafa), to(#cacaca) );background: -moz-linear-gradient(-90deg, #fafafa, #cacaca);filter:  progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#fafafa',endColorstr='#cacaca');padding-bottom:20px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px;margin:0.2%;overflow: auto; z-index:2}
+/*@media only screen and (max-width: 847px) {
 .span_1{margin:0;}
 }
 @media only screen and (max-width: 767px) {
@@ -38,10 +38,54 @@ select.abutton{min-width:50px; padding-left:18px}
 .span_2 {width: 100%;}
 .span_1 {width: 100%;}
 }
-
+*/
 input[type=checkbox] {visibility: hidden;}
 .slider {width: 80px;height: 32px;background: #888;margin: 8px auto;position: relative;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;}
 .slider:after {content: 'UIT';font: 12px/26px Arial, sans-serif;color: #666;position: absolute;top: 3px;right: 10px;z-index: 0;font-weight: bold;}
 .slider:before {content: 'AAN';font: 12px/26px Arial, sans-serif;color: #fff;position: absolute;top: 3px;left: 10px;z-index: 0;font-weight: bold;}
 .slider label {display: block;width: 34px;height: 25px;cursor: pointer;position: absolute;top: 3px;left: 3px;z-index: 1;background: #fff;background: -webkit-linear-gradient(top, #fff 0%, #fff 40%, #aaa 100%);background: -moz-linear-gradient(top, #fff 0%, #fff 40%, #aaa 100%);background: -o-linear-gradient(top, #fff 0%, #fff 40%, #aaa 100%);background: -ms-linear-gradient(top, #fff 0%, #fff 40%, #aaa 100%);background: linear-gradient(top, #fff 0%, #fff 40%, #aaa 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff', endColorstr='#aaa',GradientType=0 );-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;}
 .slider input[type=checkbox]:checked + label {left: 43px;}
+
+#actionIcon {background: url(../images/icons.png) 0 0;width: 22px;height: 22px;}
+#addIcon {background: url(../images/icons.png) 0 -32px;width: 22px;height: 22px;}
+#batteryIcon {background: url(../images/icons.png) 0 -64px;width: 22px;height: 22px;}
+#cameraIcon {background: url(../images/icons.png) 0 -96px;width: 22px;height: 22px;}
+#contactIcon {background: url(../images/icons.png) 0 -128px;width: 22px;height: 22px;}
+#dimmerIcon {background: url(../images/icons.png) 0 -160px;width: 22px;height: 22px;}
+#doorbellIcon {background: url(../images/icons.png) 0 -192px;width: 22px;height: 22px;}
+#editIcon {background: url(../images/icons.png) 0 -224px;width: 22px;height: 22px;}
+#energymeterIcon {background: url(../images/icons.png) 0 -256px;width: 22px;height: 22px;}
+#fireIcon {background: url(../images/icons.png) 0 -288px;width: 22px;height: 22px;}
+#heatlinkIcon {background: url(../images/icons.png) 0 -320px;width: 22px;height: 22px;}
+#homeIcon {background: url(../images/icons.png) 0 -352px;width: 22px;height: 22px;}
+#hueIcon {background: url(../images/icons.png) 0 -384px;width: 22px;height: 22px;}
+#infoIcon {background: url(../images/icons.png) 0 -416px;width: 22px;height: 22px;}
+#lightIcon {background: url(../images/icons.png) 0 -448px;width: 22px;height: 22px;}
+#logoutIcon {background: url(../images/icons.png) 0 -480px;width: 22px;height: 22px;}
+#loxxIcon {background: url(../images/icons.png) 0 -512px;width: 22px;height: 22px;}
+#motionIcon {background: url(../images/icons.png) 0 -544px;width: 22px;height: 22px;}
+#noneIcon {background: url(../images/icons.png) 0 -576px;width: 22px;height: 22px;}
+#notificationIcon {background: url(../images/icons.png) 0 -608px;width: 22px;height: 22px;}
+#radiatorIcon {background: url(../images/icons.png) 0 -640px;width: 22px;height: 22px;}
+#rainmeterIcon {background: url(../images/icons.png) 0 -672px;width: 22px;height: 22px;}
+#sceneIcon {background: url(../images/icons.png) 0 -704px;width: 22px;height: 22px;}
+#searchIcon {background: url(../images/icons.png) 0 -736px;width: 22px;height: 22px;}
+#setFavorites {background: url(../images/icons.png) 0 -768px;width: 22px;height: 22px;}
+#shareSettingsIcon {background: url(../images/icons.png) 0 -800px;width: 22px;height: 22px;}
+#somfyIcon {background: url(../images/icons.png) 0 -832px;width: 22px;height: 22px;}
+#sortIcon {background: url(../images/icons.png) 0 -864px;width: 22px;height: 22px;}
+#switchIcon {background: url(../images/icons.png) 0 -896px;width: 22px;height: 22px;}
+#thermometerIcon {background: url(../images/icons.png) 0 -928px;width: 22px;height: 22px;}
+#thinkingCleanerIcon {background: url(../images/icons.png) 0 -960px;width: 22px;height: 22px;}
+#timerIcon {background: url(../images/icons.png) 0 -992px;width: 22px;height: 22px;}
+#upload {background: url(../images/icons.png) 0 -1024px;width: 22px;height: 22px;}
+#uvmeterIcon {background: url(../images/icons.png) 0 -1056px;width: 22px;height: 22px;}
+#virtualIcon {background: url(../images/icons.png) 0 -1088px;width: 22px;height: 22px;}
+#weatherIcon {background: url(../images/icons.png) 0 -1120px;width: 22px;height: 22px;}
+#weatherMapIcon {background: url(../images/icons.png) 0 -1152px;width: 22px;height: 22px;}
+#weatherdisplayIcon {background: url(../images/icons.png) 0 -1184px;width: 22px;height: 22px;}
+#windmeterIcon {background: url(../images/icons.png) 0 -1216px;width: 22px;height: 22px;}
+#smokeIcon {background: url(../images/icons.png) 0 -288px;width: 22px;height: 22px;}
+#somfydownIcon {background: url(../images/somfy.png) 0 0px;width: 48px;height: 35px;}
+#somfystopIcon {background: url(../images/somfy.png) 0 -150px;width: 48px;height: 35px;}
+#somfyupIcon {background: url(../images/somfy.png) 0 -200px;width: 48px;height: 35px;}

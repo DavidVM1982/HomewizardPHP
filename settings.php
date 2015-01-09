@@ -84,6 +84,7 @@ if($showmenu==true) {
 	<form method="post"><input type="submit" name="editsensors" value="Bewerk sensoren" class="abutton"/></form><br/>
 	<form method="post"><input type="submit" name="editswitches" value="Bewerk schakelaars" class="abutton"/></form><br/>
 	<form method="post"><input type="submit" name="updateswitches" value="Update schakelaars, sensoren, historiek" class="abutton"/></form><br/>
+	<form method="post" action="update.php"><input type="submit" name="updatedatabase" value="Update Database" class="abutton"/></form><br/>
 	</form><br/>
 	';
 }
@@ -134,7 +135,6 @@ if($showmenu==false) {
 	<input type="submit" value="login" class="abutton"/><br/>
 	</form>';
 }
-$db->close();
 print '</div></div>';
 include "footer.php";
 ?>
