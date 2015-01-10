@@ -1,5 +1,5 @@
 <?php include "header.php"; 
-print '<div class="history"><div class="span_3"><br/><br/>
+print '<div class="onecolumn"><div class="item history"><br/><br/>
 <form method="post" name="filter" id="filter">
 <select name="limit" class="abutton" onChange="this.form.submit()">';
 if(isset($_POST['limit'])) print '<option selected>'.$_POST['limit'].'</option>';

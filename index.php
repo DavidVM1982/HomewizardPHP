@@ -1,27 +1,24 @@
 <?php
 include "header.php";
-
 if (isset($_POST['schakel'])) {
 	if($authenticated == true) {
 		if (isset($_POST['dimlevel'])) {
 			$responsejson = file_get_contents($jsonurl.'sw/dim/'.$_POST['switch'].'/'.$_POST['dimlevel']);
 			$response = json_decode($responsejson, true);
-			if($response['status']=='ok') {echo '<div class="row">OK</div>'; } else {echo 'response = ';print_r($response);echo '<hr>';}
+			if($response['status']=='ok') {echo '<div class="row">OK</div>'; } else {echo '<div class="row">response = ';print_r($response);echo '</div><hr>';}
 			if($debug=='yes') {echo '<br/>$_POST = ';print_r($_POST);echo "<br/>sw/dim/".$_POST['switch']."/".$_POST['dimlevel']."<hr>";}
 		} else if (isset($_POST['somfy'])){
 			$responsejson = file_get_contents($jsonurl.'sf/'.$_POST['switch'].'/'.$_POST['somfy']);
 			$response = json_decode($responsejson, true);
-			if($response['status']=='ok') {echo '<div class="row">OK</div>'; } else {print_r($response);}
+			if($response['status']=='ok') {echo '<div class="row">OK</div>'; } else {echo '<div class="row">response = ';print_r($response);echo '</div><hr>';}
 			if($debug=='yes') {echo '<br/>$_POST = ';print_r($_POST);echo "<br/>sf/".$_POST['switch']."/".$_POST['somfy']."<hr>";}
 		} else if (isset($_POST['schakel'])){
 			$responsejson = file_get_contents($jsonurl.'sw/'.$_POST['switch'].'/'.$_POST['schakel']);
 			$response = json_decode($responsejson, true);
-			if($response['status']=='ok') {echo '<div class="row">OK</div>'; } else {print_r($response);}
+			if($response['status']=='ok') {echo '<div class="row">OK</div>'; } else {echo '<div class="row">response = ';print_r($response);echo '</div><hr>';}
 			if($debug=='yes') {echo '<br/>$_POST = ';print_r($_POST);echo "<br/>sw/".$_POST['switch']."/".$_POST['schakel']."<hr>";}
 		} 
-	} else {
-		echo '<p class="error">Switching blocked when not logged in</p>';
-	}
+	} else {echo '<p class="error">Switching blocked when not logged in</p>';}
 }
 if (isset($_POST['set_temp'])) {
 	if($authenticated == true) {
@@ -31,9 +28,7 @@ if (isset($_POST['set_temp'])) {
 			if($response['status']=='ok') {echo 'OK'; } else {echo 'response = ';print_r($response);echo '<hr>';}
 		}
 		if($debug=='yes') {echo '<br/>$_POST = ';print_r($_POST);echo "<br>sw/".$_POST['radiator']."/settarget/".$_POST['set_temp']."<hr>";echo 'response = ';print_r($response);echo '<hr>';}
-	} else {
-		echo 'Switching blocked when not logged in';
-	}
+	} else {echo '<p class="error">Switching blocked when not logged in</p>';}
 }
 if (isset($_POST['schakelscene'])) {
 	if($authenticated == true) {
@@ -41,53 +36,66 @@ if (isset($_POST['schakelscene'])) {
 		$response = json_decode($responsejson, true);
 		if($response['status']=='ok') {echo 'OK'; } else {echo 'response = ';print_r($response);echo '<hr>';}
 		if($debug=='yes') {echo '<br/>$_POST = ';print_r($_POST);echo "<br/>gp/".$_POST['scene']."/".$_POST['schakelscene']."<hr>";echo 'response = ';print_r($response);echo '<hr>';}
-		
-	} else {
-		echo '<p class="error">Switching blocked when not logged in</p>';
-	}
+	} else {echo '<p class="error">Switching blocked when not logged in</p>';}
 }
 $data = null;
 try {
   $json = file_get_contents($jsonurl.'get-sensors');
   $data = json_decode($json,true);
-} catch (Exception $e) {
-  echo $e->getMessage();
-}
-if (!$data) {
-  echo "No information available...";
-} else {
-  
-flush();	
+} catch (Exception $e) {echo $e->getMessage();}
+if (!$data) {echo "No information available...";} else {
 if($authenticated == false) { 
 print '<section class="span_3"><p class="error">Some information is not available when not logged in</p></section>';
 } else {
-	if($debug=='yes') print_r($data);
+	if($debug=='yes') {echo '<div class="row">';print_r($data['response']['switches']);echo '</div><hr>';}
 }
+$switches =  $data['response']['switches'];
+foreach($switches as $switch) {
+	${'switchid'.$switch['id']} = $switch['id'];
+	${'switchname'.$switch['id']} = $switch['name'];
+	${'switchtype'.$switch['id']} = $switch['type'];
+	if($switch['type']=='radiator') { 
+		${'switchstatus'.$switch['id']} = $switch['tte']; 
+	} else if($switch['type']=='dimmer') {
+		${'switchstatus'.$switch['id']} = $switch['dimlevel'];
+	} else if($switch['type']=='asun') {
+		${'switchstatus'.$switch['id']} = $switch['mode'];
+	} else if($switch['type']=='somfy') {
+	} else {
+		${'switchstatus'.$switch['id']} = $switch['status'];
+	}
+}
+$sensors =  $data['response']['kakusensors'];
+foreach($sensors as $sensor) {
+	${'sensorid'.$sensor['id']} = $sensor['id'];
+	${'sensorname'.$sensor['id']} = $sensor['name'];
+	${'sensorstatus'.$sensor['id']} = $sensor['status'];
+	${'sensortype'.$sensor['id']} = $sensor['type'];
+	${'sensortimestamp'.$sensor['id']} = $sensor['timestamp'];
+}
+$scenes =  $data['response']['scenes'];
+$thermometers =  $data['response']['thermometers'];
+$rainmeters =  $data['response']['rainmeters'];
 
 //---SCHAKELAARS---
-$switches =  $data['response']['switches'];
-if(!empty($switches)) {
 $sql="select id_switch, name, type, volgorde from switches where type not in ('radiator', 'somfy') order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+if($result->num_rows>0) {
 $group = 0;
-?>
-<section class='span_1'><section onclick="window.location='index.php'"><h2>Schakelaars</h2></section>
-<?php
-flush();
-echo '<table align="center"><tbody>';
+echo '<div class="isotope"><div class="item"><section onclick="window.location=\'index.php\'" class="handje"><h2>Schakelaars</h2></section><table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$switchon = "";
 	$tdstyle = '';
 	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black"';
 	$group = $row['volgorde'];
-	if($row['type']=='asun') {if($data['response']['switches'][$row['id_switch']]['mode']=="1") {$switchon = "off";} else {$switchon = "on";}}
-	else {if($data['response']['switches'][$row['id_switch']]['status']=="on") {$switchon = "off";} else {$switchon = "on";}}
+	if($row['type']=='asun') {if(${'switchstatus'.$row['id_switch']}=="1") {$switchon = "off";} else {$switchon = "on";}}
+	else {if(${'switchstatus'.$row['id_switch']}=="on") {$switchon = "off";} else {$switchon = "on";}}
 	print '
 	<tr ><form method="post" action="#"><td><img id="'.$row['type'].'Icon" src="images/empty.gif" /></td><td align="right" '.$tdstyle.'>'.$row['name'].'</td>
 	<td width="70px" '.$tdstyle.' ><input type="hidden" name="switch" value="'.$row['id_switch'].'"/><input type="hidden" name="schakel" value="'.$switchon.'"/>';
 	if($row['type']=='dimmer') {
-		print '<select name="dimlevel"  class="abutton" onChange="this.form.submit()" style="margin-top:4px; width:80px; ">
-		<option '.$data['response']['switches'][$row['id_switch']]['dimlevel'].') selected>'.$data['response']['switches'][$row['id_switch']]['dimlevel'].'</option>
+		print '<select name="dimlevel"  class="abutton handje" onChange="this.form.submit()" style="margin-top:4px; width:80px; ">
+		<option '.${'switchstatus'.$row['id_switch']}.') selected>'.${'switchstatus'.$row['id_switch']}.'</option>
 		<option>0</option>
 		<option>10</option>
 		<option>20</option>
@@ -105,7 +113,7 @@ while($row = $result->fetch_assoc()){
 		print '
 		<section class="slider">	
 			<input type="hidden" value="somfy" />
-			<input type="checkbox" value="switch'.$row['id_switch'].'" id="switch'.$row['id_switch'].'" name="switch'.$row['id_switch'].'" '; if($data['response']['switches'][$row['id_switch']]['mode']==1) {print 'checked';} print ' onChange="this.form.submit()"/>
+			<input type="checkbox" value="switch'.$row['id_switch'].'" id="switch'.$row['id_switch'].'" name="switch'.$row['id_switch'].'" '; if(${'switchstatus'.$row['id_switch']}==1) {print 'checked';} print ' onChange="this.form.submit()"/>
 			<label for="switch'.$row['id_switch'].'"></label>
 		</section>';
 	}
@@ -119,14 +127,11 @@ while($row = $result->fetch_assoc()){
 	print '</td></form></tr>';
 }
 $result->free();
-echo "</tbody></table></section>";
+echo "</tbody></table></div>";
 }
 /* SCENES */
-$scenes =  $data['response']['scenes'];
 if(!empty($scenes)) {
-?>
-<section class='span_1'><section onclick='window.location="index.php"'><h2>Scènes</h2></section>
-<?php
+echo '<div class="item"><section onclick="window.location=\'index.php\'" class="handje"><h2>Scènes</h2></section>';
 foreach($scenes as $scene){
 	echo '<table width="100%"><thead><tr><th colspan="2">';
 	if($detailscenes=='optional') {print '<a href="#" onclick="toggle_visibility(\'scene'.$scene['id'].'\');" style="text-decoration:none">'.$scene['name'].'</a>';} else {print $scene['name'];}
@@ -156,55 +161,47 @@ foreach($scenes as $scene){
 	}
 	print '</table>';
 }
-echo "</section>";
+echo "</div>";
 }
 /* SOMFY */
-$sql="select id_switch, volgorde from switches where type like 'somfy' order by volgorde asc, favorite desc, name asc";
+$sql="select id_switch, name, volgorde from switches where type like 'somfy' order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
 	$group = 0;
-?>
-<section class='span_1'><section onclick="window.location='index.php'"><h2>Somfy</h2></section>
-<?php
-flush();
-echo '<table align="center"><tbody>';
+echo '<div class="item"><section onclick="window.location=\'index.php\'" class="handje"><h2>Somfy</h2></section><table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$tdstyle = '';
 	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black"';
 	$group = $row['volgorde'];
-	print '<tr><td><img id="somfyIcon" src="images/empty.gif" /></td><td align="right" '.$tdstyle.'>'.$data['response']['switches'][$row['id_switch']]['name'].'</td>
+	print '<tr><td><img id="somfyIcon" src="images/empty.gif" /></td><td align="right" '.$tdstyle.'>'.$row['name'].'</td>
 	<td width="185px" '.$tdstyle.'><form method="post" action="#">
 	<input type="hidden" name="switch" value="'.$row['id_switch'].'"/>
 	<input type="hidden" name="schakel" value="'.$row['id_switch'].'"/>
-	<input type="submit" id="somfydownIcon" name="somfy" value="down" class="abuttonsomfy"/>
-	<input type="submit" id="somfystopIcon" name="somfy" value="stop" class="abuttonsomfy"/>
-	<input type="submit" id="somfyupIcon" name="somfy" value="up" class="abuttonsomfy"/>
+	<input type="submit" id="somfydownIcon" name="somfy" value="down" class="abuttonsomfy handje"/>
+	<input type="submit" id="somfystopIcon" name="somfy" value="stop" class="abuttonsomfy handje"/>
+	<input type="submit" id="somfyupIcon" name="somfy" value="up" class="abuttonsomfy handje"/>
 	
 	</form></td></tr>';
 }
 $result->free();
-echo "</tbody></table></section>";
+echo "</tbody></table></div>";
 }
 
 //---RADIATORS---
-$sql="select id_switch, volgorde from switches where type like 'radiator' order by volgorde asc, favorite desc, name asc";
+$sql="select id_switch, name, volgorde from switches where type like 'radiator' order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
 	$group = 0;
-?>
-<section class='span_1'><section onclick="window.location='index.php'"><h2>Radiatoren</h2></section>
-<?php
-flush();
-echo '<table align="center"><tbody>';
+echo '<div class="item"><section onclick="window.location=\'index.php\'" class="handje"><h2>Radiatoren</h2></section><table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$tdstyle = '';
 	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black"';
 	$group = $row['volgorde'];
-	print '<tr><td><img id="radiatorIcon" src="images/empty.gif" /></td><td align="right" '.$tdstyle.'>'.$data['response']['switches'][$row['id_switch']]['name'].'</td>
+	print '<tr><td><img id="radiatorIcon" src="images/empty.gif" /></td><td align="right" '.$tdstyle.'>'.$row['name'].'</td>
 	<td width="115px" '.$tdstyle.'><form method="post" action="#">
 	<input type="hidden" name="radiator" value="'.$row['id_switch'].'"/>
-	<select name="set_temp"  class="abutton" onChange="this.form.submit()" style="margin-top:4px">
-		<option '.$data['response']['switches'][$row['id_switch']]['tte'].') selected>'.$data['response']['switches'][$row['id_switch']]['tte'].'</option>
+	<select name="set_temp"  class="abutton handje" onChange="this.form.submit()" style="margin-top:4px">
+		<option '.${'switchstatus'.$row['id_switch']}.') selected>'.${'switchstatus'.$row['id_switch']}.'</option>
 		<option>10</option>
 		<option>16</option>
 		<option>18</option>
@@ -216,111 +213,73 @@ while($row = $result->fetch_assoc()){
 	</form></td></tr>';
 }
 $result->free();
-echo "</tbody></table></section>";
+echo "</tbody></table></div>";
 }
 
 //---SENSORS--
-$sensors =  $data['response']['kakusensors'];
-if(!empty($sensors)) {
-?>
-<section class='span_1' onclick="window.location='history.php';"><h2>Sensoren</h2>
-<?php
-flush();
-$sql="select id_sensor, type, volgorde from sensors order by volgorde asc, favorite desc, name asc";
+echo '<div class="item handje" onclick="window.location=\'history.php\';"><h2>Sensoren</h2>';
+$sql="select id_sensor, name, type, volgorde from sensors order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+if($result->num_rows>0) {
 $group = 0;
 echo '<table align="center" width="100%">';
 while($row = $result->fetch_assoc()){
-        print '<tr>';
+        echo '<tr>';
         if($authenticated==true) {
-			$name = $data['response']['kakusensors'][$row['id_sensor']]['name'];
-			$status = $data['response']['kakusensors'][$row['id_sensor']]['status'];
-			$type = $data['response']['kakusensors'][$row['id_sensor']]['type'];
-			$time = $data['response']['kakusensors'][$row['id_sensor']]['timestamp'];
+			$type = $row['type'];
 			echo '<td style="color:#F00; font-weight:bold"><img id="'.$type.'Icon" src="images/empty.gif" /></td>';
         	if($type=="contact") $type = "Magneet";
 			if($type=="motion") $type = "Beweging";
 			if($type=="doorbell") $type = "Deurbel";
 			if($type=="smoke") $type = "Rook";
-			if($status == "yes") {print '<td style="color:#F00; font-weight:bold">'.$name.'</td>';} else {print '<td>'.$name.'</td>';}
-        	if($status == "yes") {print '<td style="color:#F00; font-weight:bold">';} else {print '<td>';}
-			if($type=="Magneet" && $status == "no") { print 'Gesloten'; }
-			else if ($type=="Magneet" && $status == "yes") { print 'Open'; }
-			else if ($type=="Beweging" && $status == "yes") { print 'Beweging'; }
-			else if ($type=="Beweging" && $status == "no") { print ''; }
-			else if ($type=="Deurbel" && $status == "no") { print ''; }
-			else if ($type=="Deurbel" && $status == "yes") { print 'Ring'; }
-			else if ($type=="Rook" && $status == "no") { print ''; }
-			else if ($type=="Rook" && $status == "yes") { print 'ROOK!!!'; }
-			else print $status;
-			print '</td>';
+			if(${'sensorstatus'.$row['id_sensor']} == "yes") {echo '<td style="color:#F00; font-weight:bold">'.$row['name'].'</td>';} else {echo '<td>'.$row['name'].'</td>';}
+        	if(${'sensorstatus'.$row['id_sensor']} == "yes") {echo '<td style="color:#F00; font-weight:bold">';} else {echo '<td>';}
+			if($type=="Magneet" && ${'sensorstatus'.$row['id_sensor']} == "no") { echo 'Gesloten'; }
+			else if ($type=="Magneet" && ${'sensorstatus'.$row['id_sensor']} == "yes") { echo 'Open'; }
+			else if ($type=="Beweging" && ${'sensorstatus'.$row['id_sensor']} == "yes") { echo 'Beweging'; }
+			else if ($type=="Beweging" && ${'sensorstatus'.$row['id_sensor']} == "no") { echo ''; }
+			else if ($type=="Deurbel" && ${'sensorstatus'.$row['id_sensor']} == "no") { echo ''; }
+			else if ($type=="Deurbel" && ${'sensorstatus'.$row['id_sensor']} == "yes") { echo 'Ring'; }
+			else if ($type=="Rook" && ${'sensorstatus'.$row['id_sensor']} == "no") { echo ''; }
+			else if ($type=="Rook" && ${'sensorstatus'.$row['id_sensor']} == "yes") { echo 'ROOK!!!'; }
+			else echo ${'sensorstatus'.$row['id_sensor']};
+			echo '</td>';
         
-			if($status == "yes") {print '<td style="color:#F00; font-weight:bold">'.$time.'</td>';} else {print '<td>'.$time.'</td>';}
+			if(${'sensorstatus'.$row['id_sensor']} == "yes") {echo '<td style="color:#F00; font-weight:bold">'.${'sensortimestamp'.$row['id_sensor']}.'</td>';} else {echo '<td>'.${'sensortimestamp'.$row['id_sensor']}.'</td>';}
 		} else {
-			print '<td>'.$name.'</td><td>'.$type.'</td><td>status</td><td>time</td>';
+			echo '<td>'.$row['name'].'</td><td>'.$type.'</td><td>status</td><td>time</td>';
 		}
-		print '</tr>';
+		echo '</tr>';
 }
-echo "</table></section>";
+echo "</table></div>";
 }
 //--THERMOMETERS--
-$thermometers =  $data['response']['thermometers'];
 if(!empty($thermometers)) {
-?>
-<section class="span_1" onclick="window.location='temp.php';"><h2>Temperatuur</h2>
-<?php
-flush();
-echo "<table width='100%'>";
-
-foreach($thermometers as $thermometer){
-	print '<tr><th></th><th>temp<br/>°C</th><th>hum<br/>%</th><th>min<br/>°C</th><th>te-t<br/>&nbsp;</th><th>max<br/>°C</th><th>te+t<br/>&nbsp;</th></tr>';
-	print '<tr>';
-	print '<td>'.$thermometer['name'].'</td>';
-	print '<td>'.$thermometer['te'].'</td>';
-	print '<td>'.$thermometer['hu'].'</td>';
-	print '<td>'.$thermometer['te-'].'</td>';
-	print '<td>'.$thermometer['te-t'].'</td>';
-	print '<td>'.$thermometer['te+'].'</td>';
-	print '<td>'.$thermometer['te+t'].'</td></tr>';
-}
-echo "</table></section>";
+	echo '<div class="item handje" onclick="window.location=\'temp.php\';"><h2>Temperatuur</h2><table width="100%">';
+	foreach($thermometers as $thermometer){
+		echo '<tr><th></th><th>temp<br/>°C</th><th>hum<br/>%</th><th>min<br/>°C</th><th>te-t<br/>&nbsp;</th><th>max<br/>°C</th><th>te+t<br/>&nbsp;</th></tr>
+		<tr><td>'.$thermometer['name'].'</td><td>'.$thermometer['te'].'</td><td>'.$thermometer['hu'].'</td><td>'.$thermometer['te-'].'</td><td>'.$thermometer['te-t'].'</td><td>'.$thermometer['te+'].'</td><td>'.$thermometer['te+t'].'</td></tr>';
+	}
+	echo "</table></div>";
 }
 //--RAINMETERS--
-$rainmeters =  $data['response']['rainmeters'];
 if(!empty($rainmeters)) {
-?>
-<section class='span_1' onclick="window.location='rain.php';"><h2>Regen</h2>
-<?php 
-flush();
-echo "<table width='100%'>";
-
-foreach($rainmeters as $rainmeter){
-	print '<tr><th></th><th>mm</th><th>3h</th></tr>';
-	print '<tr>';
-	print '<td>'.$rainmeter['name'].'</td>';
-	print '<td>'.$rainmeter['mm'].' mm</td>';
-	print '<td>'.$rainmeter['3h'].' mm</td></tr>';
-}
-echo "</table></section>";
+	echo '<div class="item handje" onclick="window.location=\'rain.php\';"><h2>Regen</h2><table width="100%">';
+	foreach($rainmeters as $rainmeter){
+		echo '<tr><th></th><th>mm</th><th>3h</th></tr>
+		<tr><td>'.$rainmeter['name'].'</td><td>'.$rainmeter['mm'].' mm</td><td>'.$rainmeter['3h'].' mm</td></tr>';
+	}
+	echo "</table></div>";
 }
 //--WINDMETERS--
 if(isset($data['response']['windmeters']['0']['ws'])) {
-$windmeters =  $data['response']['windmeters'];
-?>
-<section class='span_1' onclick="window.location='wind.php';"><h2>Wind</h2>
-<?php
-flush();
-echo "<table width='100%'>";
-foreach($windmeters as $windmeter){
-	print '<tr><th>Naam</th><th>ws</th><th>gu</th><th>dir</th><th>ws+</th></tr>';
-	print '<tr>';
-	print '<td>'.$windmeter['name'].'</td>';
-	print '<td>'.$windmeter['ws'].' km/u</td>';
-	print '<td>'.$windmeter['gu'].' km/u</td>';
-	print '<td>'.$windmeter['dir'].' °</td>';
-	print '<td>'.$windmeter['ws+'].' km/u</td></tr>';
-}
-echo "</table></section>";
+	$windmeters =  $data['response']['windmeters'];
+	echo '<div class="item handje" onclick="window.location=\'wind.php\';"><h2>Wind</h2><table width="100%">';
+	foreach($windmeters as $windmeter){
+		print '<tr><th>Naam</th><th>ws</th><th>gu</th><th>dir</th><th>ws+</th></tr>
+		<tr><td>'.$windmeter['name'].'</td><td>'.$windmeter['ws'].' km/u</td><td>'.$windmeter['gu'].' km/u</td><td>'.$windmeter['dir'].' °</td><td>'.$windmeter['ws+'].' km/u</td></tr>';
+	}
+	echo "</table></div>";
 }
 }
 ?>
@@ -335,6 +294,5 @@ echo "</table></section>";
     }
 //-->
 </script>
-<tbody style="visibility:collapse">
 <?php
 include "footer.php";?>

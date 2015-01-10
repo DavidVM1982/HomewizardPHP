@@ -1,6 +1,5 @@
-
-<section class="footer">
-<section class="span_1" onclick="window.location='settings.php';">
+</div>
+<div class="footer handje" onclick="window.location='settings.php';">
 <br/>
 <!-- Please do not remove these lines -->
 Get the code at GitHub <a href="https://github.com/Egregius/HomewizardPHP" title="HomewizardPHP"><img src="images/GitHub.png" width="16" height="16"/></a> <a href="https://github.com/Egregius/HomewizardPHP" title="HomewizardPHP">HomewizardPHP</a> <br/><br/>
@@ -17,8 +16,8 @@ if(!$result = $db->query($sql)){ die('There was an error running the query ['.$s
 while($row = $result->fetch_assoc()){$versie = $row['versie'];}
 $result->free();
 $db->close();
-echo 'Versie '.$versie.'<br/><br/>Opgemaakt in '.$total_time.' seconden op<br/>'; echo date("j M Y H:i:s");
+echo 'Versie '.$versie.'. Opgemaakt in '.$total_time.' seconden op '; echo date("j M Y H:i:s");
 ?>
-</section></section>
+</div>
 </body>
 </html>

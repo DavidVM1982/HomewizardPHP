@@ -39,6 +39,16 @@ if($authenticated==true && $debug=='yes') {
 <meta http-equiv="expires" content="Tue, 01 Jan 2014 1:00:00 GMT" />
 <meta http-equiv="pragma" content="no-cache" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<script type="text/javascript" language="javascript" src="js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" language="javascript" src="js/isotope.pkgd.min.js"></script>
+<script language="javascript">
+$( function() {
+  $('.isotope').isotope({
+    layoutMode: 'masonry',
+    itemSelector: '.item',
+  });
+});
+</script>
 <script language="javascript"> 
 function toggle(showHideDiv, switchTextDiv) {
 	var ele = document.getElementById(showHideDiv);
@@ -64,7 +74,7 @@ if(isset($_SERVER['PHP_SELF'])) $actual_page = substr($_SERVER['PHP_SELF'], -9);
 print '<section class="row">';
 
 if ($actual_page!="index.php") {
-	print '<a href="index.php" class="abutton">Home</a>';
+	print '<a href="index.php" class="abutton settings">Home</a>';
 }
 print '</section>';
 ?>

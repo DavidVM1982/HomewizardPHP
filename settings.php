@@ -80,11 +80,11 @@ if($authenticated==true) {
 //BEGIN AUTHENTICATED STUFF	
 if($showmenu==true) {
 	echo '
-	<form method="post"><input type="submit" name="parameters" value="Parameters" class="abutton"/></form><br/>
-	<form method="post"><input type="submit" name="editsensors" value="Bewerk sensoren" class="abutton"/></form><br/>
-	<form method="post"><input type="submit" name="editswitches" value="Bewerk schakelaars" class="abutton"/></form><br/>
-	<form method="post"><input type="submit" name="updateswitches" value="Update schakelaars, sensoren, historiek" class="abutton"/></form><br/>
-	<form method="post" action="update.php"><input type="submit" name="updatedatabase" value="Update Database" class="abutton"/></form><br/>
+	<form method="post"><input type="submit" name="parameters" value="Parameters" class="abutton settings"/></form><br/>
+	<form method="post"><input type="submit" name="editsensors" value="Bewerk sensoren" class="abutton settings"/></form><br/>
+	<form method="post"><input type="submit" name="editswitches" value="Bewerk schakelaars" class="abutton settings"/></form><br/>
+	<form method="post"><input type="submit" name="updateswitches" value="Update schakelaars, sensoren, historiek" class="abutton settings"/></form><br/>
+	<form method="post" action="update.php"><input type="submit" name="updatedatabase" value="Update Database" class="abutton settings"/></form><br/>
 	</form><br/>
 	';
 }
@@ -121,9 +121,9 @@ if($showeditsensors==true) {
 
 //END AUTHENTICATED STUFF	
 if($showmenu==false) {
-	print '<br/><br/><br/><form method="post"><input type="submit" name="settings" value="Instellingen" class="abutton"/></form>';
+	print '<br/><br/><br/><form method="post"><input type="submit" name="settings" value="Instellingen" class="abutton settings"/></form>';
 } else {
-	print '<br/><br/><br/><form method="post"><input type="submit" name="logout" value="Uitloggen" class="abutton"/></form>
+	print '<br/><br/><br/><form method="post"><input type="submit" name="logout" value="Uitloggen" class="abutton settings"/></form>
 	</div><div class="row"><div class="span_3"><br/>Kijk op de <a href="https://github.com/Egregius/HomewizardPHP/wiki/Settings-en-parameters" target="_blank">wiki</a> voor uitleg.</div></div>';
 }
 } else {
@@ -132,7 +132,7 @@ if($showmenu==false) {
 	<form method="post">
 	<label for="username">Username: </label><input type="text" name="username" size="20" /><br/>
 	<label for="password">Password: </label><input type="password" name="password" size="20" /><br/>
-	<input type="submit" value="login" class="abutton"/><br/>
+	<input type="submit" value="login" class="abutton settings"/><br/>
 	</form>';
 }
 print '</div></div>';
