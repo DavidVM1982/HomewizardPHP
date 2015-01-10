@@ -63,18 +63,16 @@ function toggle(showHideDiv, switchTextDiv) {
 	}
 } 
 </script>
+
 <title>HomewizardPHP</title>
 <link href="css/index.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-
-<?php 
-$actual_page = "ndex.php";
-if(isset($_SERVER['PHP_SELF'])) $actual_page = substr($_SERVER['PHP_SELF'], -9);
-print '<section class="row">';
-
-if ($actual_page!="index.php") {
-	print '<a href="index.php" class="abutton settings">Home</a>';
-}
-print '</section>';
-?>
+<script>
+$('button').on('click', function () {
+    var $rowsNo = $('#showhide tbody tr').filter(function () {
+        return $.trim($(this).find('td').eq(3).text()) === "no"
+    }).toggle();
+});
+</script>
+<section class="row"><a href="index.php" class="abutton settings">Home</a></section>

@@ -47,7 +47,7 @@ if (!$data) {
 					$namedevice = $device['name'];
 					$favorite = $device['favorite'];
 					$type = $device['type'];
-					$sql = "INSERT INTO sensors (`id_sensor`, `name`, `type`, `favorite`) values ($id_sensor, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type', `favorite`= '$favorite'";
+					$sql = "INSERT INTO sensors (`id_sensor`, `name`, `type`, `favorite`) values ($id_sensor, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type'";
 					echo $id_sensor.'-'.$namedevice.': '.$type.'<br/>';
 					if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
 					$datahistory = null;
@@ -79,7 +79,7 @@ if (!$data) {
 					$namedevice = $device['name'];
 					$favorite = $device['favorite'];
 					$type = $device['type'];
-					$sql = "INSERT INTO switches (`id_switch`, `name`, `type`, `favorite`) values ($id_switch, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type', `favorite`= '$favorite'";
+					$sql = "INSERT INTO switches (`id_switch`, `name`, `type`, `favorite`) values ($id_switch, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type'";
 					echo $id_switch.'-'.$namedevice.': '.$type.'<br/>';
 					if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
 					echo '<hr>';

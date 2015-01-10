@@ -31,7 +31,8 @@ if(isset($_POST['deletesensor'])) {
 if(isset($_POST['editswitch'])) { 
 	$id_switch=($_POST['id_switch']);
 	$volgorde=($_POST['volgorde']);
-	$sql="update switches set volgorde = '$volgorde' where id_switch = $id_switch";
+	$favorite=($_POST['favorite']);
+	$sql="update switches set volgorde = '$volgorde', favorite = '$favorite' where id_switch = $id_switch";
 	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
 	$showmenu=false;
 	$showeditswitches=true;
@@ -39,7 +40,8 @@ if(isset($_POST['editswitch'])) {
 if(isset($_POST['editsensor'])) { 
 	$id_sensor=($_POST['id_sensor']);
 	$volgorde=($_POST['volgorde']);
-	$sql="update sensors set volgorde = '$volgorde' where id_sensor = $id_sensor";
+	$favorite=($_POST['favorite']);
+	$sql="update sensors set volgorde = '$volgorde', favorite = '$favorite' where id_sensor = $id_sensor";
 	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
 	$showmenu=false;
 	$showeditsensors=true;
@@ -103,7 +105,7 @@ if($showeditswitches==true) {
 	$sql="select id_switch, name, type, favorite, volgorde from switches order by type asc, volgorde asc, favorite desc, name asc";
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	while($row = $result->fetch_assoc()){
-		echo '<form method="post"><tr><td>'.$row['id_switch'].'</td><td>'.$row['name'].'</td><td>'.$row['type'].'</td><td>'.$row['favorite'].'</td><td><input type="hidden" name="id_switch" id="id_switch" value="'.$row['id_switch'].'"/><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/></td><td><input type="submit" name="editswitch" value="Update" class="abutton"><input type="submit" name="deleteswitch" value="Wissen" class="abutton"></td></tr></form>';
+		echo '<form method="post"><tr><td>'.$row['id_switch'].'</td><td>'.$row['name'].'</td><td>'.$row['type'].'</td><td><input type="text" name="favorite" id="favorite" value="'.$row['favorite'].'" size="5"/></td><td><input type="hidden" name="id_switch" id="id_switch" value="'.$row['id_switch'].'"/><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/></td><td><input type="submit" name="editswitch" value="Update" class="abutton"><input type="submit" name="deleteswitch" value="Wissen" class="abutton"></td></tr></form>';
 	}
 	$result->free();
 	echo '</tbody></table></center>';

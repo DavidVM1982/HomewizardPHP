@@ -78,11 +78,13 @@ $thermometers =  $data['response']['thermometers'];
 $rainmeters =  $data['response']['rainmeters'];
 
 //---SCHAKELAARS---
-$sql="select id_switch, name, type, volgorde from switches where type not in ('radiator', 'somfy') order by volgorde asc, favorite desc, name asc";
+$sql="select id_switch, name, type, favorite, volgorde from switches where type not in ('radiator', 'somfy')";
+if (!isset($_POST['showallswitches'])) $sql.=" AND favorite like 'yes'";
+$sql.=" order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
 $group = 0;
-echo '<div class="isotope"><div class="item"><section onclick="window.location=\'index.php\'" class="handje"><h2>Schakelaars</h2></section><table align="center"><tbody>';
+echo '<div class="isotope"><div class="item"><form id="showallswitches" action="#" method="post"><input type="hidden" name="showallswitches" value="yes"><a href="#" onclick="document.getElementById(\'showallswitches\').submit();" style="text-decoration:none"><h2 >Schakelaars</h2></a></form><table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$switchon = "";
 	$tdstyle = '';
@@ -90,8 +92,7 @@ while($row = $result->fetch_assoc()){
 	$group = $row['volgorde'];
 	if($row['type']=='asun') {if(${'switchstatus'.$row['id_switch']}=="1") {$switchon = "off";} else {$switchon = "on";}}
 	else {if(${'switchstatus'.$row['id_switch']}=="on") {$switchon = "off";} else {$switchon = "on";}}
-	print '
-	<tr ><form method="post" action="#"><td><img id="'.$row['type'].'Icon" src="images/empty.gif" /></td><td align="right" '.$tdstyle.'>'.$row['name'].'</td>
+	echo '<tr><form method="post" action="#"><td><img id="'.$row['type'].'Icon" src="images/empty.gif" /></td><td align="right" '.$tdstyle.'>'.$row['name'].'</td>
 	<td width="70px" '.$tdstyle.' ><input type="hidden" name="switch" value="'.$row['id_switch'].'"/><input type="hidden" name="schakel" value="'.$switchon.'"/>';
 	if($row['type']=='dimmer') {
 		print '<select name="dimlevel"  class="abutton handje" onChange="this.form.submit()" style="margin-top:4px; width:80px; ">
