@@ -5,7 +5,7 @@ $time = $time[1] + $time[0];
 $start = $time;
 include "parameters.php"; 
 setlocale(LC_ALL,'nl_NL.UTF-8');
-putenv( "PHP_TZ=Europe/Amterdam" );
+//putenv( "PHP_TZ=Europe/Amterdam" );
 $sql="select variable, value from settings order by variable asc";
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	$acceptedips = array();
@@ -70,6 +70,7 @@ function toggle(showHideDiv, switchTextDiv) {
 
 <?php 
 $actual_page = "ndex.php";
+date_default_timezone_set('Europe/Brussels');
 if(isset($_SERVER['PHP_SELF'])) $actual_page = substr($_SERVER['PHP_SELF'], -9);
 print '<section class="row">';
 
