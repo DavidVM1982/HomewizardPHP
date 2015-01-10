@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `switches` (
   `name` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `favorite` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
-  `volgorde` smallint(6) NOT NULL
+  `volgorde` smallint(6) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `temperature` (
