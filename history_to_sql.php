@@ -36,6 +36,9 @@ try {
 if (!$data) {
   echo "No information available...";
 } else {
+	$thermometers =  $data['response']['thermometers'];
+	$rainmeters =  $data['response']['rainmeters'];
+	$windmeters =  $data['response']['windmeters'];
 	$types = array_keys($data['response']);
 	foreach ($types as $type) {
 		$devices = $data['response'][$type];
@@ -90,26 +93,55 @@ if (!$data) {
 }
 
 /* Temperature */
-$datas = null;
-try {
-  $json = file_get_contents($jsonurl.'te/graph/1/day'); 
-  $datas = json_decode($json,true);
-} catch (Exception $e) { 
-  echo $e->getMessage();
+if(!empty($thermometers)) {
+	foreach($thermometers as $thermometer) {
+		$datas = null;
+		try {
+			$json = file_get_contents($jsonurl.'te/graph/'.$thermometer['id'].'/day'); 
+			$datas = json_decode($json,true);
+		} catch (Exception $e) { 
+			echo $e->getMessage();
+		}
+		if (!$datas) {
+			echo "No information available...";
+		} else {
+			echo '<hr>Importing Temperature<br/>';
+			foreach($datas['response'] as $data){
+				$id_sensor=$thermometer['id'];
+				$time = $data['t'];
+				$temp = $data['te'];
+				$hum = $data['hu'];
+				echo $data['t'].' - '.$data['te'].' - '.$data['hu'].'<br/>';
+				$sql = "INSERT IGNORE INTO temperature (`timestamp`, `te`, `hu`, `id_sensor`) values ('$time', '$temp', '$hum', '$id_sensor') ";
+				if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
+			}
+		}
+	}
 }
-if (!$datas) {
-  echo "No information available...";
-} else {
-  echo '<hr>Importing Temperature<br/>';
-  foreach($datas['response'] as $data){
-	  $time = $data['t'];
-	  $temp = $data['te'];
-	  $hum = $data['hu'];
-	  echo $data['t'].' - '.$data['te'].' - '.$data['hu'].'<br/>';
-	  $sql = "INSERT IGNORE INTO temperature (`timestamp`, `te`, `hu`) values ('$time', '$temp', '$hum') ";
-	  if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
-  }
 
+/* Min Max Temperatures per day */
+if(!empty($thermometers)) {
+	$datas = null;
+	try {
+		$json = file_get_contents($jsonurl.'telist'); 
+		$datas = json_decode($json,true);
+	} catch (Exception $e) { 
+		echo $e->getMessage();
+	}
+	if (!$datas) {
+		echo "No information available...";
+	} else {
+		echo '<hr>Importing Min Max Temperatures per day<br/>';
+		foreach($datas['response'] as $data){
+			$id_sensor=$data['id'];
+			$datum = date('Y-m-d');
+			$mintemp = $data['te-'];
+			$maxtemp = $data['te+'];
+			echo $datum.': '.$mintemp.' - '.$maxtemp;
+			$sql = "INSERT INTO temp_day (`date`, `min`, `max`, `id_sensor`) values ('$datum', '$mintemp', '$maxtemp', '$id_sensor') ON DUPLICATE KEY UPDATE `min`='$mintemp', `max`='$maxtemp'";
+			if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
+		}
+	}
 }
 
 /* Rain */
@@ -128,57 +160,38 @@ if (!$datas) {
 	  $datum = date('Y-m-d');
 	  $mm = $data['mm'];
 	  echo $datum.': '.$mm;
-	  $sql = "INSERT INTO rain (`date`, `mm`) values ('$datum', '$mm') ON DUPLICATE KEY UPDATE `mm`='$mm'";
+	  $sql = "INSERT INTO rain (`date`, `mm`, `id_sensor`) values ('$datum', '$mm', '$id_sensor') ON DUPLICATE KEY UPDATE `mm`='$mm'";
 	  if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
   }
 
 }
-
-/* Min Max Temperatures per day */
-$datas = null;
-try {
-  $json = file_get_contents($jsonurl.'telist'); 
-  $datas = json_decode($json,true);
-} catch (Exception $e) { 
-  echo $e->getMessage();
-}
-if (!$datas) {
-  echo "No information available...";
-} else {
-  echo '<hr>Importing Min Max Temperatures per day<br/>';
-  foreach($datas['response'] as $data){
-	  $datum = date('Y-m-d');
-	  $mintemp = $data['te-'];
-	  $maxtemp = $data['te+'];
-	  echo $datum.': '.$mintemp.' - '.$maxtemp;
-	  $sql = "INSERT INTO temp_day (`date`, `min`, `max`) values ('$datum', '$mintemp', '$maxtemp') ON DUPLICATE KEY UPDATE `min`='$mintemp', `max`='$maxtemp'";
-	  if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
-  }
-
-}
-
+	
 /* Wind */
-$datas = null;
-try {
-  $json = file_get_contents($jsonurl.'wi/graph/2/day'); 
-  $datas = json_decode($json,true);
-} catch (Exception $e) { 
-  echo $e->getMessage();
-}
-if (!$datas) {
-  echo "No information available...";
-} else {
-  echo '<hr>Importing Wind<br/>';
-  foreach($datas['response'] as $data){
-	  $time = $data['t'];
-	  $windspeed = $data['ws'];
-	  $gust = $data['gu'];
-	  $direction = $data['dir'];
-	  echo $time.' - '.$windspeed.' - '.$gust.' - '.$direction.'<br/>';
-	  $sql = "INSERT IGNORE INTO wind (`timestamp`, `wi`, `gu`, `dir`) values ('$time', '$windspeed', '$gust', '$direction') ";
-	  if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
-  }
-
+if(!empty($windmeters)) {
+	foreach($windmeters as $windmeter){
+		$datas = null;
+		try {
+			$json = file_get_contents($jsonurl.'wi/graph/'.$windmeter['id'].'/day'); 
+			$datas = json_decode($json,true);
+		} catch (Exception $e) { 
+			echo $e->getMessage();
+		}
+		if (!$datas) {
+			echo "No information available...";
+		} else {
+			echo '<hr>Importing Wind<br/>';
+			foreach($datas['response'] as $data){
+				$id_sensor=$windmeter['id'];
+				$time = $data['t'];
+				$windspeed = $data['ws'];
+				$gust = $data['gu'];
+				$direction = $data['dir'];
+				echo $time.' - '.$windspeed.' - '.$gust.' - '.$direction.'<br/>';
+				$sql = "INSERT IGNORE INTO wind (`timestamp`, `wi`, `gu`, `dir`, `id_sensor`) values ('$time', '$windspeed', '$gust', '$direction', '$id_sensor') ";
+				if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
+			}
+		}
+	}
 }
 ?>
 </body>

@@ -47,7 +47,7 @@ if (!$data) {echo "No information available...";} else {
 if($authenticated == false) { 
 print '<section class="span_3"><p class="error">Some information is not available when not logged in</p></section>';
 } else {
-	if($debug=='yes') {echo '<div class="row">';print_r($data['response']['switches']);echo '</div><hr>';}
+	if($debug=='yes') {echo '<div class="row">';print_r($data);echo '</div><hr>';}
 }
 $switches =  $data['response']['switches'];
 foreach($switches as $switch) {
@@ -76,6 +76,7 @@ foreach($sensors as $sensor) {
 $scenes =  $data['response']['scenes'];
 $thermometers =  $data['response']['thermometers'];
 $rainmeters =  $data['response']['rainmeters'];
+$windmeters =  $data['response']['windmeters'];
 
 //---SCHAKELAARS---
 $sql="select id_switch, name, type, favorite, volgorde from switches where type not in ('radiator', 'somfy')";
@@ -258,6 +259,7 @@ echo "</table></div>";
 if(!empty($thermometers)) {
 	echo '<div class="item handje" onclick="window.location=\'temp.php\';"><h2>Temperatuur</h2><table width="100%">';
 	foreach($thermometers as $thermometer){
+		if($debug=='yes') print_r($thermometer);
 		echo '<tr><th></th><th>temp<br/>°C</th><th>hum<br/>%</th><th>min<br/>°C</th><th>te-t<br/>&nbsp;</th><th>max<br/>°C</th><th>te+t<br/>&nbsp;</th></tr>
 		<tr><td>'.$thermometer['name'].'</td><td>'.$thermometer['te'].'</td><td>'.$thermometer['hu'].'</td><td>'.$thermometer['te-'].'</td><td>'.$thermometer['te-t'].'</td><td>'.$thermometer['te+'].'</td><td>'.$thermometer['te+t'].'</td></tr>';
 	}
@@ -267,18 +269,19 @@ if(!empty($thermometers)) {
 if(!empty($rainmeters)) {
 	echo '<div class="item handje" onclick="window.location=\'rain.php\';"><h2>Regen</h2><table width="100%">';
 	foreach($rainmeters as $rainmeter){
+		if($debug=='yes') print_r($rainmeter);
 		echo '<tr><th></th><th>mm</th><th>3h</th></tr>
 		<tr><td>'.$rainmeter['name'].'</td><td>'.$rainmeter['mm'].' mm</td><td>'.$rainmeter['3h'].' mm</td></tr>';
 	}
 	echo "</table></div>";
 }
 //--WINDMETERS--
-if(isset($data['response']['windmeters']['0']['ws'])) {
-	$windmeters =  $data['response']['windmeters'];
+//if(isset($data['response']['windmeters']['0']['ws'])) {
+if(!empty($windmeters)) {
 	echo '<div class="item handje" onclick="window.location=\'wind.php\';"><h2>Wind</h2><table width="100%">';
 	foreach($windmeters as $windmeter){
-		print '<tr><th>Naam</th><th>ws</th><th>gu</th><th>dir</th><th>ws+</th></tr>
-		<tr><td>'.$windmeter['name'].'</td><td>'.$windmeter['ws'].' km/u</td><td>'.$windmeter['gu'].' km/u</td><td>'.$windmeter['dir'].' °</td><td>'.$windmeter['ws+'].' km/u</td></tr>';
+		if($debug=='yes') print_r($windmeter);
+		if(isset($windmeter['ws'])) print '<tr><th>Naam</th><th>ws</th><th>gu</th><th>dir</th><th>ws+</th></tr><tr><td>'.$windmeter['name'].'</td><td>'.$windmeter['ws'].' km/u</td><td>'.$windmeter['gu'].' km/u</td><td>'.$windmeter['dir'].' °</td><td>'.$windmeter['ws+'].' km/u</td></tr>';
 	}
 	echo "</table></div>";
 }

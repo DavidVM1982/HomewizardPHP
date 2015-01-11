@@ -28,6 +28,8 @@ if(isset($_SESSION['authenticated'])) {
 if($authenticated==true && $debug=='yes') {
 	error_reporting(E_ALL); 
 	ini_set("display_errors", "on");
+} else {
+	echo '<style type="text/css">body {-webkit-user-select:none;}</style>';
 }?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
