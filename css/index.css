@@ -11,11 +11,18 @@ a:active {text-decoration:underline;color:#000}
 .footer {clear:both; padding-top:20px; padding-bottom:20px; width:100%; margin:0 auto; margin-top:20px;}
 .onecolumn {width:98%;max-width:270px; margin:0 auto;}
 .twocolumn {width:98%;max-width:550px; margin:0 auto;}
+.threecolumn {width:98%;max-width:830px; margin:0 auto;}
 .handje{cursor: pointer; cursor: hand;}
 p.error {line-height:20px; color:#F00; }
 .isotope {height: 100%; margin:0 auto;}
 .isotope:after {content: '';display: block;clear: both;}
 .item {float: left; width:19.5%;border:1px solid #ccc;background: #cacaca;background: -webkit-gradient(linear, left top, left bottom, from(#fafafa), to(#cacaca) );background: -moz-linear-gradient(-90deg, #fafafa, #cacaca);filter:  progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#fafafa',endColorstr='#cacaca');padding-bottom:20px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px;margin:0.5px}
+.item.large {
+  width: 150px;
+  height: 550px;
+  background: #2D6;
+  z-index: 10;
+}
 .history{min-width:270px;}
 .temprain{min-width:270px;}
 @media only screen and (max-width: 1319px) {

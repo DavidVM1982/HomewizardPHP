@@ -133,7 +133,7 @@ echo "</tbody></table></div>";
 }
 /* SCENES */
 if(!empty($scenes)) {
-echo '<div class="item"><section onclick="window.location=\'index.php\'" class="handje"><h2>Scènes</h2></section>';
+echo '<div class="item"><h2>Scènes</h2>';
 foreach($scenes as $scene){
 	echo '<table width="100%"><thead><tr><th colspan="2">';
 	if($detailscenes=='optional') {print '<a href="#" onclick="toggle_visibility(\'scene'.$scene['id'].'\');" style="text-decoration:none">'.$scene['name'].'</a>';} else {print $scene['name'];}
@@ -142,7 +142,7 @@ foreach($scenes as $scene){
 	<th width="50px"><form method="post" action="#"><input type="hidden" name="scene" value="'.$scene['id'].'"/><input type="hidden" name="schakelscene" value="off"/><input type="submit" value="UIT" class="abutton"/></form></th>
 	</tr></thead>';
 	if(($detailscenes=='yes') || ($detailscenes=='optional')) {
-		if($detailscenes=='optional') {print '<tbody id="scene'.$scene['id'].'" style="display:none">';} else {print '<tbody>';}
+		if($detailscenes=='optional') {print '<tbody id="scene'.$scene['id'].'" style="display:none" class="handje">';} else {print '<tbody>';}
 		$datascene = null;
 		$datascenes = null;
 		try {
@@ -170,7 +170,7 @@ $sql="select id_switch, name, volgorde from switches where type like 'somfy' ord
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
 	$group = 0;
-echo '<div class="item"><section onclick="window.location=\'index.php\'" class="handje"><h2>Somfy</h2></section><table align="center"><tbody>';
+echo '<div class="item"><h2>Somfy</h2><table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$tdstyle = '';
 	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black"';
@@ -194,7 +194,7 @@ $sql="select id_switch, name, volgorde from switches where type like 'radiator' 
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
 	$group = 0;
-echo '<div class="item"><section onclick="window.location=\'index.php\'" class="handje"><h2>Radiatoren</h2></section><table align="center"><tbody>';
+echo '<div class="item"><h2>Radiatoren</h2><table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$tdstyle = '';
 	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black"';

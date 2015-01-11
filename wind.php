@@ -3,9 +3,9 @@ include "header.php";
 if(isset($_POST['limit'])) { $limit = $_POST['limit']; } else { $limit = 20;}
 $sql = "SELECT timestamp, wi, gu, dir FROM wind ORDER BY timestamp DESC LIMIT 0,$limit";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
-echo '<div class="onecolumn">
+echo '<div class="threecolumn">
 <form method="post" name="filter" id="filter">
-<select name="limit" class="abutton" onChange="this.form.submit()">';
+<select name="limit" class="abutton settings" onChange="this.form.submit()">';
 if(isset($_POST['limit'])) print '<option selected>'.$_POST['limit'].'</option>';
 print '<option>20</option>
 <option>50</option>
@@ -29,21 +29,29 @@ while($row = $result->fetch_assoc()){
 }
 $result->free();
 echo '</tbody></table></div>';
-if(1+2==4) {
-$sql = "SELECT date FROM wind_day ORDER BY date DESC LIMIT 0,$limit";
+$sql = "SELECT timestamp, max(wi) as maxwi, max(gu) maxgu FROM wind GROUP BY left(timestamp,10) ORDER BY timestamp DESC LIMIT 0,$limit";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
-echo '<div class="item temprain"><table align="center"><thead><tr><th>Datum</th><th>Windspeed</th><th>Gust</th><th>Direction</th></tr></thead><tbody>';
+echo '<div class="item temprain"><h2>Max wind per dag</h2><table width="100%" align="center"><thead><tr><th valign="bottom">Datum</th><th>Windspeed<br/>km/h</th><th>Gust<br/>km/h</th></tr></thead><tbody>';
 while($row = $result->fetch_assoc()){
 	echo '<tr>
-	<td align="right">'.date('M Y', strtotime($row['timestamp'])).'</td>
-	<td align="right">'.$row['wi'].' km/u</td>
-	<td align="right">'.$row['gu'].' km/u</td>
-	<td align="right">'.$row['dir'].' </td>
+	<td align="right">'.strftime("%a %e %b",strtotime($row['timestamp'])).'</td>
+	<td align="right">'.round($row['maxwi'],1).'</td>
+	<td align="right">'.round($row['maxgu'],1).'</td>
+	</tr>';
+}
+$result->free();
+echo '</tbody></table></div>';
+$sql = "SELECT timestamp, max(wi) as maxwi, max(gu) maxgu FROM wind GROUP BY left(timestamp,7) ORDER BY timestamp DESC LIMIT 0,$limit";
+if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+echo '<div class="item temprain"><h2>Max wind per maand</h2><table width="100%" align="center"><thead><tr><th valign="bottom">Datum</th><th>Windspeed<br/>km/h</th><th>Gust<br/>km/h</th></tr></thead><tbody>';
+while($row = $result->fetch_assoc()){
+	echo '<tr>
+	<td align="right">'.strftime("%B %Y",strtotime($row['timestamp'])).'</td>
+	<td align="right">'.round($row['maxwi'],1).'</td>
+	<td align="right">'.round($row['maxgu'],1).'</td>
 	</tr>';
 }
 $result->free();
 echo "</tbody></table></div>";
-}
-echo '</div>';
 include "footer.php";
 ?>

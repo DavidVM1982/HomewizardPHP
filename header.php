@@ -45,9 +45,17 @@ if($authenticated==true && $debug=='yes') {
 <script type="text/javascript" language="javascript" src="js/isotope.pkgd.min.js"></script>
 <script language="javascript">
 $( function() {
-  $('.isotope').isotope({
+  var $container = $('.isotope'),
+      $items = $('.item');
+	$('.isotope').isotope({
     layoutMode: 'masonry',
     itemSelector: '.item',
+  });
+  $items.click(function(){
+    var $this = $(this);
+    $container
+      .isotope('updateSortData', $this )
+      .isotope();
   });
 });
 </script>
@@ -70,11 +78,4 @@ function toggle(showHideDiv, switchTextDiv) {
 <link href="css/index.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-<script>
-$('button').on('click', function () {
-    var $rowsNo = $('#showhide tbody tr').filter(function () {
-        return $.trim($(this).find('td').eq(3).text()) === "no"
-    }).toggle();
-});
-</script>
 <section class="row"><a href="index.php" class="abutton settings">Home</a></section>
