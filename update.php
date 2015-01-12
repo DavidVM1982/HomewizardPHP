@@ -21,18 +21,38 @@ if(isset($_POST['updatedatabasenow'])) {
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
 	if($versie<20150111) {
-		$sql="ALTER TABLE `temperature` ADD `id_sensor` INT DEFAULT NULL ;ALTER TABLE `temperature` DROP PRIMARY KEY; ALTER TABLE `temperature` ADD PRIMARY KEY (`timestamp`,`id_sensor`);";
-		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
-		$sql="ALTER TABLE `temp_day` ADD `id_sensor` INT DEFAULT NULL ;ALTER TABLE `temp_day` DROP PRIMARY KEY; ALTER TABLE `temp_day` ADD PRIMARY KEY (`date`,`id_sensor`);";
-		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
-		$sql="ALTER TABLE `rain` ADD `id_sensor` INT DEFAULT NULL ;ALTER TABLE `rain` DROP PRIMARY KEY; ALTER TABLE `rain` ADD PRIMARY KEY (`date`,`id_sensor`);";
-		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
-		$sql="ALTER TABLE `wind` ADD `id_sensor` INT DEFAULT NULL ;ALTER TABLE `wind` DROP PRIMARY KEY; ALTER TABLE `wind` ADD PRIMARY KEY (`timestamp`,`id_sensor`);";
-		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
-		$sql="ALTER TABLE `wind_day` ADD `id_sensor` INT DEFAULT NULL ;ALTER TABLE `wind_day` DROP PRIMARY KEY; ALTER TABLE `wind_day` ADD PRIMARY KEY (`date`,`id_sensor`);";
-		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="ALTER TABLE `temperature` ADD `id_sensor` INT DEFAULT NULL ;";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
+		$sql="ALTER TABLE `temperature` DROP PRIMARY KEY;";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
+		$sql="ALTER TABLE `temperature` ADD PRIMARY KEY (`timestamp`,`id_sensor`);";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
+		$sql="ALTER TABLE `temp_day` ADD `id_sensor` INT DEFAULT NULL ;";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
+		$sql="ALTER TABLE `temp_day` DROP PRIMARY KEY;";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
+		$sql="ALTER TABLE `temp_day` ADD PRIMARY KEY (`date`,`id_sensor`);";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
+		$sql="ALTER TABLE `rain` ADD `id_sensor` INT DEFAULT NULL ;";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
+		$sql="ALTER TABLE `rain` DROP PRIMARY KEY;";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
+		$sql="ALTER TABLE `rain` ADD PRIMARY KEY (`date`,`id_sensor`);";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
+		$sql="ALTER TABLE `wind` ADD `id_sensor` INT DEFAULT NULL ;";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
+		$sql="ALTER TABLE `wind` DROP PRIMARY KEY;";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
+		$sql="ALTER TABLE `wind` ADD PRIMARY KEY (`timestamp`,`id_sensor`);";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
+		$sql="ALTER TABLE `wind_day` ADD `id_sensor` INT DEFAULT NULL ;";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
+		$sql="ALTER TABLE `wind_day` DROP PRIMARY KEY;";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
+		$sql="ALTER TABLE `wind_day` ADD PRIMARY KEY (`date`,`id_sensor`);";
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
 		$sql="insert into versie (versie) VALUES ('20150111');";
-		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		if(!$result = $db->query($sql)){ echo 'There was an error running the query ['.$sql.'][' . $db->error . ']<hr>';}
 	}
 }
 
