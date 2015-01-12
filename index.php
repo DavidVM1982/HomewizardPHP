@@ -260,8 +260,11 @@ if(!empty($thermometers)) {
 	echo '<div class="item handje" onclick="window.location=\'temp.php\';"><h2>Temperatuur</h2><table width="100%">';
 	foreach($thermometers as $thermometer){
 		if($debug=='yes') print_r($thermometer);
-		echo '<tr><th></th><th>temp<br/>°C</th><th>hum<br/>%</th><th>min<br/>°C</th><th>te-t<br/>&nbsp;</th><th>max<br/>°C</th><th>te+t<br/>&nbsp;</th></tr>
-		<tr><td>'.$thermometer['name'].'</td><td>'.$thermometer['te'].'</td><td>'.$thermometer['hu'].'</td><td>'.$thermometer['te-'].'</td><td>'.$thermometer['te-t'].'</td><td>'.$thermometer['te+'].'</td><td>'.$thermometer['te+t'].'</td></tr>';
+		echo '<tr>';
+		if(count($thermometers)>1) echo '<th></th>';
+		echo '<th>temp<br/>°C</th><th>hum<br/>%</th><th>min<br/>°C</th><th>te-t<br/>&nbsp;</th><th>max<br/>°C</th><th>te+t<br/>&nbsp;</th></tr><tr>';
+		if(count($thermometers)>1) echo '<td>'.$thermometer['name'].'</td>';
+		echo '<td>'.$thermometer['te'].'</td><td>'.$thermometer['hu'].'</td><td>'.$thermometer['te-'].'</td><td>'.$thermometer['te-t'].'</td><td>'.$thermometer['te+'].'</td><td>'.$thermometer['te+t'].'</td></tr>';
 	}
 	echo "</table></div>";
 }
@@ -270,8 +273,11 @@ if(!empty($rainmeters)) {
 	echo '<div class="item handje" onclick="window.location=\'rain.php\';"><h2>Regen</h2><table width="100%">';
 	foreach($rainmeters as $rainmeter){
 		if($debug=='yes') print_r($rainmeter);
-		echo '<tr><th></th><th>mm</th><th>3h</th></tr>
-		<tr><td>'.$rainmeter['name'].'</td><td>'.$rainmeter['mm'].' mm</td><td>'.$rainmeter['3h'].' mm</td></tr>';
+		echo '<tr>';
+		if(count($rainmeters)>1) echo '<th></th>';
+		echo '<th>Vandaag</th><th>Laatste 3u</th></tr><tr>';
+		if(count($rainmeters)>1) echo '<td>'.$rainmeter['name'].'</td>';
+		echo '<td>'.$rainmeter['mm'].' mm</td><td>'.$rainmeter['3h'].' mm</td></tr>';
 	}
 	echo "</table></div>";
 }
@@ -281,7 +287,13 @@ if(!empty($windmeters)) {
 	echo '<div class="item handje" onclick="window.location=\'wind.php\';"><h2>Wind</h2><table width="100%">';
 	foreach($windmeters as $windmeter){
 		if($debug=='yes') print_r($windmeter);
-		if(isset($windmeter['ws'])) print '<tr><th>Naam</th><th>ws</th><th>gu</th><th>dir</th><th>ws+</th></tr><tr><td>'.$windmeter['name'].'</td><td>'.$windmeter['ws'].' km/u</td><td>'.$windmeter['gu'].' km/u</td><td>'.$windmeter['dir'].' °</td><td>'.$windmeter['ws+'].' km/u</td></tr>';
+		if(isset($windmeter['ws'])) {
+			echo '<tr>';
+			if(count($windmeters)>1) echo '<th></th>';
+			echo '<th>ws</th><th>gu</th><th>dir</th><th>ws+</th></tr><tr>';
+			if(count($windmeters)>1) echo '<td>'.$windmeter['name'].'</td>';
+			echo '<td>'.$windmeter['ws'].' km/u</td><td>'.$windmeter['gu'].' km/u</td><td>'.$windmeter['dir'].' °</td><td>'.$windmeter['ws+'].' km/u</td></tr>';
+		}
 	}
 	echo "</table></div>";
 }
