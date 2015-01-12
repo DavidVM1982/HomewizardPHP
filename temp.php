@@ -23,7 +23,7 @@ print '<option>20</option>
 while($row = $result->fetch_assoc()){
 	echo '<tr>
 	<td>'.strftime("%a %e %b %H:%M",strtotime($row['timestamp'])).'&nbsp;</td>
-	<td class style="text-align: right;">&nbsp;'.$row['te'].' °C&nbsp;</td>
+	<td class style="text-align: right;">&nbsp;'.number_format($row['te'],1).' °C&nbsp;</td>
 	<td class style="text-align: right;">&nbsp;'.$row['hu'].' %&nbsp;</td>
 	</tr>';
 }
@@ -37,8 +37,8 @@ echo '<table id="table_day" align="center"><thead><tr><th>Datum</th><th>Min</th>
 while($row = $result->fetch_assoc()){
 	echo '<tr>
 	<td class style="text-align: right;">'.strftime("%a %e %b",strtotime($row['date'])).'&nbsp;</td>
-	<td class style="text-align: right;">&nbsp;'.$row['min'].' °C&nbsp;</td>
-	<td class style="text-align: right;">&nbsp;'.$row['max'].' °C&nbsp;</td>
+	<td class style="text-align: right;">&nbsp;'.number_format($row['min'],1).' °C&nbsp;</td>
+	<td class style="text-align: right;">&nbsp;'.number_format($row['max'],1).' °C&nbsp;</td>
 	</tr>';
 }
 $result->free();
@@ -51,8 +51,8 @@ echo '<table id="table_day" align="center"><thead><tr><th>Datum</th><th>Min</th>
 while($row = $result->fetch_assoc()){
 	echo '<tr>
 	<td class style="text-align: right;">'.strftime("%B %Y",strtotime($row['date'])).'&nbsp;</td>
-	<td class style="text-align: right;">&nbsp;'.$row['min'].' °C&nbsp;</td>
-	<td class style="text-align: right;">&nbsp;'.$row['max'].' °C&nbsp;</td>
+	<td class style="text-align: right;">&nbsp;'.number_format($row['min'],1).' °C&nbsp;</td>
+	<td class style="text-align: right;">&nbsp;'.number_format($row['max'],1).' °C&nbsp;</td>
 	</tr>';
 }
 $result->free();

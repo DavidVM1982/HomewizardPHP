@@ -22,8 +22,8 @@ print '<option>20</option>
 while($row = $result->fetch_assoc()){
 	echo '<tr>
 	<td align="right" width="140px">'.date('d/m H:i', strtotime($row['timestamp'])).'</td>
-	<td align="right">'.$row['wi'].'</td>
-	<td align="right">'.$row['gu'].'</td>
+	<td align="right">'.number_format($row['wi'],1).'</td>
+	<td align="right">'.number_format($row['gu'],1).'</td>
 	<td align="right">'.$row['dir'].'</td>
 	</tr>';
 }
@@ -35,8 +35,8 @@ echo '<div class="item temprain"><h2>Max wind per dag</h2><table width="100%" al
 while($row = $result->fetch_assoc()){
 	echo '<tr>
 	<td align="right">'.strftime("%a %e %b",strtotime($row['timestamp'])).'</td>
-	<td align="right">'.round($row['maxwi'],1).'</td>
-	<td align="right">'.round($row['maxgu'],1).'</td>
+	<td align="right">'.number_format($row['maxwi'],1).'</td>
+	<td align="right">'.number_format($row['maxgu'],1).'</td>
 	</tr>';
 }
 $result->free();
@@ -47,8 +47,8 @@ echo '<div class="item temprain"><h2>Max wind per maand</h2><table width="100%" 
 while($row = $result->fetch_assoc()){
 	echo '<tr>
 	<td align="right">'.strftime("%B %Y",strtotime($row['timestamp'])).'</td>
-	<td align="right">'.round($row['maxwi'],1).'</td>
-	<td align="right">'.round($row['maxgu'],1).'</td>
+	<td align="right">'.number_format($row['maxwi'],1).'</td>
+	<td align="right">'.number_format($row['maxgu'],1).'</td>
 	</tr>';
 }
 $result->free();

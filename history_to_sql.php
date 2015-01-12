@@ -109,10 +109,10 @@ if(!empty($thermometers)) {
 			foreach($datas['response'] as $data){
 				$id_sensor=$thermometer['id'];
 				$time = $data['t'];
-				$temp = $data['te'];
+				$temp = str_replace(',', '.', str_replace('.', '', $data['te']));
 				$hum = $data['hu'];
-				echo $data['t'].' - '.$data['te'].' - '.$data['hu'].'<br/>';
-				$sql = "INSERT IGNORE INTO temperature (`timestamp`, `te`, `hu`, `id_sensor`) values ('$time', '$temp', '$hum', '$id_sensor') ";
+				echo $time.' - '.$temp.' - '.$hum.'<br/>';
+				$sql = "INSERT INTO temperature (`timestamp`, `te`, `hu`, `id_sensor`) values ('$time', '$temp', '$hum', '$id_sensor') ON DUPLICATE KEY UPDATE `te`='$temp', `hu`='$hum'";
 				if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
 			}
 		}
@@ -135,8 +135,8 @@ if(!empty($thermometers)) {
 		foreach($datas['response'] as $data){
 			$id_sensor=$data['id'];
 			$datum = date('Y-m-d');
-			$mintemp = $data['te-'];
-			$maxtemp = $data['te+'];
+			$mintemp = str_replace(',', '.', str_replace('.', '', $data['te-']));
+			$maxtemp = str_replace(',', '.', str_replace('.', '', $data['te+']));
 			echo $datum.': '.$mintemp.' - '.$maxtemp;
 			$sql = "INSERT INTO temp_day (`date`, `min`, `max`, `id_sensor`) values ('$datum', '$mintemp', '$maxtemp', '$id_sensor') ON DUPLICATE KEY UPDATE `min`='$mintemp', `max`='$maxtemp'";
 			if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
@@ -158,7 +158,7 @@ if (!$datas) {
   echo '<hr>Importing Rain<br/>';
   foreach($datas['response'] as $data){
 	  $datum = date('Y-m-d');
-	  $mm = $data['mm'];
+	  $mm = str_replace(',', '.', str_replace('.', '', $data['mm']));
 	  echo $datum.': '.$mm;
 	  $sql = "INSERT INTO rain (`date`, `mm`, `id_sensor`) values ('$datum', '$mm', '$id_sensor') ON DUPLICATE KEY UPDATE `mm`='$mm'";
 	  if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
@@ -183,8 +183,8 @@ if(!empty($windmeters)) {
 			foreach($datas['response'] as $data){
 				$id_sensor=$windmeter['id'];
 				$time = $data['t'];
-				$windspeed = $data['ws'];
-				$gust = $data['gu'];
+				$windspeed = str_replace(',', '.', str_replace('.', '', $data['ws']));
+				$gust = str_replace(',', '.', str_replace('.', '', $data['gu']));
 				$direction = $data['dir'];
 				echo $time.' - '.$windspeed.' - '.$gust.' - '.$direction.'<br/>';
 				$sql = "INSERT IGNORE INTO wind (`timestamp`, `wi`, `gu`, `dir`, `id_sensor`) values ('$time', '$windspeed', '$gust', '$direction', '$id_sensor') ";
