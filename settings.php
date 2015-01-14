@@ -95,7 +95,9 @@ if($showparameters==true) {
 	$sql="select variable, value from settings order by variable asc";
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	while($row = $result->fetch_assoc()){
-		echo '<form method="post"><tr><td>'.$row['variable'].'</td><td><input type="hidden" name="variable" id="variable" value="'.$row['variable'].'"/><input type="text" name="value" id="value" value="'.$row['value'].'"/></td><td><input type="submit" name="upd" value="update" class="abutton"></td></tr></form>';
+		echo '<form method="post"><tr><td>'.$row['variable'].'</td><td><input type="hidden" name="variable" id="variable" value="'.$row['variable'].'"/>';
+		if($row['variable']=='developerjson') { echo '<textarea name="value" id="value" >'.$row['value'].'</textarea>';} else {echo '<input type="text" name="value" id="value" value="'.$row['value'].'"/>' ;}
+		echo '</td><td><input type="submit" name="upd" value="update" class="abutton"></td></tr></form>';
 	}
 	$result->free();
 	echo '<form method="post"><tr><td><input type="text" name="variable" id="variable" value=""/></td><td><input type="text" name="value" id="value" value=""/></td><td><input type="submit" name="add" value="add" class="abutton"/></td></tr></form></tbody></table></center>';

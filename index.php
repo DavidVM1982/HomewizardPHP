@@ -39,16 +39,22 @@ if (isset($_POST['schakelscene'])) {
 	} else {echo '<p class="error">Switching blocked when not logged in</p>';}
 }
 $data = null;
-try {
-  $json = file_get_contents($jsonurl.'get-sensors');
-  $data = json_decode($json,true);
-} catch (Exception $e) {echo $e->getMessage();}
-if (!$data) {echo "No information available...";} else {
-if($authenticated == false) { 
-print '<section class="span_3"><p class="error">Some information is not available when not logged in</p></section>';
+if($authenticated == true && $developermode != 'yes') { 
+	try {
+	  $json = file_get_contents($jsonurl.'get-sensors');
+	  
+	} catch (Exception $e) {echo $e->getMessage();}
+} else if ($developermode == 'yes') {
+	print '<section class="span_3"><p class="error">Developer mode</p></section>';
+	$json = $developerjson;
 } else {
-	if($debug=='yes') {echo '<div class="row">';print_r($data);echo '</div><hr>';}
+	print '<section class="span_3"><p class="error">Demo mode, no actual data shown.</p></section>';
+	$json = $developerjson;
 }
+$data = json_decode($json,true);
+if($authenticated == true && $debug=='yes') {echo '<div style="width:100%">'.$json.'</div><hr>';}
+
+
 $switches =  $data['response']['switches'];
 foreach($switches as $switch) {
 	${'switchid'.$switch['id']} = $switch['id'];
@@ -94,22 +100,11 @@ while($row = $result->fetch_assoc()){
 	if($row['type']=='asun') {if(${'switchstatus'.$row['id_switch']}=="1") {$switchon = "off";} else {$switchon = "on";}}
 	else {if(${'switchstatus'.$row['id_switch']}=="on") {$switchon = "off";} else {$switchon = "on";}}
 	echo '<tr><form method="post" action="#"><td><img id="'.$row['type'].'Icon" src="images/empty.gif" /></td><td align="right" '.$tdstyle.'>'.$row['name'].'</td>
-	<td width="70px" '.$tdstyle.' ><input type="hidden" name="switch" value="'.$row['id_switch'].'"/><input type="hidden" name="schakel" value="'.$switchon.'"/>';
+	<td width="100px" '.$tdstyle.' ><input type="hidden" name="switch" value="'.$row['id_switch'].'"/><input type="hidden" name="schakel" value="'.$switchon.'"/>';
 	if($row['type']=='dimmer') {
-		print '<select name="dimlevel"  class="abutton handje" onChange="this.form.submit()" style="margin-top:4px; width:80px; ">
-		<option '.${'switchstatus'.$row['id_switch']}.') selected>'.${'switchstatus'.$row['id_switch']}.'</option>
-		<option>0</option>
-		<option>10</option>
-		<option>20</option>
-		<option>30</option>
-		<option>40</option>
-		<option>50</option>
-		<option>60</option>
-		<option>70</option>
-		<option>80</option>
-		<option>90</option>
-		<option>100</option>
-	</select>';
+		print '<output for=dimlevel id=dimlevel>'.${'switchstatus'.$row['id_switch']}.'</output>
+		<input name="dimlevel" class="input-range" type ="range" min ="0" max="100" step ="1" value ="'.${'switchstatus'.$row['id_switch']}.'" onChange="this.form.submit()"/>
+		';
 	}
 	else if($row['type']=='asun') {
 		print '
@@ -227,8 +222,7 @@ $group = 0;
 echo '<table align="center" width="100%">';
 while($row = $result->fetch_assoc()){
         echo '<tr>';
-        if($authenticated==true) {
-			$type = $row['type'];
+        	$type = $row['type'];
 			echo '<td style="color:#F00; font-weight:bold"><img id="'.$type.'Icon" src="images/empty.gif" /></td>';
         	if($type=="contact") $type = "Magneet";
 			if($type=="motion") $type = "Beweging";
@@ -246,11 +240,7 @@ while($row = $result->fetch_assoc()){
 			else if ($type=="Rook" && ${'sensorstatus'.$row['id_sensor']} == "yes") { echo 'ROOK!!!'; }
 			else echo ${'sensorstatus'.$row['id_sensor']};
 			echo '</td>';
-        
 			if(${'sensorstatus'.$row['id_sensor']} == "yes") {echo '<td style="color:#F00; font-weight:bold">'.${'sensortimestamp'.$row['id_sensor']}.'</td>';} else {echo '<td>'.${'sensortimestamp'.$row['id_sensor']}.'</td>';}
-		} else {
-			echo '<td>'.$row['name'].'</td><td>'.$type.'</td><td>status</td><td>time</td>';
-		}
 		echo '</tr>';
 }
 echo "</table></div>";
@@ -282,7 +272,6 @@ if(!empty($rainmeters)) {
 	echo "</table></div>";
 }
 //--WINDMETERS--
-//if(isset($data['response']['windmeters']['0']['ws'])) {
 if(!empty($windmeters)) {
 	echo '<div class="item handje" onclick="window.location=\'wind.php\';"><h2>Wind</h2><table width="100%">';
 	foreach($windmeters as $windmeter){
@@ -297,7 +286,6 @@ if(!empty($windmeters)) {
 	}
 	echo "</table></div>";
 }
-}
 ?>
 <script type="text/javascript">
 <!--
@@ -310,5 +298,66 @@ if(!empty($windmeters)) {
     }
 //-->
 </script>
-<?php
+<?php 
+
+function unvar_dump($str) {
+    if (strpos($str, "\n") === false) {
+        //Add new lines:
+        $regex = array(
+            '#(\\[.*?\\]=>)#',
+            '#(string\\(|int\\(|float\\(|array\\(|NULL|object\\(|})#',
+        );
+        $str = preg_replace($regex, "\n\\1", $str);
+        $str = trim($str);
+    }
+    $regex = array(
+        '#^\\040*NULL\\040*$#m',
+        '#^\\s*array\\((.*?)\\)\\s*{\\s*$#m',
+        '#^\\s*string\\((.*?)\\)\\s*(.*?)$#m',
+        '#^\\s*int\\((.*?)\\)\\s*$#m',
+        '#^\\s*bool\\(true\\)\\s*$#m',
+        '#^\\s*bool\\(false\\)\\s*$#m',
+        '#^\\s*float\\((.*?)\\)\\s*$#m',
+        '#^\\s*\[(\\d+)\\]\\s*=>\\s*$#m',
+        '#\\s*?\\r?\\n\\s*#m',
+    );
+    $replace = array(
+        'N',
+        'a:\\1:{',
+        's:\\1:\\2',
+        'i:\\1',
+        'b:1',
+        'b:0',
+        'd:\\1',
+        'i:\\1',
+        ';'
+    );
+    $serialized = preg_replace($regex, $replace, $str);
+    $func = create_function(
+        '$match', 
+        'return "s:".strlen($match[1]).":\\"".$match[1]."\\"";'
+    );
+    $serialized = preg_replace_callback(
+        '#\\s*\\["(.*?)"\\]\\s*=>#', 
+        $func,
+        $serialized
+    );
+    $func = create_function(
+        '$match', 
+        'return "O:".strlen($match[1]).":\\"".$match[1]."\\":".$match[2].":{";'
+    );
+    $serialized = preg_replace_callback(
+        '#object\\((.*?)\\).*?\\((\\d+)\\)\\s*{\\s*;#', 
+        $func, 
+        $serialized
+    );
+    $serialized = preg_replace(
+        array('#};#', '#{;#'), 
+        array('}', '{'), 
+        $serialized
+    );
+
+    return unserialize($serialized);
+}
+
 include "footer.php";?>
