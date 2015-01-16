@@ -41,7 +41,7 @@ if (isset($_POST['schakelscene'])) {
 $data = null;
 if($authenticated == true && $developermode != 'yes') { 
 	try {
-	  $json = file_get_contents($jsonurl.'get-sensors');
+	  $json = file_get_contents($jsonurl.'get-status');
 	  
 	} catch (Exception $e) {echo $e->getMessage();}
 } else if ($developermode == 'yes') {
@@ -58,7 +58,6 @@ if($authenticated == true && $debug=='yes') {echo '<div style="width:100%">'.$js
 $switches =  $data['response']['switches'];
 foreach($switches as $switch) {
 	${'switchid'.$switch['id']} = $switch['id'];
-	${'switchname'.$switch['id']} = $switch['name'];
 	${'switchtype'.$switch['id']} = $switch['type'];
 	if($switch['type']=='radiator') { 
 		${'switchstatus'.$switch['id']} = $switch['tte']; 
@@ -67,6 +66,8 @@ foreach($switches as $switch) {
 	} else if($switch['type']=='asun') {
 		${'switchstatus'.$switch['id']} = $switch['mode'];
 	} else if($switch['type']=='somfy') {
+	} else if($switch['type']=='virtual') {
+		${'switchstatus'.$switch['id']} = 'off';
 	} else {
 		${'switchstatus'.$switch['id']} = $switch['status'];
 	}
@@ -74,12 +75,10 @@ foreach($switches as $switch) {
 $sensors =  $data['response']['kakusensors'];
 foreach($sensors as $sensor) {
 	${'sensorid'.$sensor['id']} = $sensor['id'];
-	${'sensorname'.$sensor['id']} = $sensor['name'];
 	${'sensorstatus'.$sensor['id']} = $sensor['status'];
-	${'sensortype'.$sensor['id']} = $sensor['type'];
 	${'sensortimestamp'.$sensor['id']} = $sensor['timestamp'];
 }
-$scenes =  $data['response']['scenes'];
+//$scenes =  $data['response']['scenes'];
 $thermometers =  $data['response']['thermometers'];
 $rainmeters =  $data['response']['rainmeters'];
 $windmeters =  $data['response']['windmeters'];
@@ -91,7 +90,7 @@ $sql.=" order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
 $group = 0;
-echo '<div class="isotope"><div class="item"><form id="showallswitches" action="#" method="post"><input type="hidden" name="showallswitches" value="yes"><a href="#" onclick="document.getElementById(\'showallswitches\').submit();" style="text-decoration:none"><h2 >Schakelaars</h2></a></form><table align="center"><tbody>';
+echo '<div class="isotope"><div class="item gradient"><p class="number">'.$positie_schakelaars.'</p><form id="showallswitches" action="#" method="post"><input type="hidden" name="showallswitches" value="yes"><a href="#" onclick="document.getElementById(\'showallswitches\').submit();" style="text-decoration:none"><h2 >Schakelaars</h2></a></form><table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$switchon = "";
 	$tdstyle = '';
@@ -128,13 +127,13 @@ echo "</tbody></table></div>";
 }
 /* SCENES */
 if(!empty($scenes)) {
-echo '<div class="item"><h2>Scènes</h2>';
+echo '<div class="item gradient"><p class="number">'.$positie_scenes.'</p><h2>Scènes</h2>';
 foreach($scenes as $scene){
 	echo '<table width="100%"><thead><tr><th colspan="2">';
 	if($detailscenes=='optional') {print '<a href="#" onclick="toggle_visibility(\'scene'.$scene['id'].'\');" style="text-decoration:none">'.$scene['name'].'</a>';} else {print $scene['name'];}
 	print '<img id="'.$row['type'].'Icon" src="images/empty.gif" /></th>
-	<th width="50px"><form method="post" action="#"><input type="hidden" name="scene" value="'.$scene['id'].'"/><input type="hidden" name="schakelscene" value="on"/><input type="submit" value="AAN" class="abutton"/></form></th>
-	<th width="50px"><form method="post" action="#"><input type="hidden" name="scene" value="'.$scene['id'].'"/><input type="hidden" name="schakelscene" value="off"/><input type="submit" value="UIT" class="abutton"/></form></th>
+	<th width="50px"><form method="post" action="#"><input type="hidden" name="scene" value="'.$scene['id'].'"/><input type="hidden" name="schakelscene" value="on"/><input type="submit" value="AAN" class="abutton gradient"/></form></th>
+	<th width="50px"><form method="post" action="#"><input type="hidden" name="scene" value="'.$scene['id'].'"/><input type="hidden" name="schakelscene" value="off"/><input type="submit" value="UIT" class="abutton gradient"/></form></th>
 	</tr></thead>';
 	if(($detailscenes=='yes') || ($detailscenes=='optional')) {
 		if($detailscenes=='optional') {print '<tbody id="scene'.$scene['id'].'" style="display:none" class="handje">';} else {print '<tbody>';}
@@ -165,7 +164,7 @@ $sql="select id_switch, name, volgorde from switches where type like 'somfy' ord
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
 	$group = 0;
-echo '<div class="item"><h2>Somfy</h2><table align="center"><tbody>';
+echo '<div class="item gradient"><p class="number">'.$positie_somfy.'</p><h2>Somfy</h2><table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$tdstyle = '';
 	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black"';
@@ -174,9 +173,9 @@ while($row = $result->fetch_assoc()){
 	<td width="185px" '.$tdstyle.'><form method="post" action="#">
 	<input type="hidden" name="switch" value="'.$row['id_switch'].'"/>
 	<input type="hidden" name="schakel" value="'.$row['id_switch'].'"/>
-	<input type="submit" id="somfydownIcon" name="somfy" value="down" class="abuttonsomfy handje"/>
-	<input type="submit" id="somfystopIcon" name="somfy" value="stop" class="abuttonsomfy handje"/>
-	<input type="submit" id="somfyupIcon" name="somfy" value="up" class="abuttonsomfy handje"/>
+	<input type="submit" id="somfydownIcon" name="somfy" value="down" class="abuttonsomfy handje gradient"/>
+	<input type="submit" id="somfystopIcon" name="somfy" value="stop" class="abuttonsomfy handje gradient"/>
+	<input type="submit" id="somfyupIcon" name="somfy" value="up" class="abuttonsomfy handje gradient"/>
 	
 	</form></td></tr>';
 }
@@ -189,7 +188,7 @@ $sql="select id_switch, name, volgorde from switches where type like 'radiator' 
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
 	$group = 0;
-echo '<div class="item"><h2>Radiatoren</h2><table align="center"><tbody>';
+echo '<div class="item gradient"><p class="number">'.$positie_radiatoren.'</p><h2>Radiatoren</h2><table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$tdstyle = '';
 	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black"';
@@ -197,7 +196,7 @@ while($row = $result->fetch_assoc()){
 	print '<tr><td><img id="radiatorIcon" src="images/empty.gif" /></td><td align="right" '.$tdstyle.'>'.$row['name'].'</td>
 	<td width="115px" '.$tdstyle.'><form method="post" action="#">
 	<input type="hidden" name="radiator" value="'.$row['id_switch'].'"/>
-	<select name="set_temp"  class="abutton handje" onChange="this.form.submit()" style="margin-top:4px">
+	<select name="set_temp"  class="abutton handje gradient" onChange="this.form.submit()" style="margin-top:4px">
 		<option '.${'switchstatus'.$row['id_switch']}.') selected>'.${'switchstatus'.$row['id_switch']}.'</option>
 		<option>10</option>
 		<option>16</option>
@@ -214,7 +213,7 @@ echo "</tbody></table></div>";
 }
 
 //---SENSORS--
-echo '<div class="item handje" onclick="window.location=\'history.php\';"><h2>Sensoren</h2>';
+echo '<div class="item handje gradient" onclick="window.location=\'history.php\';"><p class="number">'.$positie_sensoren.'</p><h2>Sensoren</h2>';
 $sql="select id_sensor, name, type, volgorde from sensors order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
@@ -247,41 +246,35 @@ echo "</table></div>";
 }
 //--THERMOMETERS--
 if(!empty($thermometers)) {
-	echo '<div class="item handje" onclick="window.location=\'temp.php\';"><h2>Temperatuur</h2><table width="100%">';
+	echo '<div class="item handje gradient" onclick="window.location=\'temp.php\';"><p class="number">'.$positie_temperatuur.'</p><h2>Temperatuur</h2><table width="100%"><tr><th></th><th>temp</th><th>hum</th></tr>';
 	foreach($thermometers as $thermometer){
 		if($debug=='yes') print_r($thermometer);
 		echo '<tr>';
-		if(count($thermometers)>1) echo '<th></th>';
-		echo '<th>temp<br/>°C</th><th>hum<br/>%</th><th>min<br/>°C</th><th>te-t<br/>&nbsp;</th><th>max<br/>°C</th><th>te+t<br/>&nbsp;</th></tr><tr>';
-		if(count($thermometers)>1) echo '<td>'.$thermometer['name'].'</td>';
-		echo '<td>'.$thermometer['te'].'</td><td>'.$thermometer['hu'].'</td><td>'.$thermometer['te-'].'</td><td>'.$thermometer['te-t'].'</td><td>'.$thermometer['te+'].'</td><td>'.$thermometer['te+t'].'</td></tr>';
+		if(count($thermometers)>1) {echo '<td>'.$thermometer['name'].'</td>';} else { echo '<td></td>';}
+		echo '<td>'.$thermometer['te'].' °C</td><td>'.$thermometer['hu'].' %</td></tr>';
 	}
 	echo "</table></div>";
 }
 //--RAINMETERS--
 if(!empty($rainmeters)) {
-	echo '<div class="item handje" onclick="window.location=\'rain.php\';"><h2>Regen</h2><table width="100%">';
+	echo '<div class="item handje gradient" onclick="window.location=\'rain.php\';"><p class="number">'.$positie_regen.'</p><h2>Regen</h2><table width="100%"><tr><th></th><th>Vandaag</th><th>Laatste 3u</th></tr>';
 	foreach($rainmeters as $rainmeter){
 		if($debug=='yes') print_r($rainmeter);
 		echo '<tr>';
-		if(count($rainmeters)>1) echo '<th></th>';
-		echo '<th>Vandaag</th><th>Laatste 3u</th></tr><tr>';
-		if(count($rainmeters)>1) echo '<td>'.$rainmeter['name'].'</td>';
+		if(count($rainmeters)>1) {echo '<td>'.$rainmeter['name'].'</td>';} else { echo '<td></td>';}
 		echo '<td>'.$rainmeter['mm'].' mm</td><td>'.$rainmeter['3h'].' mm</td></tr>';
 	}
 	echo "</table></div>";
 }
 //--WINDMETERS--
 if(!empty($windmeters)) {
-	echo '<div class="item handje" onclick="window.location=\'wind.php\';"><h2>Wind</h2><table width="100%">';
+	echo '<div class="item handje gradient" onclick="window.location=\'wind.php\';"><p class="number">'.$positie_wind.'</p><h2>Wind</h2><table width="100%"><tr><th></th><th>ws</th><th>gu</th><th>dir</th></tr>';
 	foreach($windmeters as $windmeter){
 		if($debug=='yes') print_r($windmeter);
 		if(isset($windmeter['ws'])) {
 			echo '<tr>';
-			if(count($windmeters)>1) echo '<th></th>';
-			echo '<th>ws</th><th>gu</th><th>dir</th><th>ws+</th></tr><tr>';
-			if(count($windmeters)>1) echo '<td>'.$windmeter['name'].'</td>';
-			echo '<td>'.$windmeter['ws'].' km/u</td><td>'.$windmeter['gu'].' km/u</td><td>'.$windmeter['dir'].' °</td><td>'.$windmeter['ws+'].' km/u</td></tr>';
+			if(count($windmeters)>1) {echo '<td>'.$windmeter['name'].'</td>';} else { echo '<td></td>';}
+			echo '<td>'.$windmeter['ws'].' km/u</td><td>'.$windmeter['gu'].' km/u</td><td>'.$windmeter['dir'].' °</td></tr>';
 		}
 	}
 	echo "</table></div>";
@@ -298,66 +291,4 @@ if(!empty($windmeters)) {
     }
 //-->
 </script>
-<?php 
-
-function unvar_dump($str) {
-    if (strpos($str, "\n") === false) {
-        //Add new lines:
-        $regex = array(
-            '#(\\[.*?\\]=>)#',
-            '#(string\\(|int\\(|float\\(|array\\(|NULL|object\\(|})#',
-        );
-        $str = preg_replace($regex, "\n\\1", $str);
-        $str = trim($str);
-    }
-    $regex = array(
-        '#^\\040*NULL\\040*$#m',
-        '#^\\s*array\\((.*?)\\)\\s*{\\s*$#m',
-        '#^\\s*string\\((.*?)\\)\\s*(.*?)$#m',
-        '#^\\s*int\\((.*?)\\)\\s*$#m',
-        '#^\\s*bool\\(true\\)\\s*$#m',
-        '#^\\s*bool\\(false\\)\\s*$#m',
-        '#^\\s*float\\((.*?)\\)\\s*$#m',
-        '#^\\s*\[(\\d+)\\]\\s*=>\\s*$#m',
-        '#\\s*?\\r?\\n\\s*#m',
-    );
-    $replace = array(
-        'N',
-        'a:\\1:{',
-        's:\\1:\\2',
-        'i:\\1',
-        'b:1',
-        'b:0',
-        'd:\\1',
-        'i:\\1',
-        ';'
-    );
-    $serialized = preg_replace($regex, $replace, $str);
-    $func = create_function(
-        '$match', 
-        'return "s:".strlen($match[1]).":\\"".$match[1]."\\"";'
-    );
-    $serialized = preg_replace_callback(
-        '#\\s*\\["(.*?)"\\]\\s*=>#', 
-        $func,
-        $serialized
-    );
-    $func = create_function(
-        '$match', 
-        'return "O:".strlen($match[1]).":\\"".$match[1]."\\":".$match[2].":{";'
-    );
-    $serialized = preg_replace_callback(
-        '#object\\((.*?)\\).*?\\((\\d+)\\)\\s*{\\s*;#', 
-        $func, 
-        $serialized
-    );
-    $serialized = preg_replace(
-        array('#};#', '#{;#'), 
-        array('}', '{'), 
-        $serialized
-    );
-
-    return unserialize($serialized);
-}
-
-include "footer.php";?>
+<?PHP include "footer.php";?>

@@ -1,7 +1,5 @@
 <?php
-$laatsteversie = 20150113;
-include "header.php";
-print '<div class="row"><div class="span_3">';
+$laatsteversie = 20150116;
 if($authenticated==true) {
 	
 //BEGIN UPDATE	
@@ -62,7 +60,12 @@ if(isset($_POST['updatedatabasenow'])) {
 		$sql="insert into versie (versie) VALUES ('20150113');";
 		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
-	
+	if($versie<20150116) {
+		$sql="INSERT IGNORE INTO `settings` (`variable`, `value`) VALUES ('positie_radiatoren', '3'),('positie_regen', '8'),('positie_scenes', '2'),('positie_schakelaars', '1'),('positie_sensoren', '4'),('positie_somfy', '1'),('positie_temperatuur', '6'),('positie_wind', '9'),('refreshinterval', '60');";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="insert into versie (versie) VALUES ('20150116');";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+	}
 }
 
 $sql="select versie from versie order by id desc limit 0,1";
@@ -74,6 +77,4 @@ Geïnstalleerde versie HomewizardPHP: '.$laatsteversie.'<br/><br/>';
 if($versie<$laatsteversie) echo '<form method="post"><input type="submit" name="updatedatabasenow" value="Update Database" class="abutton settings"/></form>';
 //EINDE UPDATE
 }
-print '</div></div>';
-include "footer.php";
 ?>

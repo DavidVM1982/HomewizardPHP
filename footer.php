@@ -16,8 +16,9 @@ if(!$result = $db->query($sql)){ die('There was an error running the query ['.$s
 while($row = $result->fetch_assoc()){$versie = $row['versie'];}
 $result->free();
 $db->close();
-echo 'Versie '.$versie.'. Opgemaakt in '.$total_time.' seconden op '; echo date("j M Y H:i:s");
+echo '<small>Versie '.$versie.'. Opgemaakt in '.$total_time.' seconden op '; echo date("j M Y H:i:s"); 
 ?>
+</small>
 </div>
 </body>
 </html>
