@@ -66,6 +66,7 @@ if(isset($_POST['updatedatabasenow'])) {
 		$sql="insert into versie (versie) VALUES ('20150116');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
+	
 }
 
 $sql="select versie from versie order by id desc limit 0,1";
@@ -74,7 +75,7 @@ while($row = $result->fetch_assoc()){$versie = $row['versie'];}
 
 echo '<br/>Huidige versie database: '.$versie.'<br/><br>
 Geïnstalleerde versie HomewizardPHP: '.$laatsteversie.'<br/><br/>';
-if($versie<$laatsteversie) echo '<form method="post"><input type="submit" name="updatedatabasenow" value="Update Database" class="abutton settings"/></form>';
+if($versie<$laatsteversie) echo '<form method="post"><input type="hidden" name="updatedatabase" value="Update Database" class="abutton settings gradient"/><input type="submit" name="updatedatabasenow" value="Update Database" class="abutton settings"/></form>';
 //EINDE UPDATE
 }
 ?>
