@@ -41,7 +41,7 @@ if (isset($_POST['schakelscene'])) {
 $data = null;
 if($authenticated == true && $developermode != 'yes') { 
 	try {
-	  $json = file_get_contents($jsonurl.'get-status');
+	  $json = file_get_contents($jsonurl.'get-sensors');
 	  
 	} catch (Exception $e) {echo $e->getMessage();}
 } else if ($developermode == 'yes') {
@@ -67,7 +67,7 @@ foreach($switches as $switch) {
 		${'switchstatus'.$switch['id']} = $switch['mode'];
 	} else if($switch['type']=='somfy') {
 	} else if($switch['type']=='virtual') {
-		${'switchstatus'.$switch['id']} = 'off';
+		if(isset($switch['status'])) {${'switchstatus'.$switch['id']} = $switch['status'];} else {${'switchstatus'.$switch['id']} = 'off';};
 	} else {
 		${'switchstatus'.$switch['id']} = $switch['status'];
 	}
@@ -78,7 +78,7 @@ foreach($sensors as $sensor) {
 	${'sensorstatus'.$sensor['id']} = $sensor['status'];
 	${'sensortimestamp'.$sensor['id']} = $sensor['timestamp'];
 }
-//$scenes =  $data['response']['scenes'];
+$scenes =  $data['response']['scenes'];
 $thermometers =  $data['response']['thermometers'];
 $rainmeters =  $data['response']['rainmeters'];
 $windmeters =  $data['response']['windmeters'];
@@ -234,7 +234,7 @@ while($row = $result->fetch_assoc()){
 			else if ($type=="Beweging" && ${'sensorstatus'.$row['id_sensor']} == "yes") { echo 'Beweging'; }
 			else if ($type=="Beweging" && ${'sensorstatus'.$row['id_sensor']} == "no") { echo ''; }
 			else if ($type=="Deurbel" && ${'sensorstatus'.$row['id_sensor']} == "no") { echo ''; }
-			else if ($type=="Deurbel" && ${'sensorstatus'.$row['id_sensor']} == "yes") { echo 'Ring'; }
+			else if ($type=="Deurbel" && ${'sensorstatus'.$row['id_sensor']} == "yes") { echo 'Gebeld'; }
 			else if ($type=="Rook" && ${'sensorstatus'.$row['id_sensor']} == "no") { echo ''; }
 			else if ($type=="Rook" && ${'sensorstatus'.$row['id_sensor']} == "yes") { echo 'ROOK!!!'; }
 			else echo ${'sensorstatus'.$row['id_sensor']};
@@ -248,7 +248,7 @@ echo "</table></div>";
 if(!empty($thermometers)) {
 	echo '<div class="item handje gradient" onclick="window.location=\'temp.php\';"><p class="number">'.$positie_temperatuur.'</p><h2>Temperatuur</h2><table width="100%"><tr><th></th><th>temp</th><th>hum</th></tr>';
 	foreach($thermometers as $thermometer){
-		if($debug=='yes') print_r($thermometer);
+		if($authenticated == true && $debug=='yes') print_r($thermometer);
 		echo '<tr>';
 		if(count($thermometers)>1) {echo '<td>'.$thermometer['name'].'</td>';} else { echo '<td></td>';}
 		echo '<td>'.$thermometer['te'].' °C</td><td>'.$thermometer['hu'].' %</td></tr>';
@@ -259,7 +259,7 @@ if(!empty($thermometers)) {
 if(!empty($rainmeters)) {
 	echo '<div class="item handje gradient" onclick="window.location=\'rain.php\';"><p class="number">'.$positie_regen.'</p><h2>Regen</h2><table width="100%"><tr><th></th><th>Vandaag</th><th>Laatste 3u</th></tr>';
 	foreach($rainmeters as $rainmeter){
-		if($debug=='yes') print_r($rainmeter);
+		if($authenticated == true && $debug=='yes') print_r($rainmeter);
 		echo '<tr>';
 		if(count($rainmeters)>1) {echo '<td>'.$rainmeter['name'].'</td>';} else { echo '<td></td>';}
 		echo '<td>'.$rainmeter['mm'].' mm</td><td>'.$rainmeter['3h'].' mm</td></tr>';
@@ -270,7 +270,7 @@ if(!empty($rainmeters)) {
 if(!empty($windmeters)) {
 	echo '<div class="item handje gradient" onclick="window.location=\'wind.php\';"><p class="number">'.$positie_wind.'</p><h2>Wind</h2><table width="100%"><tr><th></th><th>ws</th><th>gu</th><th>dir</th></tr>';
 	foreach($windmeters as $windmeter){
-		if($debug=='yes') print_r($windmeter);
+		if($authenticated == true && $debug=='yes') print_r($windmeter);
 		if(isset($windmeter['ws'])) {
 			echo '<tr>';
 			if(count($windmeters)>1) {echo '<td>'.$windmeter['name'].'</td>';} else { echo '<td></td>';}
