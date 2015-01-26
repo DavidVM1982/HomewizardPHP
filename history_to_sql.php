@@ -39,6 +39,7 @@ if (!$data) {
 	$thermometers =  $data['response']['thermometers'];
 	$rainmeters =  $data['response']['rainmeters'];
 	$windmeters =  $data['response']['windmeters'];
+	$energylinks =  $data['response']['energylinks'];
 	$types = array_keys($data['response']);
 	foreach ($types as $type) {
 		$devices = $data['response'][$type];
@@ -189,6 +190,35 @@ if(!empty($windmeters)) {
 				echo $time.' - '.$windspeed.' - '.$gust.' - '.$direction.'<br/>';
 				$sql = "INSERT IGNORE INTO wind (`timestamp`, `wi`, `gu`, `dir`, `id_sensor`) values ('$time', '$windspeed', '$gust', '$direction', '$id_sensor') ";
 				if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
+			}
+		}
+	}
+}
+
+/* energylink */
+if(!empty($energylinks)) {
+	foreach($energylinks as $energylink) {
+		$datas = null;
+		try {
+			$json = file_get_contents($jsonurl.'el/graph/0/day');
+			$datas = json_decode($json,true);
+		} catch (Exception $e) {
+			echo $e->getMessage();
+		}
+	if (!$datas) {
+		echo "No information available...";
+	} else {
+		echo ' Importing energylink';
+			foreach($datas['response'] as $data){
+			$time = $data['t'];
+			$netto = $data['a'];
+			$verbruik = $data['u'];
+			$water = $data['s1'];
+			$zon = $data['s2'];
+			$gas = $data['g']*100;
+			echo $time.' - '.$netto.' - '.$water.' - '.$zon.' - '.$gas.'<br/>';
+			$sql = "INSERT IGNORE INTO energylink (timestamp, netto, verbruik, S1 , S2 , gas) values ('$time', '$netto', '$verbruik', '$water' , '$zon' , '$gas') ";
+			if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
 			}
 		}
 	}

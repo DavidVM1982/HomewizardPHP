@@ -4,6 +4,7 @@ $time = explode(' ', $time);
 $time = $time[1] + $time[0];
 $start = $time;
 include "parameters.php"; 
+include "functions.php";
 setlocale(LC_ALL,'nl_NL.UTF-8');
 date_default_timezone_set('Europe/Brussels');
 $sql="select variable, value from settings order by variable asc";
@@ -56,11 +57,11 @@ $( function() {
   var $container = $('.isotope'),
       $items = $('.item');
 	$('.isotope').isotope({
-    layoutMode: 'masonry',
     itemSelector: '.item',
-	sortBy : 'number',
+	layoutMode: 'masonry',
+    sortBy : 'number',
 	getSortData: {
-      number: '.number parseInt',
+    number: '.number parseInt',
     }
   });
   $items.click(function(){
@@ -90,4 +91,4 @@ function toggle(showHideDiv, switchTextDiv) {
 <link href="css/index.css" rel="stylesheet" type="text/css" />
 </head>
 <body class="gradient">
-<section class="row"><a href="index.php" class="abutton settings gradient">Home</a></section>
+<div class="header"><a href="index.php" class="abutton settings gradient" style="padding:10px 0px;">Home</a></div>

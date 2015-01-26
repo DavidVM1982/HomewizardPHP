@@ -13,70 +13,151 @@ if(!isset($_SESSION['authenticated'])) {
 			$error = 'Incorrect username or password';
 		}
 	}
-   echo '<p class="error">'.$error.'</p>';
+   echo '<section class="error">'.$error.'</section>';
 	}
-if($debug=='yes') {print '<div class="row"><div class="span_3"><span class="error"><br/>POST = ';print_r($_POST);print '</div></div>';}
-$showmenu = true;
-$showaddnew = false;
-$dosaveaction = false;
-$dodeleteaction = false;
-$doaddsensor = false;
-if(isset($_POST['addaction'])) $showaddnew=true;
-if(isset($_POST['saveaction'])) $dosaveaction=true;
-if(isset($_POST['deleteaction'])) $dodeleteaction=true;
-if(isset($_POST['addsensor'])) $doaddsensor=true;
+if($authenticated==true && $debug=='yes') {print '<section class="error"><br/>POST = ';print_r($_POST);print '</section>';}
 if($authenticated==true) {
 //BEGIN AUTHENTICATED STUFF	
-if($showaddnew==true) {
-	echo '<div class="row"><div class="span_3">
+echo '
+<form method="post"><input type="submit" name="actions" value="Actions" class="abutton settings gradient"/><input type="submit" name="addaction" value="Add action" class="abutton settings gradient"/></form><br/>
+';
+if(isset($_POST['addaction'])) {
+	echo '<div class="actions gradient">
 	<form method="post">
-	<label>Name: </label><input type="text" name="name" size="50"><br/>
-	<input type="submit" name="saveaction" value="Save action" class="abutton"/></form><br/>
-	</div></div>';
+	<label>Naam: </label><input type="text" name="name" size="50"><br/>
+	<input type="submit" name="saveaction" value="Save action" class="abutton settings gradient"/></form><br/>
+	</div>';
 }
-if($dosaveaction==true) {
+
+if(isset($_POST['saveaction'])) {
 	$name=$db->real_escape_string($_POST['name']);
-	$sql="insert into actions (name) VALUES ('$name')";
+	$sql="insert into actions (naam) VALUES ('$name')";
 	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
 }
-if($doaddsensor==true) {
+
+if(isset($_POST['addsensorin'])) {
 	$id_action=$_POST['id'];
 	$id_sensor=$_POST['id_sensor'];
-	$sql="insert into action_sensors (id_action, id_sensor) VALUES ('$id_action', '$id_sensor')";
+	$sql="insert into action_sensors_in (id_action, id_sensor) VALUES ('$id_action', '$id_sensor')";
 	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
 }
-if($dodeleteaction==true) {
+
+if(isset($_POST['addswitchin'])) {
+	$id_action=$_POST['id'];
+	$id_switch=$_POST['id_switch'];
+	$sql="insert into action_switches_in (id_action, id_switch) VALUES ('$id_action', '$id_switch')";
+	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
+}
+
+if(isset($_POST['removesensorin'])) {
+	$id_action=$_POST['id'];
+	$id_sensor=$_POST['id_sensor'];
+	$sql="delete from action_sensors_in WHERE id_action = '$id_action' AND id_sensor = '$id_sensor'";
+	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
+}
+
+if(isset($_POST['removeswitchin'])) {
+	$id_action=$_POST['id'];
+	$id_switch=$_POST['id_switch'];
+	$sql="delete from action_switches_in WHERE id_action = '$id_action' AND id_switch = '$id_switch'";
+	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
+}
+
+if(isset($_POST['deleteaction'])) {
 	$id=$_POST['id'];
 	$sql="delete from actions where id = $id";
 	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
-	$sql="delete from action_switches where id_action = $id";
+	$sql="delete from action_switches_in where id_action = $id";
 	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
-	$sql="delete from action_sensors where id_action = $id";
+	$sql="delete from action_sensors_in where id_action = $id";
+	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
+	$sql="delete from action_switches_uit where id_action = $id";
+	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
+	$sql="delete from action_sensors_uit where id_action = $id";
 	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
 }
-if($showmenu==true) {
-	echo '<div class="row"><div class="span_3">
-	<form method="post"><input type="submit" name="addaction" value="Add action" class="abutton"/></form><br/>
-	</div></div>';
-	$sql="select id, name from actions order by name asc";
-	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
-	while($row = $result->fetch_assoc()){
-		echo '<div class="row"><div class="span_3"><h2>'.$row['id'].': '.$row['name'].'<h2>
-		
-		<form action="#" method="post"><input type="hidden" name="id" value="'.$row['id'].'"><select name="id_sensor" class="abutton" > ';
-		$id_action = $row['id'];
-		$sqlsensors="select id_sensor, name, type, favorite, volgorde from sensors WHERE id_sensor not in (SELECT id_sensor from action_sensors where id_action = $id_action) order by volgorde asc, favorite desc, name asc";
-		if(!$resultsensors = $db->query($sqlsensors)){ die('There was an error running the query [' . $db->error . ']');}
-		while($rowsensors = $resultsensors->fetch_assoc()){
-			print '<option value="'.$rowsensors['id_sensor'].'">'.$rowsensors['name'].'</option>';
-		}
-		$resultsensors->free();
-		echo '</select>
-		<input type="submit" name="addsensor" value="Add sensor" class="abutton"/><br/>
-		<input type="submit" name="deleteaction" value="Delete action" class="abutton"/></form></div></div>';
+
+$sql="select id, naam from actions order by naam asc";
+if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+//ga door de acties
+while($row = $result->fetch_assoc()){
+	echo '<div class="actions gradient"><h2>'.$row['naam'].'</h2>';
+	//Toon sensors in
+	echo '
+	<table width="100%" align="center">
+		<thead>
+			<tr>
+				<th width="50%">IN</th>
+				<th width="50%">OUT</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<table align="center">';
+						$id_action = $row['id'];
+						$sqlsensorsin="select id_sensor, name, type, favorite, volgorde from sensors WHERE id_sensor in (SELECT id_sensor from action_sensors_in where id_action = $id_action) order by volgorde asc, favorite desc, name asc";
+						if(!$resultsensorsin = $db->query($sqlsensorsin)){ die('There was an error running the query [' . $db->error . ']');}
+						while($rowsensorsin = $resultsensorsin->fetch_assoc()){
+						print '<tr>
+								<td align="left">'.$rowsensorsin['type'].'</td>
+								<td align="left">'.$rowsensorsin['name'].'</td>
+								<td>
+									<form action="#" method="post">
+									<input type="hidden" name="id" value="'.$row['id'].'">
+									<input type="hidden" name="id_sensor" value="'.$rowsensorsin['id_sensor'].'">
+									<input type="submit" name="removesensorin" value="Remove" class="abutton  gradient"/>
+									</form>
+								</td>
+							</tr>';
+						}
+					$resultsensorsin->free();
+					//Toon schakelaars in
+					$id_action = $row['id'];
+					$sqlswitchin="select id_switch, name, type, favorite, volgorde from switches WHERE id_switch in (SELECT id_switch from action_switches_in where id_action = $id_action) order by volgorde asc, favorite desc, name asc";
+					if(!$resultswitchin = $db->query($sqlswitchin)){ die('There was an error running the query [' . $db->error . ']');}
+					while($rowswitchin = $resultswitchin->fetch_assoc()){
+						print '<tr>
+								<td align="left">'.$rowswitchin['type'].'</td>
+								<td align="left">'.$rowswitchin['name'].'</td>
+								<td>
+									<form action="#" method="post">
+									<input type="hidden" name="id" value="'.$row['id'].'">
+									<input type="hidden" name="id_switch" value="'.$rowswitchin['id_switch'].'">
+									<input type="submit" name="removeswitchin" value="Remove" class="abutton  gradient"/>
+									</form>
+								</td>
+							</tr>';
+					}
+					$resultswitchin->free();
+			echo '</table>';
+	//zoek sensors nog niet toegevoegd
+	echo '<form action="#" method="post"><input type="hidden" name="id" value="'.$row['id'].'">
+	<select name="id_sensor" class="abutton settings gradient" onChange="this.form.submit()"><option selected disabled>Voeg een sensor toe</option> ';
+	$sqlsensors="select id_sensor, name, type, favorite, volgorde from sensors WHERE id_sensor not in (SELECT id_sensor from action_sensors_in where id_action = $id_action) order by volgorde asc, favorite desc, name asc";
+	if(!$resultsensors = $db->query($sqlsensors)){ die('There was an error running the query [' . $db->error . ']');}
+	while($rowsensors = $resultsensors->fetch_assoc()){
+		print '<option value="'.$rowsensors['id_sensor'].'">'.$rowsensors['name'].'</option>';
 	}
-	$result->free();
+	$resultsensors->free();
+	echo '</select>
+	<input type="hidden" name="addsensorin" value="Add sensor" class="abutton gradient"/></form>';
+	//zoek schakelaars nog niet toegevoegd
+	echo '<form action="#" method="post"><input type="hidden" name="id" value="'.$row['id'].'">
+	<select name="id_switch" class="abutton settings gradient" onChange="this.form.submit()"><option selected disabled>Voeg een schakelaar toe</option> ';
+	$sqlswitches="select id_switch, name, type, favorite, volgorde from switches WHERE id_switch not in (SELECT id_switch from action_switches_in where id_action = $id_action) order by volgorde asc, favorite desc, name asc";
+	if(!$resultswitches = $db->query($sqlswitches)){ die('There was an error running the query [' . $db->error . ']');}
+	while($rowswitches = $resultswitches->fetch_assoc()){
+		print '<option value="'.$rowswitches['id_switch'].'">'.$rowswitches['name'].'</option>';
+	}
+	$resultsensors->free();
+	echo '</select>
+	<input type="hidden" name="addswitchin" value="Add switch" class="abutton gradient"/></form>';
+	echo '</td><td></td></tbody></table>
+	<form action="#" method="post"><input type="hidden" name="id" value="'.$row['id'].'"><input type="submit" name="deleteaction" value="Delete action" class="abutton settings gradient"/></form></div>';
 }
+$result->free();
+echo '</div>';
 //END AUTHENTICATED STUFF	
 } else {
 	echo '<br/><br/>Log in:<br/><br/>';
@@ -87,6 +168,5 @@ if($showmenu==true) {
 	<input type="submit" value="login" class="abutton"/><br/>
 	</form>';
 }
-$db->close();
 include "footer.php";
 ?>

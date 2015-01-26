@@ -124,16 +124,16 @@ if($authenticated==true) {
 //BEGIN AUTHENTICATED STUFF	
 
 	echo '<div class="item gradient"><p class="number">1</p>
-	<form method="post"><input type="submit" name="parameters" value="Parameters" class="abutton settings gradient"/></form><br/>
-	<form method="post"><input type="submit" name="editsensors" value="Bewerk sensoren" class="abutton settings gradient"/></form><br/>
-	<form method="post"><input type="submit" name="editswitches" value="Bewerk schakelaars" class="abutton settings gradient"/></form><br/>
-	<form method="post"><input type="submit" name="updateswitches" value="Import schakelaars, historiek" class="abutton settings gradient"/></form><br/>
-	<form method="post"><input type="submit" name="updatedatabase" value="Update Database" class="abutton settings gradient"/></form><br/>
-	<form method="post"><input type="submit" name="jsongetsensors" value="JSON get-sensors" class="abutton settings gradient"/></form><br/>
-	<form method="post"><input type="submit" name="jsongetstatus" value="JSON get-status" class="abutton settings gradient"/></form><br/>
-	<form method="post"><input type="submit" name="jsongetswlist" value="JSON swlist" class="abutton settings gradient"/></form><br/>
-	<form method="post"><input type="submit" name="jsongetsuntimes" value="JSON suntimes" class="abutton settings gradient"/></form><br/>
-	<form method="post"><input type="submit" name="jsongettimers" value="JSON timers" class="abutton settings gradient"/></form><br/>
+	<form method="post"><input type="submit" name="parameters" value="Parameters" class="abutton settings gradient"/></form>
+	<form method="post"><input type="submit" name="editsensors" value="Bewerk sensoren" class="abutton settings gradient"/></form>
+	<form method="post"><input type="submit" name="editswitches" value="Bewerk schakelaars" class="abutton settings gradient"/></form>
+	<form method="post"><input type="submit" name="updateswitches" value="Import schakelaars, historiek" class="abutton settings gradient"/></form>
+	<form method="post"><input type="submit" name="updatedatabase" value="Update Database" class="abutton settings gradient"/></form>
+	<form method="post"><input type="submit" name="jsongetsensors" value="JSON get-sensors" class="abutton settings gradient"/></form>
+	<form method="post"><input type="submit" name="jsongetstatus" value="JSON get-status" class="abutton settings gradient"/></form>
+	<form method="post"><input type="submit" name="jsongetswlist" value="JSON swlist" class="abutton settings gradient"/></form>
+	<form method="post"><input type="submit" name="jsongetsuntimes" value="JSON suntimes" class="abutton settings gradient"/></form>
+	<form method="post"><input type="submit" name="jsongettimers" value="JSON timers" class="abutton settings gradient"/></form>
 	<form method="post"><input type="submit" name="jsongetnotifications" value="JSON notifications" class="abutton settings gradient"/></form><br/>
 	<br/><br/><br/><br/><br/><br/><form method="post"><input type="submit" name="logout" value="Uitloggen" class="abutton settings gradient"/></form><br/>
 	Kijk op de <a href="https://github.com/Egregius/HomewizardPHP/wiki/Settings-en-parameters" target="_blank">wiki</a> voor uitleg.<br/></div>
