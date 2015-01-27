@@ -4,7 +4,7 @@ $time = explode(' ', $time);
 $time = $time[1] + $time[0];
 $start = $time;
 include "parameters.php"; 
-include "functions.php";
+//include "functions.php";
 setlocale(LC_ALL,'nl_NL.UTF-8');
 date_default_timezone_set('Europe/Brussels');
 $sql="select variable, value from settings order by variable asc";

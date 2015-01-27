@@ -62,6 +62,12 @@ if(isset($_POST['updateswitches'])) {
 	include "history_to_sql.php";
 	echo '</div>';
 }
+if(isset($_POST['actionscron'])) { 
+	$showparameters=false;
+	echo '<div class="item wide gradient"><p class="number">2</p>';
+	include "actionscron.php";
+	echo '</div>';
+}
 if(isset($_POST['updatedatabase'])) { 
 	$showparameters=false;
 	echo '<div class="item wide gradient"><p class="number">2</p>';
@@ -135,6 +141,7 @@ if($authenticated==true) {
 	<form method="post"><input type="submit" name="jsongetsuntimes" value="JSON suntimes" class="abutton settings gradient"/></form>
 	<form method="post"><input type="submit" name="jsongettimers" value="JSON timers" class="abutton settings gradient"/></form>
 	<form method="post"><input type="submit" name="jsongetnotifications" value="JSON notifications" class="abutton settings gradient"/></form><br/>
+	<form method="post"><input type="submit" name="actionscron" value="Actions cron" class="abutton settings gradient"/></form><br/>
 	<br/><br/><br/><br/><br/><br/><form method="post"><input type="submit" name="logout" value="Uitloggen" class="abutton settings gradient"/></form><br/>
 	Kijk op de <a href="https://github.com/Egregius/HomewizardPHP/wiki/Settings-en-parameters" target="_blank">wiki</a> voor uitleg.<br/></div>
 	';
