@@ -49,7 +49,7 @@ if (!$data) {
 					//print_r($device);
 					$id_sensor = $device['id'];
 					$namedevice = $device['name'];
-					$favorite = $device['favorite'];
+					$favorite = 'yes';
 					$type = $device['type'];
 					if(isset($_POST['updateswitches'])) {
 						$sql = "INSERT INTO sensors (`id_sensor`, `name`, `type`, `favorite`) values ($id_sensor, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type'";
@@ -84,7 +84,7 @@ if (!$data) {
 						//print_r($device);
 						$id_switch = $device['id'];
 						$namedevice = $device['name'];
-						$favorite = $device['favorite'];
+						$favorite = 'yes';
 						$type = $device['type'];
 						$sql = "INSERT INTO switches (`id_switch`, `name`, `type`, `favorite`) values ($id_switch, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type'";
 						echo $id_switch.'-'.$namedevice.': '.$type.'<br/>';
@@ -97,9 +97,22 @@ if (!$data) {
 						//print_r($device);
 						$id_switch = $device['id'];
 						$namedevice = $device['name'];
-						$favorite = $device['favorite'];
+						$favorite = 'yes';
 						$type = 'scene';
 						$sql = "INSERT INTO switches (`id_switch`, `name`, `type`, `favorite`) values ($id_switch, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type'";
+						echo $id_switch.'-'.$namedevice.': '.$type.'<br/>';
+						if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
+						echo '<hr>';
+					}
+				}
+				if($type=="thermometers") {
+					foreach($devices as $device){ 
+						print_r($device);
+						$id_sensor = $device['id'];
+						$namedevice = $device['name'];
+						$favorite = 'yes';
+						$type = 'temp';
+						$sql = "INSERT INTO sensors (`id_sensor`, `name`, `type`, `favorite`) values ($id_sensor, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type'";
 						echo $id_switch.'-'.$namedevice.': '.$type.'<br/>';
 						if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
 						echo '<hr>';

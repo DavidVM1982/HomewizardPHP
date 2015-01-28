@@ -79,11 +79,16 @@ foreach($sensors as $sensor) {
 	${'sensortimestamp'.$sensor['id']} = $sensor['timestamp'];
 }
 $thermometers =  $data['response']['thermometers'];
+foreach($thermometers as $thermometer) {
+	${'thermometerid'.$thermometer['id']} = $thermometer['id'];
+	${'thermometertemp'.$thermometer['id']} = $thermometer['te'];
+	${'thermometerhu'.$thermometer['id']} = $thermometer['hu'];
+}
 $rainmeters =  $data['response']['rainmeters'];
 $windmeters =  $data['response']['windmeters'];
 
 //---SCHAKELAARS---
-$sql="select id_switch, name, type, favorite, volgorde from switches where type not in ('radiator', 'somfy', 'scene')";
+$sql="select id_switch, name, type, favorite, volgorde from switches where type in ('switch', 'dimmer', 'virtual')";
 if (!isset($_POST['showallswitches'])) $sql.=" AND favorite like 'yes'";
 $sql.=" order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
@@ -245,8 +250,8 @@ echo '<div class="item  gradient"><p class="number">'.$positie_sensoren.'</p>
 		<input type="hidden" name="showallsensors" value="yes">
 		<a href="#" onclick="document.getElementById(\'showallsensors\').submit();" style="text-decoration:none">
 		<h2>Sensoren</h2></a></form>';
-$sql="select id_sensor, name, type, volgorde from sensors";
-if (!isset($_POST['showallsensors'])) $sql.=" WHERE favorite like 'yes'";
+$sql="select id_sensor, name, type, volgorde from sensors WHERE type in ('smoke','contact','doorbell','motion')";
+if (!isset($_POST['showallsensors'])) $sql.=" AND favorite like 'yes'";
 $sql.=" order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
@@ -278,15 +283,21 @@ while($row = $result->fetch_assoc()){
 echo "</table></div></div>";
 }
 //--THERMOMETERS--
-if(!empty($thermometers)) {
-	echo '<div class="item handje gradient" onclick="window.location=\'temp.php\';"><p class="number">'.$positie_temperatuur.'</p><h2>Temperatuur</h2><table width="100%"><tr><th></th><th>temp</th><th>hum</th></tr>';
-	foreach($thermometers as $thermometer){
-		if($authenticated == true && $debug=='yes') print_r($thermometer);
+$sql="select id_sensor, name, type, volgorde from sensors WHERE type in ('temp')";
+if (!isset($_POST['showalltemps'])) $sql.=" AND favorite like 'yes'";
+$sql.=" order by volgorde asc, favorite desc, name asc";
+if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+if($result->num_rows>0) {	
+echo '<div class="item gradient"><p class="number">'.$positie_temperatuur.'</p><form id="showalltemps" action="#" method="post">
+		<input type="hidden" name="showalltemps" value="yes">
+		<a href="#" onclick="document.getElementById(\'showalltemps\').submit();" style="text-decoration:none"><h2>Temperatuur</h2></a></form>
+	<div class="handje" onclick="window.location=\'temp.php\';"><table width="100%"><tr><th></th><th>temp</th><th>hum</th></tr>';
+	while($row = $result->fetch_assoc()){
 		echo '<tr>';
-		if(count($thermometers)>1) {echo '<td>'.$thermometer['name'].'</td>';} else { echo '<td></td>';}
-		echo '<td>'.$thermometer['te'].' °C</td><td>'.$thermometer['hu'].' %</td></tr>';
+		if($result->num_rows>1) {echo '<td>'.$row['name'].'</td>';} else { echo '<td></td>';}
+		echo '<td>'.${'thermometertemp'.$row['id_sensor']}.' °C</td><td>'.${'thermometerhu'.$row['id_sensor']}.' %</td></tr>';
 	}
-	echo "</table></div>";
+	echo "</table></div></div>";
 }
 //--RAINMETERS--
 if(!empty($rainmeters)) {

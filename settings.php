@@ -1,5 +1,6 @@
 <?php
 include "header.php";
+print '<div class="threecolumn"><div class="isotope">';	
 $showparameters = true;
 $showupdatesensors  = false;
 $showeditswitches = false;
@@ -127,7 +128,6 @@ if(!isset($_SESSION['authenticated'])) {
    echo '<p class="error">'.$error.'</p>';
 	}
 if($authenticated==true) {
-print '<div class="threecolumn"><div class="isotope">';	
 //BEGIN AUTHENTICATED STUFF	
 
 	echo '<div class="item gradient"><p class="number">1</p>
