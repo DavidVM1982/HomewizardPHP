@@ -160,11 +160,13 @@ foreach($scenes as $scene){
 echo "</div>";
 }
 /* SOMFY */
-$sql="select id_switch, name, volgorde from switches where type like 'somfy' order by volgorde asc, favorite desc, name asc";
+$sql="select id_switch, name, volgorde from switches where type like 'somfy'";
+if (!isset($_POST['showallsomfy'])) $sql.=" AND favorite like 'yes'";
+$sql.=" order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
 	$group = 0;
-echo '<div class="item gradient"><p class="number">'.$positie_somfy.'</p><h2>Somfy</h2><table align="center"><tbody>';
+echo '<div class="item gradient"><p class="number">'.$positie_somfy.'</p><form id="showallsomfy" action="#" method="post"><input type="hidden" name="showallsomfy" value="yes"><a href="#" onclick="document.getElementById(\'showallsomfy\').submit();" style="text-decoration:none"><h2>Somfy</h2></form><table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$tdstyle = '';
 	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black"';
@@ -198,13 +200,22 @@ while($row = $result->fetch_assoc()){
 	<input type="hidden" name="radiator" value="'.$row['id_switch'].'"/>
 	<select name="set_temp"  class="abutton handje gradient" onChange="this.form.submit()" style="margin-top:4px">
 		<option '.${'switchstatus'.$row['id_switch']}.') selected>'.${'switchstatus'.$row['id_switch']}.'</option>
+		<option>8</option>
 		<option>10</option>
+		<option>12</option>
+		<option>14</option>
 		<option>16</option>
 		<option>18</option>
 		<option>19</option>
 		<option>20</option>
+		<option>20.5</option>
 		<option>21</option>
+		<option>21.5</option>
 		<option>22</option>
+		<option>22.5</option>
+		<option>23</option>
+		<option>23.5</option>
+		<option>24</option>
 	</select>
 	</form></td></tr>';
 }
