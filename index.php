@@ -90,11 +90,18 @@ $sql.=" order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
 $group = 0;
-echo '<div class="isotope"><div class="item gradient"><p class="number">'.$positie_schakelaars.'</p><form id="showallswitches" action="#" method="post"><input type="hidden" name="showallswitches" value="yes"><a href="#" onclick="document.getElementById(\'showallswitches\').submit();" style="text-decoration:none"><h2 >Schakelaars</h2></a></form><table align="center"><tbody>';
+echo '<div class="isotope">
+	<div class="item gradient">
+		<p class="number">'.$positie_schakelaars.'</p>
+			<form id="showallswitches" action="#" method="post">
+				<input type="hidden" name="showallswitches" value="yes">
+					<a href="#" onclick="document.getElementById(\'showallswitches\').submit();" style="text-decoration:none"><h2 >Schakelaars</h2></a>
+			</form>
+	<table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$switchon = "";
 	$tdstyle = '';
-	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black"';
+	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black; padding-top:10px;"';
 	$group = $row['volgorde'];
 	if($row['type']=='asun') {if(${'switchstatus'.$row['id_switch']}=="1") {$switchon = "off";} else {$switchon = "on";}}
 	else {if(${'switchstatus'.$row['id_switch']}=="on") {$switchon = "off";} else {$switchon = "on";}}
@@ -169,7 +176,7 @@ if($result->num_rows>0) {
 echo '<div class="item gradient"><p class="number">'.$positie_somfy.'</p><form id="showallsomfy" action="#" method="post"><input type="hidden" name="showallsomfy" value="yes"><a href="#" onclick="document.getElementById(\'showallsomfy\').submit();" style="text-decoration:none"><h2>Somfy</h2></a></form><table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$tdstyle = '';
-	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black"';
+	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black; padding-top:10px; "';
 	$group = $row['volgorde'];
 	print '<tr><td><img id="somfyIcon" src="images/empty.gif" /></td><td align="right" '.$tdstyle.'>'.$row['name'].'</td>
 	<td width="185px" '.$tdstyle.'><form method="post" action="#">
@@ -193,7 +200,7 @@ if($result->num_rows>0) {
 echo '<div class="item gradient"><p class="number">'.$positie_radiatoren.'</p><h2>Radiatoren</h2><table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$tdstyle = '';
-	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black"';
+	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black; padding-top:10px; "';
 	$group = $row['volgorde'];
 	print '<tr><td><img id="radiatorIcon" src="images/empty.gif" /></td><td align="right" '.$tdstyle.'>'.$row['name'].'</td>
 	<td width="115px" '.$tdstyle.'><form method="post" action="#">

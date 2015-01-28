@@ -76,6 +76,12 @@ if(isset($_POST['updatedatabasenow'])) {
 		$sql="insert into versie (versie) VALUES ('20150126');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
+	if($versie<20150128) {
+		$sql="INSERT IGNORE INTO `homewizard`.`settings` (`variable`, `value`) VALUES ('defaultthermometer', '1');";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="insert into versie (versie) VALUES ('20150128');";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+	}
 }
 
 $sql="select versie from versie order by id desc limit 0,1";
