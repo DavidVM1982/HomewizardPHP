@@ -165,7 +165,15 @@ if($showeditswitches==true) {
 	$sql="select id_switch, name, type, favorite, volgorde from switches order by type asc, volgorde asc, favorite desc, name asc";
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	while($row = $result->fetch_assoc()){
-		echo '<form method="post"><tr><td>'.$row['id_switch'].'</td><td>'.$row['name'].'</td><td>'.$row['type'].'</td><td><input type="text" name="favorite" id="favorite" value="'.$row['favorite'].'" size="5"/></td><td><input type="hidden" name="id_switch" id="id_switch" value="'.$row['id_switch'].'"/><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/></td><td><input type="submit" name="editswitch" value="Update" class="abutton gradient"><input type="submit" name="deleteswitch" value="Wissen" class="abutton"></td></tr></form>';
+		echo '<form method="post">
+			<tr>
+				<td>'.$row['id_switch'].'</td>
+				<td>'.$row['name'].'</td>
+				<td>'.$row['type'].'</td>
+				<td><input type="text" name="favorite" id="favorite" value="'.$row['favorite'].'" size="5"/></td>
+				<td><input type="hidden" name="id_switch" id="id_switch" value="'.$row['id_switch'].'"/><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/></td>
+				<td><input type="submit" name="editswitch" value="Update" class="abutton gradient"><input type="submit" name="deleteswitch" value="Wissen" class="abutton"></td>
+			</tr></form>';
 	}
 	$result->free();
 	echo '</tbody></table></center>';
@@ -175,7 +183,15 @@ if($showeditsensors==true) {
 	$sql="select id_sensor, name, type, favorite, volgorde from sensors order by volgorde asc, favorite desc, name asc";
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	while($row = $result->fetch_assoc()){
-		echo '<form method="post"><tr><td>'.$row['id_sensor'].'</td><td>'.$row['name'].'</td><td>'.$row['type'].'</td><td>'.$row['favorite'].'</td><td><input type="hidden" name="id_sensor" id="id_sensor" value="'.$row['id_sensor'].'"/><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/></td><td><input type="submit" name="editsensor" value="Update" class="abutton"><input type="submit" name="deletesensor" value="Wissen" class="abutton gradient"></td></tr></form>';
+		echo '<form method="post">
+			<tr>
+				<td>'.$row['id_sensor'].'</td>
+				<td>'.$row['name'].'</td>
+				<td>'.$row['type'].'</td>
+				<td><input type="text" name="favorite" id="favorite" value="'.$row['favorite'].'" size="5"/></td>
+				<td><input type="hidden" name="id_sensor" id="id_sensor" value="'.$row['id_sensor'].'"/><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/></td>
+				<td><input type="submit" name="editsensor" value="Update" class="abutton gradient"><input type="submit" name="deletesensor" value="Wissen" class="abutton gradient"></td>
+			</tr></form>';
 	}
 	$result->free();
 	echo '</tbody></table></center>';

@@ -1,7 +1,7 @@
 <?php include "header.php"; 
-print '<div class="onecolumn"><div class="item history"><br/><br/>
+print '<div class="onecolumn"><div class="item history gradient"><br/><br/>
 <form method="post" name="filter" id="filter">
-<select name="limit" class="abutton" onChange="this.form.submit()">';
+<select name="limit" class="abutton gradient" onChange="this.form.submit()">';
 if(isset($_POST['limit'])) print '<option selected>'.$_POST['limit'].'</option>';
 print '<option>20</option>
 <option>50</option>
@@ -13,7 +13,7 @@ print '<option>20</option>
 <option>50000</option>
 <option>100000</option>
 </select>
-<select name="filter" class="abutton abuttonhistory" onChange="this.form.submit()"><option ';if(isset($_POST['filter'])) { if($_POST['filter']=='all') print 'selected';} print '>All</option>';
+<select name="filter" class="abutton abuttonhistory gradient" onChange="this.form.submit()"><option ';if(isset($_POST['filter'])) { if($_POST['filter']=='all') print 'selected';} print '>All</option>';
 $sql = "SELECT name FROM sensors ORDER BY name ASC";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 while($row = $result->fetch_assoc()){

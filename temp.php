@@ -4,7 +4,7 @@ $sql = "SELECT timestamp, te, hu FROM temperature GROUP BY left(timestamp,13) OR
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 echo '<div class="threecolumn">
 <form method="post" name="filter" id="filter">
-<select name="limit" class="abutton settings" onChange="this.form.submit()">';
+<select name="limit" class="abutton settings gradient" onChange="this.form.submit()">';
 if(isset($_POST['limit'])) print '<option selected>'.$_POST['limit'].'</option>';
 print '<option>20</option>
 <option>50</option>
@@ -17,7 +17,7 @@ print '<option>20</option>
 <option>100000</option>
 </select>
 </form>
-<div class="isotope"><div class="item temprain">
+<div class="isotope"><div class="item temprain gradient">
 	<h2>Laatste '.$limit.' uur</h2>
 	<table id="table" align="center"><thead><tr><th>Tijd</th><th>Temp</th><th>Rel Voch</th></tr></thead><tbody>';
 while($row = $result->fetch_assoc()){
@@ -28,7 +28,7 @@ while($row = $result->fetch_assoc()){
 	</tr>';
 }
 $result->free();
-echo "</tbody></table></div><div class='item temprain'>
+echo "</tbody></table></div><div class='item temprain gradient'>
 	<h2>Laatste ".$limit." dagen</h2>";
 
 $sql = "SELECT date, min, max FROM temp_day ORDER BY date DESC LIMIT 0,$limit";
@@ -42,7 +42,7 @@ while($row = $result->fetch_assoc()){
 	</tr>';
 }
 $result->free();
-echo "</tbody></table></div><div class='item temprain'>
+echo "</tbody></table></div><div class='item temprain gradient'>
 	<h2>Laatste ".$limit." maanden</h2>";
 
 $sql = "SELECT left(date,7) AS date, min(min) as min, max(max) as max FROM temp_day GROUP BY left(date,7) ORDER BY date DESC LIMIT 0,$limit";

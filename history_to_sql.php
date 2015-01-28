@@ -51,9 +51,11 @@ if (!$data) {
 					$namedevice = $device['name'];
 					$favorite = $device['favorite'];
 					$type = $device['type'];
-					$sql = "INSERT INTO sensors (`id_sensor`, `name`, `type`, `favorite`) values ($id_sensor, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type'";
-					echo $id_sensor.'-'.$namedevice.': '.$type.'<br/>';
-					if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
+					if(isset($_POST['updateswitches'])) {
+						$sql = "INSERT INTO sensors (`id_sensor`, `name`, `type`, `favorite`) values ($id_sensor, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type'";
+						echo $id_sensor.'-'.$namedevice.': '.$type.'<br/>';
+						if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
+					}
 					$datahistory = null;
 					try {
 						$jsonhistory = file_get_contents($jsonurl.'kks/get/'.$id_sensor.'/log');  
@@ -69,24 +71,26 @@ if (!$data) {
 			       			$time = $devicehistory['t'];
 							$status = $device['type'].$devicehistory['status'];
 							$sql = "INSERT IGNORE INTO history (`id_sensor`, `time`, `status`) values ($id_sensor, '$time', '$status')";
-							//echo $id_sensor.'-'.$time.': '.$status.'<br/>';
+							echo $id_sensor.'-'.$time.': '.$status.'<br/>';
 							if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
 				    	}
 					}
 					echo '<hr>';
 				}
 			}
-			if($type=="switches") {
-				foreach($devices as $device){ 
-					//print_r($device);
-					$id_switch = $device['id'];
-					$namedevice = $device['name'];
-					$favorite = $device['favorite'];
-					$type = $device['type'];
-					$sql = "INSERT INTO switches (`id_switch`, `name`, `type`, `favorite`) values ($id_switch, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type'";
-					echo $id_switch.'-'.$namedevice.': '.$type.'<br/>';
-					if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
-					echo '<hr>';
+			if(isset($_POST['updateswitches'])) {
+				if($type=="switches") {
+					foreach($devices as $device){ 
+						//print_r($device);
+						$id_switch = $device['id'];
+						$namedevice = $device['name'];
+						$favorite = $device['favorite'];
+						$type = $device['type'];
+						$sql = "INSERT INTO switches (`id_switch`, `name`, `type`, `favorite`) values ($id_switch, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type'";
+						echo $id_switch.'-'.$namedevice.': '.$type.'<br/>';
+						if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
+						echo '<hr>';
+					}
 				}
 			}
 		}

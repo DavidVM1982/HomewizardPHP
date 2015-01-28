@@ -166,7 +166,7 @@ $sql.=" order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
 	$group = 0;
-echo '<div class="item gradient"><p class="number">'.$positie_somfy.'</p><form id="showallsomfy" action="#" method="post"><input type="hidden" name="showallsomfy" value="yes"><a href="#" onclick="document.getElementById(\'showallsomfy\').submit();" style="text-decoration:none"><h2>Somfy</h2></form><table align="center"><tbody>';
+echo '<div class="item gradient"><p class="number">'.$positie_somfy.'</p><form id="showallsomfy" action="#" method="post"><input type="hidden" name="showallsomfy" value="yes"><a href="#" onclick="document.getElementById(\'showallsomfy\').submit();" style="text-decoration:none"><h2>Somfy</h2></a></form><table align="center"><tbody>';
 while($row = $result->fetch_assoc()){
 	$tdstyle = '';
 	if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black"';
@@ -224,12 +224,18 @@ echo "</tbody></table></div>";
 }
 
 //---SENSORS--
-echo '<div class="item handje gradient" onclick="window.location=\'history.php\';"><p class="number">'.$positie_sensoren.'</p><h2>Sensoren</h2>';
-$sql="select id_sensor, name, type, volgorde from sensors order by volgorde asc, favorite desc, name asc";
+echo '<div class="item  gradient"><p class="number">'.$positie_sensoren.'</p>
+	<form id="showallsensors" action="#" method="post">
+		<input type="hidden" name="showallsensors" value="yes">
+		<a href="#" onclick="document.getElementById(\'showallsensors\').submit();" style="text-decoration:none">
+		<h2>Sensoren</h2></a></form>';
+$sql="select id_sensor, name, type, volgorde from sensors";
+if (!isset($_POST['showallsensors'])) $sql.=" WHERE favorite like 'yes'";
+$sql.=" order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
 $group = 0;
-echo '<table align="center" width="100%">';
+echo '<div class="handje" onclick="window.location=\'history.php\';"><table align="center" width="100%">';
 while($row = $result->fetch_assoc()){
         echo '<tr>';
         	$type = $row['type'];
@@ -253,7 +259,7 @@ while($row = $result->fetch_assoc()){
 			if(${'sensorstatus'.$row['id_sensor']} == "yes") {echo '<td style="color:#F00; font-weight:bold">'.${'sensortimestamp'.$row['id_sensor']}.'</td>';} else {echo '<td>'.${'sensortimestamp'.$row['id_sensor']}.'</td>';}
 		echo '</tr>';
 }
-echo "</table></div>";
+echo "</table></div></div>";
 }
 //--THERMOMETERS--
 if(!empty($thermometers)) {
