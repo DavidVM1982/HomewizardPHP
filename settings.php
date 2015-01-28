@@ -1,17 +1,15 @@
 <?php
 include "header.php";
-print '<div class="threecolumn"><div class="isotope">';
 $showparameters = true;
 $showupdatesensors  = false;
 $showeditswitches = false;
 $showeditsensors = false;
-
 if(isset($_POST['updatesensors'])) {$showupdatesensors = true; $showparameters = false;}
 if(isset($_POST['editswitches'])) {$showeditswitches = true; $showparameters = false;}
 if(isset($_POST['editsensors'])) {$showeditsensors = true; $showparameters = false;}
 
 if(isset($_POST['logout'])) {session_destroy();$authenticated = false;header("location:settings.php");exit();}
-
+if($authenticated==true) {
 if(isset($_POST['deleteswitch'])) { 
 	$id_switch=($_POST['id_switch']);
 	$sql="delete from switches where id_switch = $id_switch";
@@ -47,6 +45,8 @@ if(isset($_POST['editsensor'])) {
 if(isset($_POST['upd'])) { 
 	$variable=$db->real_escape_string($_POST['variable']);
 	$value=$db->real_escape_string($_POST['value']);
+	if(!isset($_POST['value'])) $value = 'no';
+	echo 'update settings set value = '.$value.' where variable like '.$variable.'';
 	$sql="update settings set value = '$value' where variable like '$variable'";
 	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
 }
@@ -110,6 +110,7 @@ if(isset($_POST['jsongetswlist'])) {
 	$json = file_get_contents($jsonurl.'swlist');
 	echo $json.'</textarea></div>';
 }
+}
 if(isset($_SESSION['authenticated'])) {if ($_SESSION['authenticated'] == true) {$authenticated = true;}}
 if(!isset($_SESSION['authenticated'])) {
 		$error = null;
@@ -126,7 +127,7 @@ if(!isset($_SESSION['authenticated'])) {
    echo '<p class="error">'.$error.'</p>';
 	}
 if($authenticated==true) {
-	
+print '<div class="threecolumn"><div class="isotope">';	
 //BEGIN AUTHENTICATED STUFF	
 
 	echo '<div class="item gradient"><p class="number">1</p>
@@ -152,10 +153,34 @@ if($showparameters==true) {
 	$sql="select variable, value from settings order by variable asc";
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	while($row = $result->fetch_assoc()){
-		echo '<form method="post"><tr><td align="left">'.$row['variable'].'</td><td><input type="hidden" name="variable" id="variable" value="'.$row['variable'].'"/>';
-		if($row['variable']=='developerjson') { echo '<textarea name="value" id="value" >'.$row['value'].'</textarea>';} 
-		else {echo '<input type="text" name="value" id="value" value="'.$row['value'].'"/>' ;}
-		echo '</td><td><input type="hidden" name="parameters" value="Parameters" /><input type="submit" name="upd" value="update" class="abutton gradient"></td></tr></form>';
+		echo '<form method="post" >
+		<tr>
+			<td align="left">'.$row['variable'].'</td>
+			<td><input type="hidden" name="variable" id="variable" value="'.$row['variable'].'"/>';
+		if(in_array($row['variable'], array('developerjson'))) { echo '<textarea name="value" id="value" cols="32" rows="5">'.$row['value'].'</textarea>';} 
+		else if(in_array($row['variable'], array('debug','developermode'))) {
+			if($row['value']=="yes") {echo '<input type="hidden" name="value" id="value" value="no"/>';} else {echo '<input type="hidden" name="value" id="value" value="yes"/>';}
+		echo '
+		<section class="slider">	
+			<input type="hidden" name="upd" value="update">
+			<input type="checkbox" value="'.$row['value'].'" id="'.$row['variable'].'" name="'.$row['variable'].'" '; if($row['value']=="yes") {print 'checked';} print ' onChange="this.form.submit()"/>
+			<label for="'.$row['variable'].'"></label>
+		</section>
+			' ;}
+		else if(in_array($row['variable'], array('detailscenes'))) {
+		echo '<input type="hidden" name="upd" value="update">
+		<select name="value" class="abutton handje gradient settings" onChange="this.form.submit()" >	
+			<option '.$row['value'].' selected>'.$row['value'].'</option>
+			<option>yes</option>
+			<option>optional</option>
+			<option>no</option>
+		</select>
+			' ;}	
+		else {echo '<input type="text" name="value" id="value" value="'.$row['value'].'" size="40px"/>' ;}
+		
+		echo '</td><td><input type="hidden" name="parameters" value="Parameters" />';
+		if(!in_array($row['variable'], array('debug','developermode','detailscenes'))) echo '<input type="submit" name="upd" value="update" class="abutton gradient">';
+		echo '</td></tr></form>';
 	}
 	$result->free();
 	echo '<form method="post"><tr><td><input type="text" name="variable" id="variable" value=""/></td><td><input type="text" name="value" id="value" value=""/></td><td><input type="submit" name="add" value="add" class="abutton gradient"/></td></tr></form></tbody></table></center>';

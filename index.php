@@ -41,7 +41,7 @@ if (isset($_POST['schakelscene'])) {
 $data = null;
 if($authenticated == true && $developermode != 'yes') { 
 	try {
-	  $json = file_get_contents($jsonurl.'get-sensors');
+	  $json = file_get_contents($jsonurl.'get-status');
 	  
 	} catch (Exception $e) {echo $e->getMessage();}
 } else if ($developermode == 'yes') {
@@ -78,13 +78,12 @@ foreach($sensors as $sensor) {
 	${'sensorstatus'.$sensor['id']} = $sensor['status'];
 	${'sensortimestamp'.$sensor['id']} = $sensor['timestamp'];
 }
-$scenes =  $data['response']['scenes'];
 $thermometers =  $data['response']['thermometers'];
 $rainmeters =  $data['response']['rainmeters'];
 $windmeters =  $data['response']['windmeters'];
 
 //---SCHAKELAARS---
-$sql="select id_switch, name, type, favorite, volgorde from switches where type not in ('radiator', 'somfy')";
+$sql="select id_switch, name, type, favorite, volgorde from switches where type not in ('radiator', 'somfy', 'scene')";
 if (!isset($_POST['showallswitches'])) $sql.=" AND favorite like 'yes'";
 $sql.=" order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
@@ -133,21 +132,31 @@ $result->free();
 echo "</tbody></table></div>";
 }
 /* SCENES */
-if(!empty($scenes)) {
-echo '<div class="item gradient"><p class="number">'.$positie_scenes.'</p><h2>Scènes</h2>';
-foreach($scenes as $scene){
+$sql="select id_switch, name, type, favorite, volgorde from switches where type in ('scene')";
+if (!isset($_POST['showallscenes'])) $sql.=" AND favorite like 'yes'";
+$sql.=" order by volgorde asc, favorite desc, name asc";
+if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+if($result->num_rows>0) {
+$group = 0;
+echo '<div class="item gradient"><p class="number">'.$positie_scenes.'</p>
+			<form id="showallscenes" action="#" method="post">
+				<input type="hidden" name="showallscenes" value="yes">
+					<a href="#" onclick="document.getElementById(\'showallscenes\').submit();" style="text-decoration:none"><h2>Scènes</h2></a>
+			</form>';
+while($row = $result->fetch_assoc()){
+	
 	echo '<table width="100%"><thead><tr><th colspan="2">';
-	if($detailscenes=='optional') {print '<a href="#" onclick="toggle_visibility(\'scene'.$scene['id'].'\');" style="text-decoration:none">'.$scene['name'].'</a>';} else {print $scene['name'];}
-	print '<img id="'.$row['type'].'Icon" src="images/empty.gif" /></th>
-	<th width="50px"><form method="post" action="#"><input type="hidden" name="scene" value="'.$scene['id'].'"/><input type="hidden" name="schakelscene" value="on"/><input type="submit" value="AAN" class="abutton gradient"/></form></th>
-	<th width="50px"><form method="post" action="#"><input type="hidden" name="scene" value="'.$scene['id'].'"/><input type="hidden" name="schakelscene" value="off"/><input type="submit" value="UIT" class="abutton gradient"/></form></th>
+	if($detailscenes=='optional') {print '<a href="#" onclick="toggle_visibility(\'scene'.$row['id_switch'].'\');" style="text-decoration:none">'.$row['name'].'</a>';} else {print $row['name'];}
+	print '</th>
+	<th width="50px"><form method="post" action="#"><input type="hidden" name="scene" value="'.$row['id_switch'].'"/><input type="hidden" name="schakelscene" value="on"/><input type="submit" value="AAN" class="abutton gradient"/></form></th>
+	<th width="50px"><form method="post" action="#"><input type="hidden" name="scene" value="'.$row['id_switch'].'"/><input type="hidden" name="schakelscene" value="off"/><input type="submit" value="UIT" class="abutton gradient"/></form></th>
 	</tr></thead>';
 	if(($detailscenes=='yes') || ($detailscenes=='optional')) {
-		if($detailscenes=='optional') {print '<tbody id="scene'.$scene['id'].'" style="display:none" class="handje">';} else {print '<tbody>';}
+		if($detailscenes=='optional') {print '<tbody id="scene'.$row['id_switch'].'" style="display:none" class="handje">';} else {print '<tbody>';}
 		$datascene = null;
 		$datascenes = null;
 		try {
-			$jsonscene = file_get_contents($jsonurl.'gp/get/'.$scene['id']);
+			$jsonscene = file_get_contents($jsonurl.'gp/get/'.$row['id_switch']);
 			$datascenes = json_decode($jsonscene,true);
 			if($debug=='yes') print_r($datascenes);
 		} catch (Exception $e) {

@@ -92,6 +92,19 @@ if (!$data) {
 						echo '<hr>';
 					}
 				}
+				if($type=="scenes") {
+					foreach($devices as $device){ 
+						//print_r($device);
+						$id_switch = $device['id'];
+						$namedevice = $device['name'];
+						$favorite = $device['favorite'];
+						$type = 'scene';
+						$sql = "INSERT INTO switches (`id_switch`, `name`, `type`, `favorite`) values ($id_switch, '$namedevice', '$type', '$favorite') ON DUPLICATE KEY UPDATE `name`='$namedevice', `type`= '$type'";
+						echo $id_switch.'-'.$namedevice.': '.$type.'<br/>';
+						if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
+						echo '<hr>';
+					}
+				}
 			}
 		}
 	}
