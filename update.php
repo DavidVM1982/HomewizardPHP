@@ -1,5 +1,5 @@
 <?php
-$laatsteversie = 20150126;
+$laatsteversie = 20150128;
 if($authenticated==true) {
 	
 //BEGIN UPDATE	
@@ -67,7 +67,7 @@ if(isset($_POST['updatedatabasenow'])) {
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
 	if($versie<20150126) {
-		$sql="INSERT IGNORE INTO `settings` (`variable`, `value`) VALUES ('positie_energylink', '7');";
+		$sql="INSERT IGNORE INTO settings (`variable`, `value`) VALUES ('positie_energylink', '7');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 		$sql="CREATE TABLE IF NOT EXISTS `energylink` (`timestamp` timestamp NOT NULL,`netto` float NOT NULL,`S1` float NOT NULL,`S2` float NOT NULL,`gas` float NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
@@ -76,8 +76,18 @@ if(isset($_POST['updatedatabasenow'])) {
 		$sql="insert into versie (versie) VALUES ('20150126');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
-	if($versie<20150128) {
-		$sql="INSERT IGNORE INTO `homewizard`.`settings` (`variable`, `value`) VALUES ('defaultthermometer', '1');";
+	if($versie<20150128) { 
+		$sql="INSERT IGNORE INTO settings (`variable`, `value`) VALUES ('defaultthermometer', '1');";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="ALTER TABLE `sensors` DROP PRIMARY KEY;";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="ALTER TABLE `sensors` ADD PRIMARY KEY (`id_sensor`,`type`);";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="ALTER TABLE `switches` DROP PRIMARY KEY;";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="ALTER TABLE `switches` ADD PRIMARY KEY (`id_switch`,`type`);";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="CREATE TABLE IF NOT EXISTS switchhistory (`id_switch` smallint(6) NOT NULL, `timestamp` int(11) NOT NULL,`type` varchar(50) COLLATE utf8_unicode_ci NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 		$sql="insert into versie (versie) VALUES ('20150128');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}

@@ -15,7 +15,14 @@ if (isset($_POST['schakel'])) {
 		} else if (isset($_POST['schakel'])){
 			$responsejson = file_get_contents($jsonurl.'sw/'.$_POST['switch'].'/'.$_POST['schakel']);
 			$response = json_decode($responsejson, true);
-			if($response['status']=='ok') {echo '<div class="row">OK</div>'; } else {echo '<div class="row">response = ';print_r($response);echo '</div><hr>';}
+			if($response['status']=='ok') {
+				$id_switch = $_POST['switch'];
+				$type = $_POST['schakel'];
+				$timestamp = time();
+				echo '<div class="row">OK</div>';
+				$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`) values ($id_switch, $timestamp, '$type');";
+				if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+			} else {echo '<div class="row">response = ';print_r($response);echo '</div><hr>';}
 			if($debug=='yes') {echo '<br/>$_POST = ';print_r($_POST);echo "<br/>sw/".$_POST['switch']."/".$_POST['schakel']."<hr>";}
 		} 
 	} else {echo '<p class="error">Switching blocked when not logged in</p>';}

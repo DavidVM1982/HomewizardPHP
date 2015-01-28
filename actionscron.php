@@ -90,10 +90,18 @@ if($switchstatus1=='on') {
 		De laatste beweging is gedetecteerd om '.$sensortimestamp2.'<br/>
 		Het is nu '.date("H:i",time()).'<br/>';
 	if(strtotime($sensortimestamp1)<(time()-300) && strtotime($sensortimestamp2)<(time()-300)) {
-		echo 'Meer dan 5 min geleden, het licht gaat uit. <br/>';
-		$responsejson = file_get_contents($jsonurl.'sw/1/off');
-		$response = json_decode($responsejson, true);
-		if($response['status']=='ok') {echo '<div class="row">OK</div>'; } else {echo '<div class="row">response = ';print_r($response);echo '</div><hr>';}
+		echo 'Meer dan 5 min geleden, kijken of het licht manueel aangelegd werd. <br/>';
+		$sql ="select timestamp from switchhistory WHERE id_switch = $switchid1 AND type like 'on' order by timestamp DESC limit 0,1;";
+		if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+		$row = $result->fetch_assoc();
+		echo 'Het licht werd laatst manueel geschakeld om '.date("H:i",$row['timestamp']);
+		if($row['timestamp']<(time()-60*120)) {
+			echo 'Licht is meer dan 2 uur geleden geschakeld, we schakelen het uit.';
+			$responsejson = file_get_contents($jsonurl.'sw/1/off');
+			$response = json_decode($responsejson, true);
+			if($response['status']=='ok') {echo '<div class="row">OK</div>'; } else {echo '<div class="row">response = ';print_r($response);echo '</div><hr>';}
+		}
+		$result->free();
 	} else {
 		if(isset($_POST['actionscron'])) echo 'We hebben nog steeds licht nodig<br/>';
 	}
