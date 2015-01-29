@@ -5,7 +5,7 @@ if (isset($_POST['schakel'])) {
 		if (isset($_POST['dimlevel'])) {
 			$responsejson = file_get_contents($jsonurl.'sw/dim/'.$_POST['switch'].'/'.$_POST['dimlevel']);
 			$response = json_decode($responsejson, true);
-			if($response['status']=='ok') {echo '<div class="error gradient">>OK</div>'; } else {echo '<div class="error gradient">response = ';print_r($response);echo '</div>';}
+			if($response['status']=='ok') {echo '<div class="error gradient">OK</div>'; } else {echo '<div class="error gradient">response = ';print_r($response);echo '</div>';}
 			if($debug=='yes') {echo '<div class="error gradient">$_POST = ';print_r($_POST);echo "<br/>sw/dim/".$_POST['switch']."/".$_POST['dimlevel']."<hr>";}
 		} else if (isset($_POST['somfy'])){
 			$responsejson = file_get_contents($jsonurl.'sf/'.$_POST['switch'].'/'.$_POST['somfy']);
@@ -304,7 +304,7 @@ $result->free();
 }
 
 //--THERMOMETERS--
-$sql="select id_sensor, name, type, volgorde from sensors WHERE type in ('temp')";
+$sql="select id_sensor, name, volgorde from sensors WHERE type in ('temp')";
 if (!isset($_POST['showalltemps'])) $sql.=" AND favorite like 'yes'";
 $sql.=" order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}

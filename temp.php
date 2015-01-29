@@ -13,10 +13,15 @@ if (!$data) {
 echo '<div class="onecolumn">';
 $thermometers =  $data['response'];
 if(!empty($thermometers)) {
-	echo '<div class="gradient"><table width="100%">';
 	foreach($thermometers as $thermometer){
 		${'thermometerid'.$thermometer['id']} = $thermometer['id'];
 		${'thermometernaam'.$thermometer['id']} = $thermometer['name'];
+	}
+}
+if($authenticated==true) {
+if(!empty($thermometers)) {
+	echo '<div class="gradient"><table width="100%">';
+	foreach($thermometers as $thermometer){
 		if($authenticated == true && $debug=='yes') print_r($thermometer);
 		echo '<tr>';
 		if(count($thermometers)>1) {echo '<td>'.$thermometer['name'].'</td>';} else { echo '<td></td>';}
@@ -24,10 +29,11 @@ if(!empty($thermometers)) {
 	}
 	echo "</table></div>";
 }
+}
 
 echo '</div><div class="threecolumn"><br/>
 <form method="post" name="filter" id="filter">';
-if(!empty($thermometers)) {
+if(!empty($thermometers) && $authenticated==true) {
 	echo '<select name="sensor" class="abutton settings gradient" onChange="this.form.submit()">';
 	if(isset($_POST['sensor'])) {
 		print '<option value="'.$_POST['sensor'].'" selected>'.$_POST['sensor'].' - '.${'thermometernaam'.$_POST['sensor']}.'</option>';
