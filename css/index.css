@@ -13,7 +13,7 @@ a:active {text-decoration:underline;color:#000}
 .twocolumn {width:98%;max-width:550px; margin:0 auto;}
 .threecolumn {width:98%;max-width:850px; margin:0 auto;}
 .handje{cursor: pointer; cursor: hand;}
-p.error {line-height:20px; color:#F00; }
+.error {line-height:20px; color:#B00; padding:12px; border:1px solid #ccc;background: #cacaca;margin:10px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px;  }
 .isotope {height: 100%; min-height:80%; margin:0 auto;}
 .isotope:after {content: '';display: block;clear: both;}
 .item {float: left; width:19.45%; max-width:297px; border:1px solid #ccc;background: #cacaca;padding-bottom:15px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px; margin-right:3px; margin-bottom:6px;}
