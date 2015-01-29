@@ -14,14 +14,14 @@ if($authenticated==true) {
 if(isset($_POST['deleteswitch'])) { 
 	$id_switch=($_POST['id_switch']);
 	$sql="delete from switches where id_switch = $id_switch";
-	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
+	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	$showeditswitches=true;
 	$showparameters = false;
 }
 if(isset($_POST['deletesensor'])) { 
 	$id_sensor=($_POST['id_sensor']);
 	$sql="delete from sensors where id_sensor = $id_sensor";
-	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
+	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	$showeditsensors=true;
 	$showparameters = false;
 }
@@ -31,7 +31,7 @@ if(isset($_POST['editswitch'])) {
 	$type=($_POST['soort']);
 	$favorite=($_POST['favorite']);
 	$sql="update switches set volgorde = '$volgorde', favorite = '$favorite' where id_switch = $id_switch AND type like '$type'";
-	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
+	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	$showeditswitches=true;
 	$showparameters = false;
 }
@@ -41,7 +41,7 @@ if(isset($_POST['editsensor'])) {
 	$type=($_POST['soort']);
 	$favorite=($_POST['favorite']);
 	$sql="update sensors set volgorde = '$volgorde', favorite = '$favorite' where id_sensor = $id_sensor AND type like '$type'";
-	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
+	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	$showeditsensors=true;
 	$showparameters = false;
 }
@@ -51,13 +51,13 @@ if(isset($_POST['upd'])) {
 	if(!isset($_POST['value'])) $value = 'no';
 	echo 'update settings set value = '.$value.' where variable like '.$variable.'';
 	$sql="update settings set value = '$value' where variable like '$variable'";
-	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
+	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 }
 if(isset($_POST['add'])) { 
 	$variable=$db->real_escape_string($_POST['variable']);
 	$value=$db->real_escape_string($_POST['value']);
 	$sql="insert into settings (variable, value) VALUES ('$variable', '$value')";
-	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
+	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 }
 if(isset($_POST['updateswitches'])) { 
 	$showparameters=false;
@@ -127,7 +127,7 @@ if(!isset($_SESSION['authenticated'])) {
 			$error = 'Incorrect username or password';
 		}
 	}
-   echo '<p class="error">'.$error.'</p>';
+   if(isset($error)) echo '<div class="error gradient">'.$error.'</div>';
 	}
 if($authenticated==true) {
 //BEGIN AUTHENTICATED STUFF	
@@ -153,7 +153,7 @@ if($showeditsensors==true || $showeditswitches==true || $showparameters==true ||
 if($showparameters==true) {
 	echo '<center><table width="400px" style="text-align:center"><tbody>';
 	$sql="select variable, value from settings order by variable asc";
-	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
 		echo '<form method="post" >
 		<tr>
@@ -189,15 +189,25 @@ if($showparameters==true) {
 }
 if($showeditswitches==true) {
 	echo '<center><table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Name</th><th>type</th><th>favorite</th><th>order</th></thead><tbody>';
-	$sql="select id_switch, name, type, favorite, volgorde from switches order by type asc, volgorde asc, favorite desc, name asc";
-	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+	$sql="select id_switch, name, type, favorite, volgorde from switches order by type asc, volgorde asc, name asc";
+	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
 		echo '<form method="post">
 			<tr>
 				<td>'.$row['id_switch'].'</td>
 				<td>'.$row['name'].'</td>
 				<td>'.$row['type'].'</td>
-				<td><input type="text" name="favorite" id="favorite" value="'.$row['favorite'].'" size="5"/></td>
+				<td>';
+				
+		echo '
+		<section class="slider">';
+		if($row['favorite']=="yes") {echo '<input type="hidden" name="favorite" id="favorite" value="no"/>';} else {echo '<input type="hidden" name="favorite" id="favorite" value="yes"/>';}
+		echo '
+			<input type="hidden" name="editswitch" value="update">
+			<input type="checkbox" value="'.$row['favorite'].'" id="'.$row['type'].$row['id_switch'].'" name="'.$row['id_switch'].'" '; if($row['favorite']=="yes") {print 'checked';} print ' onChange="this.form.submit()"/>
+			<label for="'.$row['type'].$row['id_switch'].'"></label>
+		</section>
+		</td>
 				<td><input type="hidden" name="id_switch" id="id_switch" value="'.$row['id_switch'].'"/><input type="hidden" name="soort" id="soort" value="'.$row['type'].'"/><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/></td>
 				<td><input type="submit" name="editswitch" value="Update" class="abutton gradient"><input type="submit" name="deleteswitch" value="Wissen" class="abutton"></td>
 			</tr></form>';
@@ -207,15 +217,25 @@ if($showeditswitches==true) {
 }
 if($showeditsensors==true) {
 	echo '<center><table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Name</th><th>type</th><th>favorite</th><th>order</th></thead><tbody>';
-	$sql="select id_sensor, name, type, favorite, volgorde from sensors order by volgorde asc, favorite desc, name asc";
-	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+	$sql="select id_sensor, name, type, favorite, volgorde from sensors order by volgorde asc, name asc";
+	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
 		echo '<form method="post">
 			<tr>
 				<td>'.$row['id_sensor'].'</td>
 				<td>'.$row['name'].'</td>
 				<td>'.$row['type'].'</td>
-				<td><input type="text" name="favorite" id="favorite" value="'.$row['favorite'].'" size="4"/></td>
+				<td>';
+				
+		echo '
+		<section class="slider">';
+		if($row['favorite']=="yes") {echo '<input type="hidden" name="favorite" id="favorite" value="no"/>';} else {echo '<input type="hidden" name="favorite" id="favorite" value="yes"/>';}
+		echo '
+			<input type="hidden" name="editsensor" value="update">
+			<input type="checkbox" value="'.$row['favorite'].'" id="'.$row['type'].$row['id_sensor'].'" name="'.$row['id_sensor'].'" '; if($row['favorite']=="yes") {print 'checked';} print ' onChange="this.form.submit()"/>
+			<label for="'.$row['type'].$row['id_sensor'].'"></label>
+		</section>
+		</td>
 				<td><input type="hidden" name="id_sensor" id="id_sensor" value="'.$row['id_sensor'].'"/><input type="hidden" name="soort" id="soort" value="'.$row['type'].'"/><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/></td>
 				<td><input type="submit" name="editsensor" value="Update" class="abutton gradient"><input type="submit" name="deletesensor" value="Wissen" class="abutton gradient"></td>
 			</tr></form>';
@@ -227,7 +247,7 @@ if($showeditsensors==true) {
 //END AUTHENTICATED STUFF	
 
 } else {
-	print '<div class="item wide gradient"><br/><br/>Log in:<br/><br/>';
+	print '<div class="error gradient">Log in:<br/><br/>';
 	print '<br/><br/>
 	<form method="post">
 	<label for="username">Username: </label><input type="text" name="username" size="20" /><br/>

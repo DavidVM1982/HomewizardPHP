@@ -5,13 +5,13 @@ if (isset($_POST['schakel'])) {
 		if (isset($_POST['dimlevel'])) {
 			$responsejson = file_get_contents($jsonurl.'sw/dim/'.$_POST['switch'].'/'.$_POST['dimlevel']);
 			$response = json_decode($responsejson, true);
-			if($response['status']=='ok') {echo '<div class="row">OK</div>'; } else {echo '<div class="row">response = ';print_r($response);echo '</div><hr>';}
-			if($debug=='yes') {echo '<br/>$_POST = ';print_r($_POST);echo "<br/>sw/dim/".$_POST['switch']."/".$_POST['dimlevel']."<hr>";}
+			if($response['status']=='ok') {echo '<div class="error gradient">>OK</div>'; } else {echo '<div class="error gradient">response = ';print_r($response);echo '</div>';}
+			if($debug=='yes') {echo '<div class="error gradient">$_POST = ';print_r($_POST);echo "<br/>sw/dim/".$_POST['switch']."/".$_POST['dimlevel']."<hr>";}
 		} else if (isset($_POST['somfy'])){
 			$responsejson = file_get_contents($jsonurl.'sf/'.$_POST['switch'].'/'.$_POST['somfy']);
 			$response = json_decode($responsejson, true);
-			if($response['status']=='ok') {echo '<div class="row">OK</div>'; } else {echo '<div class="row">response = ';print_r($response);echo '</div><hr>';}
-			if($debug=='yes') {echo '<br/>$_POST = ';print_r($_POST);echo "<br/>sf/".$_POST['switch']."/".$_POST['somfy']."<hr>";}
+			if($response['status']=='ok') {echo '<div class="error gradient">OK</div>'; } else {echo '<div class="error gradient">response = ';print_r($response);echo '</div><hr>';}
+			if($debug=='yes') {echo '<div class="error gradient">$_POST = ';print_r($_POST);echo "<br/>sf/".$_POST['switch']."/".$_POST['somfy']."</div>";}
 		} else if (isset($_POST['schakel'])){
 			$responsejson = file_get_contents($jsonurl.'sw/'.$_POST['switch'].'/'.$_POST['schakel']);
 			$response = json_decode($responsejson, true);
@@ -19,13 +19,13 @@ if (isset($_POST['schakel'])) {
 				$id_switch = $_POST['switch'];
 				$type = $_POST['schakel'];
 				$timestamp = time();
-				echo '<div class="row">OK</div>';
+				echo '<div class="error gradient">OK</div>';
 				$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`) values ($id_switch, $timestamp, '$type');";
 				if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
-			} else {echo '<div class="row">response = ';print_r($response);echo '</div><hr>';}
-			if($debug=='yes') {echo '<br/>$_POST = ';print_r($_POST);echo "<br/>sw/".$_POST['switch']."/".$_POST['schakel']."<hr>";}
+			} else {echo '<div class="error gradient">response = ';print_r($response);echo '</div>';}
+			if($debug=='yes') {echo '<div class="error gradient">$_POST = ';print_r($_POST);echo "<br/>sw/".$_POST['switch']."/".$_POST['schakel']."</div>";}
 		} 
-	} else {echo '<p class="error">Switching blocked when not logged in</p>';}
+	} else {echo '<div class="error gradient">Switching blocked when not logged in</div>';}
 }
 if (isset($_POST['set_temp'])) {
 	if($authenticated == true) {
@@ -34,16 +34,16 @@ if (isset($_POST['set_temp'])) {
 			$response = json_decode($responsejson, true);
 			if($response['status']=='ok') {echo 'OK'; } else {echo 'response = ';print_r($response);echo '<hr>';}
 		}
-		if($debug=='yes') {echo '<br/>$_POST = ';print_r($_POST);echo "<br>sw/".$_POST['radiator']."/settarget/".$_POST['set_temp']."<hr>";echo 'response = ';print_r($response);echo '<hr>';}
-	} else {echo '<p class="error">Switching blocked when not logged in</p>';}
+		if($debug=='yes') {echo '<div class="error gradient">$_POST = ';print_r($_POST);echo "<br>sw/".$_POST['radiator']."/settarget/".$_POST['set_temp']."<hr>";echo 'response = ';print_r($response);echo '</div>';}
+	} else {echo '<div class="error gradient">Switching blocked when not logged in</div>';}
 }
 if (isset($_POST['schakelscene'])) {
 	if($authenticated == true) {
 		$responsejson = file_get_contents($jsonurl.'gp/'.$_POST['scene'].'/'.$_POST['schakelscene']);
 		$response = json_decode($responsejson, true);
-		if($response['status']=='ok') {echo 'OK'; } else {echo 'response = ';print_r($response);echo '<hr>';}
-		if($debug=='yes') {echo '<br/>$_POST = ';print_r($_POST);echo "<br/>gp/".$_POST['scene']."/".$_POST['schakelscene']."<hr>";echo 'response = ';print_r($response);echo '<hr>';}
-	} else {echo '<p class="error">Switching blocked when not logged in</p>';}
+		if($response['status']=='ok') {echo '<div class="error gradient">OK</div>'; } else {echo '<div class="error gradient">response = ';print_r($response);echo '</div>';}
+		if($debug=='yes') {echo '<div class="error gradient">$_POST = ';print_r($_POST);echo "<br/>gp/".$_POST['scene']."/".$_POST['schakelscene']."<hr>";echo 'response = ';print_r($response);echo '</div>';}
+	} else {echo '<div class="error gradient">Switching blocked when not logged in</div>';}
 }
 $data = null;
 if($authenticated == true && $developermode != 'yes') { 
@@ -52,14 +52,14 @@ if($authenticated == true && $developermode != 'yes') {
 	  
 	} catch (Exception $e) {echo $e->getMessage();}
 } else if ($developermode == 'yes') {
-	print '<section class="span_3"><p class="error">Developer mode</p></section>';
+	print '<div class="error gradient">Developer mode</div>';
 	$json = $developerjson;
 } else {
-	print '<section class="span_3"><p class="error">Demo mode, no actual data shown.</p></section>';
+	print '<div class="error gradient">Demo mode, no actual data shown.</div>';
 	$json = $developerjson;
 }
 $data = json_decode($json,true);
-if($authenticated == true && $debug=='yes') {echo '<div style="width:100%">'.$json.'</div><hr>';}
+if($authenticated == true && $debug=='yes') {echo '<div class="error gradient">'.$json.'</div>';}
 
 
 $switches =  $data['response']['switches'];
@@ -193,12 +193,11 @@ while($row = $result->fetch_assoc()){
 			print '<tr><td align="right" width="60px">'.$datascene['type'].'&nbsp;&nbsp;</td><td align="left">&nbsp;'.$datascene['name'].'</td><td>'.$datascene['onstatus'].'</td><td>'.$datascene['offstatus'].'</td></tr>';
 			}
 		}
-		echo '</tbody>';
+		echo '</tbody></table>';
 	}
-	print '</table>';
-}
+	echo '</div>';
 $result->free();
-echo "</div>";
+}
 }
 /* SOMFY */
 $sql="select id_switch, name, volgorde from switches where type like 'somfy'";
@@ -265,17 +264,17 @@ echo "</tbody></table></div>";
 }
 
 //---SENSORS--
-echo '<div class="item  gradient"><p class="number">'.$positie_sensoren.'</p>
-	<form id="showallsensors" action="#" method="post">
-		<input type="hidden" name="showallsensors" value="yes">
-		<a href="#" onclick="document.getElementById(\'showallsensors\').submit();" style="text-decoration:none">
-		<h2>Sensoren</h2></a></form>';
 $sql="select id_sensor, name, type, volgorde from sensors WHERE type in ('smoke','contact','doorbell','motion')";
 if (!isset($_POST['showallsensors'])) $sql.=" AND favorite like 'yes'";
 $sql.=" order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
-$group = 0;
+echo '<div class="item  gradient"><p class="number">'.$positie_sensoren.'</p>
+	<form id="showallsensors" action="#" method="post">
+		<input type="hidden" name="showallsensors" value="yes">
+		<a href="#" onclick="document.getElementById(\'showallsensors\').submit();" style="text-decoration:none">
+		<h2>Sensoren</h2></a></form>';
+		$group = 0;
 echo '<div class="handje" onclick="window.location=\'history.php\';"><table align="center" width="100%">';
 while($row = $result->fetch_assoc()){
         echo '<tr>';
@@ -300,9 +299,10 @@ while($row = $result->fetch_assoc()){
 			if(${'sensorstatus'.$row['id_sensor']} == "yes") {echo '<td style="color:#F00; font-weight:bold">'.${'sensortimestamp'.$row['id_sensor']}.'</td>';} else {echo '<td>'.${'sensortimestamp'.$row['id_sensor']}.'</td>';}
 		echo '</tr>';
 }
-$result->free();
 echo "</table></div></div>";
+$result->free();
 }
+
 //--THERMOMETERS--
 $sql="select id_sensor, name, type, volgorde from sensors WHERE type in ('temp')";
 if (!isset($_POST['showalltemps'])) $sql.=" AND favorite like 'yes'";
