@@ -95,6 +95,7 @@ $rainmeters =  $data['response']['rainmeters'];
 $windmeters =  $data['response']['windmeters'];
 
 //---SCHAKELAARS---
+if($toon_schakelaars=='yes') {
 $sql="select id_switch, name, type, favorite, volgorde from switches where type in ('switch', 'dimmer', 'virtual')";
 if (!isset($_POST['showallswitches'])) $sql.=" AND favorite like 'yes'";
 $sql.=" order by volgorde asc, favorite desc, name asc";
@@ -155,7 +156,10 @@ while($row = $result->fetch_assoc()){
 $result->free();
 echo "</tbody></table></div>";
 }
+}
+
 /* SCENES */
+if($toon_scenes=='yes') {
 $sql="select id_switch, name, type, favorite, volgorde from switches where type in ('scene')";
 if (!isset($_POST['showallscenes'])) $sql.=" AND favorite like 'yes'";
 $sql.=" order by volgorde asc, favorite desc, name asc";
@@ -199,7 +203,10 @@ while($row = $result->fetch_assoc()){
 $result->free();
 }
 }
+}
 /* SOMFY */
+if($toon_somfy=='yes') {
+
 $sql="select id_switch, name, volgorde from switches where type like 'somfy'";
 if (!isset($_POST['showallsomfy'])) $sql.=" AND favorite like 'yes'";
 $sql.=" order by volgorde asc, favorite desc, name asc";
@@ -224,8 +231,10 @@ while($row = $result->fetch_assoc()){
 $result->free();
 echo "</tbody></table></div>";
 }
+}
 
 //---RADIATORS---
+if($toon_radiatoren=='yes') {
 $sql="select id_switch, name, volgorde from switches where type like 'radiator' order by volgorde asc, favorite desc, name asc";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 if($result->num_rows>0) {
@@ -262,8 +271,9 @@ while($row = $result->fetch_assoc()){
 $result->free();
 echo "</tbody></table></div>";
 }
-
+}
 //---SENSORS--
+if($toon_sensoren=='yes') {
 $sql="select id_sensor, name, type, volgorde from sensors WHERE type in ('smoke','contact','doorbell','motion')";
 if (!isset($_POST['showallsensors'])) $sql.=" AND favorite like 'yes'";
 $sql.=" order by volgorde asc, favorite desc, name asc";
@@ -302,8 +312,9 @@ while($row = $result->fetch_assoc()){
 echo "</table></div></div>";
 $result->free();
 }
-
+}
 //--THERMOMETERS--
+if($toon_temperatuur=='yes') {
 $sql="select id_sensor, name, volgorde from sensors WHERE type in ('temp')";
 if (!isset($_POST['showalltemps'])) $sql.=" AND favorite like 'yes'";
 $sql.=" order by volgorde asc, favorite desc, name asc";
@@ -321,7 +332,9 @@ echo '<div class="item gradient"><p class="number">'.$positie_temperatuur.'</p><
 	echo "</table></div></div>";
 }
 $result->free();
+}
 //--RAINMETERS--
+if($toon_regen=='yes') {
 if(!empty($rainmeters)) {
 	echo '<div class="item handje gradient" onclick="window.location=\'rain.php\';"><p class="number">'.$positie_regen.'</p><h2>Regen</h2><table width="100%"><tr><th></th><th>Vandaag</th><th>Laatste 3u</th></tr>';
 	foreach($rainmeters as $rainmeter){
@@ -332,7 +345,9 @@ if(!empty($rainmeters)) {
 	}
 	echo "</table></div>";
 }
+}
 //--WINDMETERS--
+if($toon_wind=='yes') {
 if(!empty($windmeters)) {
 	echo '<div class="item handje gradient" onclick="window.location=\'wind.php\';"><p class="number">'.$positie_wind.'</p><h2>Wind</h2><table width="100%"><tr><th></th><th>ws</th><th>gu</th><th>dir</th></tr>';
 	foreach($windmeters as $windmeter){
@@ -344,6 +359,7 @@ if(!empty($windmeters)) {
 		}
 	}
 	echo "</table></div>";
+}
 }
 ?>
 <script type="text/javascript">

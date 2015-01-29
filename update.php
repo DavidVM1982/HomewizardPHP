@@ -1,5 +1,5 @@
 <?php
-$laatsteversie = 20150128;
+$laatsteversie = 20150129;
 if($authenticated==true) {
 	
 //BEGIN UPDATE	
@@ -90,6 +90,12 @@ if(isset($_POST['updatedatabasenow'])) {
 		$sql="CREATE TABLE IF NOT EXISTS switchhistory (`id_switch` smallint(6) NOT NULL, `timestamp` int(11) NOT NULL,`type` varchar(50) COLLATE utf8_unicode_ci NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 		$sql="insert into versie (versie) VALUES ('20150128');";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+	}
+	if($versie<20150129) {
+		$sql="INSERT IGNORE INTO `settings` (`variable`, `value`) VALUES ('toon_radiatoren', 'yes'),('toon_regen', 'yes'),('toon_scenes', 'yes'),('toon_schakelaars', 'yes'),('toon_sensoren', 'yes'),('toon_somfy', 'yes'),('toon_temperatuur', 'yes'),('toon_wind', 'yes'),('toon_energylink', 'yes');";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="insert into versie (versie) VALUES ('20150129');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
 }

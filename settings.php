@@ -160,7 +160,7 @@ if($showparameters==true) {
 			<td align="left">'.$row['variable'].'</td>
 			<td><input type="hidden" name="variable" id="variable" value="'.$row['variable'].'"/>';
 		if(in_array($row['variable'], array('developerjson'))) { echo '<textarea name="value" id="value" cols="32" rows="5">'.$row['value'].'</textarea>';} 
-		else if(in_array($row['variable'], array('debug','developermode'))) {
+		else if(in_array($row['variable'], array('debug','developermode','toon_radiatoren','toon_regen','toon_scenes','toon_schakelaars','toon_sensoren','toon_somfy','toon_temperatuur','toon_wind','toon_energylink'))) {
 			if($row['value']=="yes") {echo '<input type="hidden" name="value" id="value" value="no"/>';} else {echo '<input type="hidden" name="value" id="value" value="yes"/>';}
 		echo '
 		<section class="slider">	
@@ -181,7 +181,7 @@ if($showparameters==true) {
 		else {echo '<input type="text" name="value" id="value" value="'.$row['value'].'" size="40px"/>' ;}
 		
 		echo '</td><td><input type="hidden" name="parameters" value="Parameters" />';
-		if(!in_array($row['variable'], array('debug','developermode','detailscenes'))) echo '<input type="submit" name="upd" value="update" class="abutton gradient">';
+		if(!in_array($row['variable'], array('debug','developermode','detailscenes','toon_radiatoren','toon_regen','toon_scenes','toon_schakelaars','toon_sensoren','toon_somfy','toon_temperatuur','toon_wind','toon_energylink'))) echo '<input type="submit" name="upd" value="update" class="abutton gradient">';
 		echo '</td></tr></form>';
 	}
 	$result->free();
