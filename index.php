@@ -119,8 +119,20 @@ while($row = $result->fetch_assoc()){
 	echo '<tr><form method="post" action="#"><td><img id="'.$row['type'].'Icon" src="images/empty.gif" /></td><td align="right" '.$tdstyle.'>'.$row['name'].'</td>
 	<td width="100px" '.$tdstyle.' ><input type="hidden" name="switch" value="'.$row['id_switch'].'"/><input type="hidden" name="schakel" value="'.$switchon.'"/>';
 	if($row['type']=='dimmer') {
-		print '<output for=dimlevel id=dimlevel>'.${'switchstatus'.$row['id_switch']}.'</output>
-		<input name="dimlevel" class="input-range" type ="range" min ="0" max="100" step ="1" value ="'.${'switchstatus'.$row['id_switch']}.'" onChange="this.form.submit()"/>
+		print '<select name="dimlevel"  class="abutton handje gradient" onChange="this.form.submit()" style="margin-top:4px">
+		<option '.${'switchstatus'.$row['id_switch']}.') selected>'.${'switchstatus'.$row['id_switch']}.'</option>
+		<option>0</option>
+		<option>10</option>
+		<option>20</option>
+		<option>30</option>
+		<option>40</option>
+		<option>50</option>
+		<option>60</option>
+		<option>70</option>
+		<option>80</option>
+		<option>90</option>
+		<option>100</option>
+	</select>
 		';
 	}
 	else if($row['type']=='asun') {

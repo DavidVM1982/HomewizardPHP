@@ -37,8 +37,9 @@ if(isset($_POST['editswitch'])) {
 if(isset($_POST['editsensor'])) { 
 	$id_sensor=($_POST['id_sensor']);
 	$volgorde=($_POST['volgorde']);
+	$type=($_POST['soort']);
 	$favorite=($_POST['favorite']);
-	$sql="update sensors set volgorde = '$volgorde', favorite = '$favorite' where id_sensor = $id_sensor";
+	$sql="update sensors set volgorde = '$volgorde', favorite = '$favorite' where id_sensor = $id_sensor AND type like '$type'";
 	if(!$result = $db->query($sql)){ die('There was an error running the query '.$sql.'<br/>[' . $db->error . ']');}
 	$showeditsensors=true;
 	$showparameters = false;
@@ -213,8 +214,8 @@ if($showeditsensors==true) {
 				<td>'.$row['id_sensor'].'</td>
 				<td>'.$row['name'].'</td>
 				<td>'.$row['type'].'</td>
-				<td><input type="text" name="favorite" id="favorite" value="'.$row['favorite'].'" size="5"/></td>
-				<td><input type="hidden" name="id_sensor" id="id_sensor" value="'.$row['id_sensor'].'"/><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/></td>
+				<td><input type="text" name="favorite" id="favorite" value="'.$row['favorite'].'" size="4"/></td>
+				<td><input type="hidden" name="id_sensor" id="id_sensor" value="'.$row['id_sensor'].'"/><input type="hidden" name="soort" id="soort" value="'.$row['type'].'"/><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/></td>
 				<td><input type="submit" name="editsensor" value="Update" class="abutton gradient"><input type="submit" name="deletesensor" value="Wissen" class="abutton gradient"></td>
 			</tr></form>';
 	}
