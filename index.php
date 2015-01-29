@@ -197,6 +197,7 @@ while($row = $result->fetch_assoc()){
 	}
 	print '</table>';
 }
+$result->free();
 echo "</div>";
 }
 /* SOMFY */
@@ -299,6 +300,7 @@ while($row = $result->fetch_assoc()){
 			if(${'sensorstatus'.$row['id_sensor']} == "yes") {echo '<td style="color:#F00; font-weight:bold">'.${'sensortimestamp'.$row['id_sensor']}.'</td>';} else {echo '<td>'.${'sensortimestamp'.$row['id_sensor']}.'</td>';}
 		echo '</tr>';
 }
+$result->free();
 echo "</table></div></div>";
 }
 //--THERMOMETERS--
@@ -318,6 +320,7 @@ echo '<div class="item gradient"><p class="number">'.$positie_temperatuur.'</p><
 	}
 	echo "</table></div></div>";
 }
+$result->free();
 //--RAINMETERS--
 if(!empty($rainmeters)) {
 	echo '<div class="item handje gradient" onclick="window.location=\'rain.php\';"><p class="number">'.$positie_regen.'</p><h2>Regen</h2><table width="100%"><tr><th></th><th>Vandaag</th><th>Laatste 3u</th></tr>';
