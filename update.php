@@ -1,5 +1,5 @@
 <?php
-$laatsteversie = 20150129;
+$laatsteversie = 20150130;
 if($authenticated==true) {
 	
 //BEGIN UPDATE	
@@ -98,7 +98,17 @@ if(isset($_POST['updatedatabasenow'])) {
 		$sql="insert into versie (versie) VALUES ('20150129');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
+	if($versie<20150130) {
+		$sql="ALTER TABLE `switchhistory` ADD `who` VARCHAR(20) NOT NULL DEFAULT 'man'; ;";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="insert into versie (versie) VALUES ('20150130');";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+	}
 }
+
+
+
+
 
 $sql="select versie from versie order by id desc limit 0,1";
 if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}

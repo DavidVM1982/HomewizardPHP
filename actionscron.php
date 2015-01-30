@@ -57,13 +57,23 @@ foreach($windmeters as $windmeter) {
 //BEGIN ACTION BRANDER
 if($switchstatus12=='off') {
 	if($switchstatus6>$thermometerte4) {
-		file_get_contents($jsonurl.'sw/12/on');
+		$responsejson = file_get_contents($jsonurl.'sw/12/on');
+		$response = json_decode($responsejson, true);
+			if($response['status']=='ok') {
+				$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($id_switch, $timestamp, 'on', 'cron');";
+				if(!$result = $db->query($sql)){ die('There was an error running the query <br/>'.$sql.'<br/>[' . $db->error . ']');}
+			}
 	} 
 }
 if($switchstatus12=='on') {
 	if($switchstatus6<$thermometerte4) {
 		if(isset($_POST['actionscron'])) echo 'We hebben geen warmte meer nodig<br/>';
-		file_get_contents($jsonurl.'sw/12/off');
+		$responsejson = file_get_contents($jsonurl.'sw/12/off');
+		$response = json_decode($responsejson, true);
+			if($response['status']=='ok') {
+				$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($id_switch, $timestamp, 'off', 'cron');";
+				if(!$result = $db->query($sql)){ die('There was an error running the query <br/>'.$sql.'<br/>[' . $db->error . ']');}
+			}
 	}
 }
 //END ACTION BRANDER
@@ -75,7 +85,12 @@ if($switchstatus1=='on') {
 		if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 		$row = $result->fetch_assoc();
 		if($row['timestamp']<(time()-7200) || $row['type']=='off') {
-			file_get_contents($jsonurl.'sw/1/off');
+			$responsejson = file_get_contents($jsonurl.'sw/1/off');
+			$response = json_decode($responsejson, true);
+			if($response['status']=='ok') {
+				$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($id_switch, $timestamp, 'off', 'cron');";
+				if(!$result = $db->query($sql)){ die('There was an error running the query <br/>'.$sql.'<br/>[' . $db->error . ']');}
+			}
 		}
 		$result->free();
 	} 

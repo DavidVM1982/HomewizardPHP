@@ -1,112 +1,97 @@
-html{min-height:100%; margin:0 auto;}
-body {cursor:default;font-size:12px;font-family:"Lucida Sans","Verdana",Arial,Helvetica,sans-serif;line-height:10px;font-weight:200;padding:0px;text-align:center;margin:0 auto;width:98%; max-width:1500px;color:#444; background:#bbb;background-repeat: no-repeat;background-attachment: fixed;} 
-h1 {font-weight: 100;font-size: 40px;} 
-h2 {font-weight: 200;font-size: 22px;} 
-h3 {font-weight: 200;font-size: 18px;} 
-a:link {text-decoration:bold;color:#000} 
-a:visited {text-decoration:bold;color:#000} 
-a:hover {text-decoration:underline;color:#000; } 
-a:active {text-decoration:underline;color:#000}
-.header {clear:both; padding-bottom:10px; width:400px; max-width:90%; margin:0 auto; }
-.footer {clear:both; padding:20px; width:400px; max-width:90%; margin:0 auto; }
-.onecolumn {width:98%;max-width:270px; margin:0 auto;}
-.twocolumn {width:98%;max-width:550px; margin:0 auto;}
-.threecolumn {width:98%;max-width:850px; margin:0 auto;}
-.handje{cursor: pointer; cursor: hand;}
-.error {line-height:20px; color:#B00; padding:12px; border:1px solid #ccc;background: #cacaca;margin:10px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px;  }
-.isotope {height: 100%; min-height:80%; margin:0 auto;}
-.isotope:after {content: '';display: block;clear: both;}
-.item {float: left; width:19.45%; max-width:297px; border:1px solid #ccc;background: #cacaca;padding-bottom:15px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px; margin-right:3px; margin-bottom:6px;}
-.wide {min-width: 500px;}
-.actions {width: 100%; margin:0 auto; border:1px solid #ccc;background: #cacaca;padding-bottom:15px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px; margin-right:3px; margin-bottom:6px;}
-.item .number {position: absolute;left: 8px;top: 5px; display:none;}
+html{min-height:100%;margin:0 auto;}
+body{cursor:default;font-size:12px;font-family:"Lucida Sans","Verdana",Arial,Helvetica,sans-serif;line-height:10px;font-weight:200;padding:0px;text-align:center;margin:0 auto;width:98%;max-width:1500px;color:#444;background:#bbb;background-repeat:no-repeat;background-attachment:fixed;}
+h1{font-weight:100;font-size:40px;}
+h2{font-weight:200;font-size:22px;}
+h3{font-weight:200;font-size:18px;}
+a:link{text-decoration:bold;color:#000}
+a:visited{text-decoration:bold;color:#000}
+a:hover{text-decoration:underline;color:#000;}
+a:active{text-decoration:underline;color:#000}
+.header{clear:both;padding-bottom:10px;width:400px;max-width:90%;margin:0 auto;}
+.footer{clear:both;padding:20px;width:400px;max-width:90%;margin:0 auto;}
+.onecolumn{width:98%;max-width:270px;margin:0 auto;}
+.twocolumn{width:98%;max-width:550px;margin:0 auto;}
+.threecolumn{width:98%;max-width:850px;margin:0 auto;}
+.handje{cursor:pointer;cursor:hand;}
+.error{line-height:20px;color:#B00;padding:12px;border:1px solid #ccc;background:#cacaca;margin:10px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px;}
+.isotope{height:100%;min-height:80%;margin:0 auto;}
+.isotope:after{content:'';display:block;clear:both;}
+.item{float:left;width:19.45%;max-width:297px;border:1px solid #ccc;background:#cacaca;padding-bottom:15px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px;margin-right:3px;margin-bottom:6px;}
+.wide{min-width:500px;}
+.actions{width:100%;margin:0 auto;border:1px solid #ccc;background:#cacaca;padding-bottom:15px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px;margin-right:3px;margin-bottom:6px;}
+.item .number{position:absolute;left:8px;top:5px;display:none;}
 .history{min-width:270px;}
 .temprain{min-width:270px;}
-pre {white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;-webkit-user-select:text !important}
-@media only screen and (max-width: 1319px) {
-.item {width: 24.1%; max-width:326px;}
+pre{white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-wrap:break-word;-webkit-user-select:text !important}
+@media only screen and (max-width:1319px){.item{width:24.1%;max-width:326px;}
 }
-@media only screen and (max-width: 1051px) {
-.item {width: 32.7%; max-width:340px;}
+@media only screen and (max-width:1051px){.item{width:32.7%;max-width:340px;}
 }
-@media only screen and (max-width: 791px) {
-.item {width: 49%; max-width:382px;}
+@media only screen and (max-width:791px){.item{width:49%;max-width:382px;}
 }
-@media only screen and (max-width: 550px) {
-select.abutton{min-width:50px; padding-left:18px}
-.item {width: 99%; max-width:538px;}
+@media only screen and (max-width:550px){select.abutton{min-width:50px;padding-left:18px}
+.item{width:99%;max-width:538px;}
 }
-.gradient {
-	background: #bbb;
-	background:-webkit-gradient(linear, left top, left bottom, from(#fff), to(#bbb) );
-	background:-webkit-linear-gradient(top, #fff, #bbb);
-	background:-moz-linear-gradient(-90deg, #fff, #bbb);
-	background:-ms-linear-gradient(top, #fff, #999);
-	background:-o-linear-gradient(top, #fff, #bbb);
-	background:linear-gradient(to bottom, #fff, #bbb);
-	background-repeat: no-repeat;}
-.abutton {
-border:0px solid #aaa;display:inline-block;padding:9px 0px; text-decoration:none; margin:0; width:50px; min-width:52px; box-shadow:0px 0px 0px 1px #999 inset;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;}
-.settings {width:100%; max-width:300px;padding: 4px 0px;}
-.abuttonsomfy {border:0px solid #f00;padding:0px 0px; text-decoration:none; margin:0; width:150px; font-size:0px;}
-.abutton:hover {text-decoration:none !important;}
+.gradient{background:#bbb;background:-webkit-gradient(linear, left top, left bottom, from(#fff), to(#bbb));background:-webkit-linear-gradient(top, #fff, #bbb);background:-moz-linear-gradient(-90deg, #fff, #bbb);background:-ms-linear-gradient(top, #fff, #999);background:-o-linear-gradient(top, #fff, #bbb);background:linear-gradient(to bottom, #fff, #bbb);background-repeat:no-repeat;}
+.abutton{border:0px solid #aaa;display:inline-block;padding:9px 0px;text-decoration:none;margin:0;width:50px;min-width:52px;box-shadow:0px 0px 0px 1px #999 inset;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;}
+.settings{width:100%;max-width:300px;padding:4px 0px;}
+.abuttonsomfy{border:0px solid #f00;padding:0px 0px;text-decoration:none;margin:0;width:150px;font-size:0px;}
+.abutton:hover{text-decoration:none !important;}
 .abuttonhistory{width:150px;}
-select.abutton {height:31px; padding-left:20px; margin-bottom:8px;-webkit-appearance: none;-moz-appearance: none;appearance: none;text-indent:0.01px; text-overflow:'';-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;}
-table{ text-align:center;}
-table, td{padding:0px 0px 0px 0px;font: 14px/26px Arial, sans-serif;}
-input[type=checkbox] {visibility: hidden;}
-.slider {width: 80px;height: 32px;background: #888;margin: 8px auto;position: relative;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;}
-.slider:after {content: 'UIT';font: 12px/26px Arial, sans-serif;color: #666;position: absolute;top: 3px;right: 10px;z-index: 0;font-weight: bold;}
-.slider:before {content: 'AAN';font: 12px/26px Arial, sans-serif;color: #fff;position: absolute;top: 3px;left: 10px;z-index: 0;font-weight: bold;}
-.slider label {display: block;width: 34px;height: 25px;cursor: pointer;position: absolute;top: 3px;left: 3px;z-index: 1;background: #fff;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;}
-.slider input[type=checkbox]:checked + label {left: 43px;}
-
-input[type=range] {margin: 1px 0px 1px 0px;width: 100%;}
-input[type=range]::-ms-track {width: 100%;height: 10px;cursor: pointer;background: transparent;border-color: transparent;border-width: 16px 0;color: transparent;}
-input[type=range]::-ms-fill-lower {background: #333;border: 0.2px solid #010101;border-radius: 2.6px;box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;}
-input[type=range]::-ms-fill-upper {background: #777;border: 0.2px solid #010101;border-radius: 2.6px;box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;}
-input[type=range]::-ms-thumb {box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;border: 1px solid #000000;height: 30px;width: 16px;border-radius: 6px;background: #ffffff;cursor: pointer;}
-
-#actionIcon {background: url(../images/icons.png) 0 0;width: 22px;height: 22px;}
-#addIcon {background: url(../images/icons.png) 0 -32px;width: 22px;height: 22px;}
-#batteryIcon {background: url(../images/icons.png) 0 -64px;width: 22px;height: 22px;}
-#cameraIcon {background: url(../images/icons.png) 0 -96px;width: 22px;height: 22px;}
-#contactIcon {background: url(../images/icons.png) 0 -128px;width: 22px;height: 22px;}
-#dimmerIcon {background: url(../images/icons.png) 0 -160px;width: 22px;height: 22px;}
-#doorbellIcon {background: url(../images/icons.png) 0 -192px;width: 22px;height: 22px;}
-#editIcon {background: url(../images/icons.png) 0 -224px;width: 22px;height: 22px;}
-#energymeterIcon {background: url(../images/icons.png) 0 -256px;width: 22px;height: 22px;}
-#fireIcon {background: url(../images/icons.png) 0 -288px;width: 22px;height: 22px;}
-#heatlinkIcon {background: url(../images/icons.png) 0 -320px;width: 22px;height: 22px;}
-#homeIcon {background: url(../images/icons.png) 0 -352px;width: 22px;height: 22px;}
-#hueIcon {background: url(../images/icons.png) 0 -384px;width: 22px;height: 22px;}
-#infoIcon {background: url(../images/icons.png) 0 -416px;width: 22px;height: 22px;}
-#lightIcon {background: url(../images/icons.png) 0 -448px;width: 22px;height: 22px;}
-#logoutIcon {background: url(../images/icons.png) 0 -480px;width: 22px;height: 22px;}
-#loxxIcon {background: url(../images/icons.png) 0 -512px;width: 22px;height: 22px;}
-#motionIcon {background: url(../images/icons.png) 0 -544px;width: 22px;height: 22px;}
-#noneIcon {background: url(../images/icons.png) 0 -576px;width: 22px;height: 22px;}
-#notificationIcon {background: url(../images/icons.png) 0 -608px;width: 22px;height: 22px;}
-#radiatorIcon {background: url(../images/icons.png) 0 -640px;width: 22px;height: 22px;}
-#rainmeterIcon {background: url(../images/icons.png) 0 -672px;width: 22px;height: 22px;}
-#sceneIcon {background: url(../images/icons.png) 0 -704px;width: 22px;height: 22px;}
-#searchIcon {background: url(../images/icons.png) 0 -736px;width: 22px;height: 22px;}
-#setFavorites {background: url(../images/icons.png) 0 -768px;width: 22px;height: 22px;}
-#shareSettingsIcon {background: url(../images/icons.png) 0 -800px;width: 22px;height: 22px;}
-#somfyIcon {background: url(../images/icons.png) 0 -832px;width: 22px;height: 22px;}
-#sortIcon {background: url(../images/icons.png) 0 -864px;width: 22px;height: 22px;}
-#switchIcon {background: url(../images/icons.png) 0 -896px;width: 22px;height: 22px;}
-#thermometerIcon {background: url(../images/icons.png) 0 -928px;width: 22px;height: 22px;}
-#thinkingCleanerIcon {background: url(../images/icons.png) 0 -960px;width: 22px;height: 22px;}
-#timerIcon {background: url(../images/icons.png) 0 -992px;width: 22px;height: 22px;}
-#upload {background: url(../images/icons.png) 0 -1024px;width: 22px;height: 22px;}
-#uvmeterIcon {background: url(../images/icons.png) 0 -1056px;width: 22px;height: 22px;}
-#virtualIcon {background: url(../images/icons.png) 0 -1088px;width: 22px;height: 22px;}
-#weatherIcon {background: url(../images/icons.png) 0 -1120px;width: 22px;height: 22px;}
-#weatherMapIcon {background: url(../images/icons.png) 0 -1152px;width: 22px;height: 22px;}
-#weatherdisplayIcon {background: url(../images/icons.png) 0 -1184px;width: 22px;height: 22px;}
-#windmeterIcon {background: url(../images/icons.png) 0 -1216px;width: 22px;height: 22px;}
-#smokeIcon {background: url(../images/icons.png) 0 -288px;width: 22px;height: 22px;}
-#somfydownIcon {background: url(../images/somfy.png) 0 0px;width: 48px;height: 35px;}
-#somfystopIcon {background: url(../images/somfy.png) 0 -150px;width: 48px;height: 35px;}
-#somfyupIcon {background: url(../images/somfy.png) 0 -200px;width: 48px;height: 35px;}
+select.abutton{height:31px;padding-left:20px;margin-bottom:8px;-webkit-appearance:none;-moz-appearance:none;appearance:none;text-indent:0.01px;text-overflow:'';-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;}
+table{text-align:center;}
+table, td{padding:0px 0px 0px 0px;font:14px/26px Arial, sans-serif;}
+input[type=checkbox]{visibility:hidden;}
+.slider{width:80px;height:32px;background:#888;margin:8px auto;position:relative;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;}
+.slider:after{content:'UIT';font:12px/26px Arial, sans-serif;color:#666;position:absolute;top:3px;right:10px;z-index:0;font-weight:bold;}
+.slider:before{content:'AAN';font:12px/26px Arial, sans-serif;color:#fff;position:absolute;top:3px;left:10px;z-index:0;font-weight:bold;}
+.slider label{display:block;width:34px;height:25px;cursor:pointer;position:absolute;top:3px;left:3px;z-index:1;background:#fff;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;}
+.slider input[type=checkbox]:checked + label{left:43px;}
+input[type=range]{margin:1px 0px 1px 0px;width:100%;}
+input[type=range]::-ms-track{width:100%;height:10px;cursor:pointer;background:transparent;border-color:transparent;border-width:16px 0;color:transparent;}
+input[type=range]::-ms-fill-lower{background:#333;border:0.2px solid #010101;border-radius:2.6px;box-shadow:1px 1px 1px #000000, 0px 0px 1px #0d0d0d;}
+input[type=range]::-ms-fill-upper{background:#777;border:0.2px solid #010101;border-radius:2.6px;box-shadow:1px 1px 1px #000000, 0px 0px 1px #0d0d0d;}
+input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000000, 0px 0px 1px #0d0d0d;border:1px solid #000000;height:30px;width:16px;border-radius:6px;background:#ffffff;cursor:pointer;}
+#actionIcon{background:url(../images/icons.png) 0 0;width:22px;height:22px;}
+#addIcon{background:url(../images/icons.png) 0 -32px;width:22px;height:22px;}
+#batteryIcon{background:url(../images/icons.png) 0 -64px;width:22px;height:22px;}
+#cameraIcon{background:url(../images/icons.png) 0 -96px;width:22px;height:22px;}
+#contactIcon{background:url(../images/icons.png) 0 -128px;width:22px;height:22px;}
+#dimmerIcon{background:url(../images/icons.png) 0 -160px;width:22px;height:22px;}
+#doorbellIcon{background:url(../images/icons.png) 0 -192px;width:22px;height:22px;}
+#editIcon{background:url(../images/icons.png) 0 -224px;width:22px;height:22px;}
+#energymeterIcon{background:url(../images/icons.png) 0 -256px;width:22px;height:22px;}
+#fireIcon{background:url(../images/icons.png) 0 -288px;width:22px;height:22px;}
+#heatlinkIcon{background:url(../images/icons.png) 0 -320px;width:22px;height:22px;}
+#homeIcon{background:url(../images/icons.png) 0 -352px;width:22px;height:22px;}
+#hueIcon{background:url(../images/icons.png) 0 -384px;width:22px;height:22px;}
+#infoIcon{background:url(../images/icons.png) 0 -416px;width:22px;height:22px;}
+#lightIcon{background:url(../images/icons.png) 0 -448px;width:22px;height:22px;}
+#logoutIcon{background:url(../images/icons.png) 0 -480px;width:22px;height:22px;}
+#loxxIcon{background:url(../images/icons.png) 0 -512px;width:22px;height:22px;}
+#motionIcon{background:url(../images/icons.png) 0 -544px;width:22px;height:22px;}
+#noneIcon{background:url(../images/icons.png) 0 -576px;width:22px;height:22px;}
+#notificationIcon{background:url(../images/icons.png) 0 -608px;width:22px;height:22px;}
+#radiatorIcon{background:url(../images/icons.png) 0 -640px;width:22px;height:22px;}
+#rainmeterIcon{background:url(../images/icons.png) 0 -672px;width:22px;height:22px;}
+#sceneIcon{background:url(../images/icons.png) 0 -704px;width:22px;height:22px;}
+#searchIcon{background:url(../images/icons.png) 0 -736px;width:22px;height:22px;}
+#setFavorites{background:url(../images/icons.png) 0 -768px;width:22px;height:22px;}
+#shareSettingsIcon{background:url(../images/icons.png) 0 -800px;width:22px;height:22px;}
+#somfyIcon{background:url(../images/icons.png) 0 -832px;width:22px;height:22px;}
+#sortIcon{background:url(../images/icons.png) 0 -864px;width:22px;height:22px;}
+#switchIcon{background:url(../images/icons.png) 0 -896px;width:22px;height:22px;}
+#thermometerIcon{background:url(../images/icons.png) 0 -928px;width:22px;height:22px;}
+#thinkingCleanerIcon{background:url(../images/icons.png) 0 -960px;width:22px;height:22px;}
+#timerIcon{background:url(../images/icons.png) 0 -992px;width:22px;height:22px;}
+#upload{background:url(../images/icons.png) 0 -1024px;width:22px;height:22px;}
+#uvmeterIcon{background:url(../images/icons.png) 0 -1056px;width:22px;height:22px;}
+#virtualIcon{background:url(../images/icons.png) 0 -1088px;width:22px;height:22px;}
+#weatherIcon{background:url(../images/icons.png) 0 -1120px;width:22px;height:22px;}
+#weatherMapIcon{background:url(../images/icons.png) 0 -1152px;width:22px;height:22px;}
+#weatherdisplayIcon{background:url(../images/icons.png) 0 -1184px;width:22px;height:22px;}
+#windmeterIcon{background:url(../images/icons.png) 0 -1216px;width:22px;height:22px;}
+#smokeIcon{background:url(../images/icons.png) 0 -288px;width:22px;height:22px;}
+#somfydownIcon{background:url(../images/somfy.png) 0 0px;width:48px;height:35px;}
+#somfystopIcon{background:url(../images/somfy.png) 0 -150px;width:48px;height:35px;}
+#somfyupIcon{background:url(../images/somfy.png) 0 -200px;width:48px;height:35px;}

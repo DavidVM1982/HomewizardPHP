@@ -54,12 +54,12 @@ if (isset($_POST['set_temp'])) {
 			$responsejson = file_get_contents($jsonurl.'sw/'.$_POST['radiator'].'/settarget/'.$_POST['set_temp']);
 			$response = json_decode($responsejson, true);
 			if($response['status']=='ok') {
-				$id_switch = $_POST['switch'];
+				$id_switch = $_POST['radiator'];
 				$type = $_POST['set_temp'];
 				$timestamp = time();
 				echo '<div class="error gradient">OK</div>';
-				$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`) values ($id_switch, $timestamp, '$type');";
-				if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+				$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`) values ($id_switch, $timestamp, $type);";
+				if(!$result = $db->query($sql)){ die('There was an error running the query <br/>'.$sql.'<br/>[' . $db->error . ']');}
 			} else {
 				echo '<div class="error gradient">response = ';print_r($response);echo '</div>';
 			}
@@ -139,7 +139,7 @@ echo '<div class="isotope">';
 if($toon_schakelaars=='yes') {
 	echo '<div class="item gradient"><p class="number">'.$positie_schakelaars.'</p>
 			<form id="showallswitches" action="#" method="post">
-				<input type="hidden" name="showallswitches" value="yes">
+				<input type="hidden" name="showallswitches" value="yes" />
 				<a href="#" onclick="document.getElementById(\'showallswitches\').submit();" style="text-decoration:none"><h2 >Schakelaars</h2></a>
 			</form>';
 	$sql="select id_switch, name, type, favorite, volgorde from switches where type in ('switch', 'dimmer', 'virtual')";
@@ -158,7 +158,7 @@ if($toon_schakelaars=='yes') {
 			if($row['type']=='asun') {if(${'switchstatus'.$row['id_switch']}=="1") {$switchon = "off";} else {$switchon = "on";}}
 			else {if(${'switchstatus'.$row['id_switch']}=="on") {$switchon = "off";} else {$switchon = "on";}}
 			echo '<tr><form method="post" action="#">
-				<td><img id="'.$row['type'].'Icon" src="images/empty.gif" /></td>
+				<td><img id="'.$row['type'].'Icon" src="images/empty.gif" width="1px" height="1px" /></td>
 				<td align="right" '.$tdstyle.'>'.$row['name'].'</td>
 				<td width="100px" '.$tdstyle.' ><input type="hidden" name="switch" value="'.$row['id_switch'].'"/><input type="hidden" name="schakel" value="'.$switchon.'"/>';
 			if($row['type']=='dimmer') {
@@ -202,7 +202,7 @@ if($toon_schakelaars=='yes') {
 if($toon_scenes=='yes') {
 	echo '<div class="item gradient"><p class="number">'.$positie_scenes.'</p>
 			<form id="showallscenes" action="#" method="post">
-				<input type="hidden" name="showallscenes" value="yes">
+				<input type="hidden" name="showallscenes" value="yes" />
 				<a href="#" onclick="document.getElementById(\'showallscenes\').submit();" style="text-decoration:none"><h2>Scènes</h2></a>
 			</form>';
 	$sql="select id_switch, name, type, favorite, volgorde from switches where type in ('scene')";
@@ -248,7 +248,7 @@ if($toon_scenes=='yes') {
 if($toon_somfy=='yes') {
 	echo '<div class="item gradient"><p class="number">'.$positie_somfy.'</p>
 			<form id="showallsomfy" action="#" method="post">
-				<input type="hidden" name="showallsomfy" value="yes">
+				<input type="hidden" name="showallsomfy" value="yes" />
 				<a href="#" onclick="document.getElementById(\'showallsomfy\').submit();" style="text-decoration:none"><h2>Somfy</h2></a>
 			</form>';
 	$sql="select id_switch, name, volgorde from switches where type like 'somfy'";
@@ -262,7 +262,7 @@ if($toon_somfy=='yes') {
 			$tdstyle = '';
 			if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black; padding-top:10px; "';
 			$group = $row['volgorde'];
-			print '<tr><td><img id="somfyIcon" src="images/empty.gif" /></td><td align="right" '.$tdstyle.'>'.$row['name'].'</td>
+			print '<tr><td><img id="somfyIcon" src="images/empty.gif" width="1px" height="1px" /></td><td align="right" '.$tdstyle.'>'.$row['name'].'</td>
 			<td width="185px" '.$tdstyle.'><form method="post" action="#">
 			<input type="hidden" name="switch" value="'.$row['id_switch'].'"/>
 			<input type="hidden" name="schakel" value="'.$row['id_switch'].'"/>
@@ -281,7 +281,7 @@ if($toon_somfy=='yes') {
 if($toon_radiatoren=='yes') {
 	echo '<div class="item gradient"><p class="number">'.$positie_radiatoren.'</p>
 			<form id="showallradiators" action="#" method="post">
-				<input type="hidden" name="showallradiators" value="yes">
+				<input type="hidden" name="showallradiators" value="yes"/>
 				<a href="#" onclick="document.getElementById(\'showallradiators\').submit();" style="text-decoration:none"><h2>Radiatoren</h2></a>
 			</form>';
 	$sql="select id_switch, name, volgorde from switches where type like 'radiator'";
@@ -296,7 +296,7 @@ if($toon_radiatoren=='yes') {
 			if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black; padding-top:10px; "';
 			$group = $row['volgorde'];
 			print '<tr>
-			<td><img id="radiatorIcon" src="images/empty.gif" /></td>
+			<td><img id="radiatorIcon" src="images/empty.gif" width="1px" height="1px" /></td>
 			<td align="right" '.$tdstyle.'>'.$row['name'].'</td>
 			<td width="115px" '.$tdstyle.'>
 				<form method="post" action="#">
@@ -333,7 +333,7 @@ if($toon_radiatoren=='yes') {
 if($toon_sensoren=='yes') {
 	echo '<div class="item gradient"><p class="number">'.$positie_sensoren.'</p>
 			<form id="showallsensors" action="#" method="post">
-				<input type="hidden" name="showallsensors" value="yes">
+				<input type="hidden" name="showallsensors" value="yes"/>
 				<a href="#" onclick="document.getElementById(\'showallsensors\').submit();" style="text-decoration:none"><h2>Sensoren</h2></a>
 			</form>';
 	$sql="select id_sensor, name, type, volgorde from sensors WHERE type in ('smoke','contact','doorbell','motion')";
@@ -346,7 +346,7 @@ if($toon_sensoren=='yes') {
 		while($row = $result->fetch_assoc()){
        		echo '<tr>';
        		$type = $row['type'];
-			echo '<td style="color:#F00; font-weight:bold"><img id="'.$type.'Icon" src="images/empty.gif" /></td>';
+			echo '<td style="color:#F00; font-weight:bold"><img id="'.$type.'Icon" src="images/empty.gif" width="1px" height="1px" /></td>';
        		if($type=="contact") $type = "Magneet";
 			if($type=="motion") $type = "Beweging";
 			if($type=="doorbell") $type = "Deurbel";
@@ -376,7 +376,7 @@ if($toon_sensoren=='yes') {
 if($toon_temperatuur=='yes') {
 	echo '<div class="item gradient"><p class="number">'.$positie_temperatuur.'</p>
 			<form id="showalltemps" action="#" method="post">
-				<input type="hidden" name="showalltemps" value="yes">
+				<input type="hidden" name="showalltemps" value="yes"/>
 				<a href="#" onclick="document.getElementById(\'showalltemps\').submit();" style="text-decoration:none"><h2>Temperatuur</h2></a>
 			</form>';
 	$sql="select id_sensor, name, volgorde from sensors WHERE type in ('temp')";
