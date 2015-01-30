@@ -148,8 +148,7 @@ if($toon_schakelaars=='yes') {
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	if($result->num_rows>0) {
 		$group = 0;
-		
-			echo '
+ 		echo '
 		<table align="center"><tbody>';
 		while($row = $result->fetch_assoc()){
 			$switchon = "";
@@ -212,7 +211,6 @@ if($toon_scenes=='yes') {
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	if($result->num_rows>0) {
 		$group = 0;
-		
 		while($row = $result->fetch_assoc()){
 			echo '<table width="100%"><thead><tr><th colspan="2">';
 			if($detailscenes=='optional') {print '<a href="#" onclick="toggle_visibility(\'scene'.$row['id_switch'].'\');" style="text-decoration:none">'.$row['name'].'</a>';} else {print $row['name'];}
@@ -238,10 +236,10 @@ if($toon_scenes=='yes') {
 						print '<tr><td align="right" width="60px">'.$datascene['type'].'&nbsp;&nbsp;</td><td align="left">&nbsp;'.$datascene['name'].'</td><td>'.$datascene['onstatus'].'</td><td>'.$datascene['offstatus'].'</td></tr>';
 					}
 				}
-				echo '</tbody></table>';
 			}
-			$result->free();
 		}
+		echo '</tbody></table>';
+		$result->free();
 	}
 	echo '</div>';
 }
