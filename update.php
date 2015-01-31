@@ -1,5 +1,5 @@
 <?php
-$laatsteversie = 20150130;
+$laatsteversie = 20150131;
 if($authenticated==true) {
 	
 //BEGIN UPDATE	
@@ -99,9 +99,15 @@ if(isset($_POST['updatedatabasenow'])) {
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
 	if($versie<20150130) {
-		$sql="ALTER TABLE `switchhistory` ADD `who` VARCHAR(20) NOT NULL DEFAULT 'man'; ;";
+		$sql="ALTER TABLE `switchhistory` ADD `who` VARCHAR(20) NOT NULL DEFAULT 'man';";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 		$sql="insert into versie (versie) VALUES ('20150130');";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+	}
+	if($versie<20150131) {
+		$sql="ALTER TABLE `switches` ADD `temp` SMALLINT NULL ;";
+		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="insert into versie (versie) VALUES ('20150131');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
 }
