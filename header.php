@@ -16,7 +16,6 @@ $time = explode(' ', $time);
 $time = $time[1] + $time[0];
 $start = $time;
 include "parameters.php"; 
-
 setlocale(LC_ALL,'nl_NL.UTF-8');
 setlocale(LC_ALL, 'nld_nld');
 date_default_timezone_set('Europe/Brussels');
@@ -24,25 +23,15 @@ $sql="select variable, value from settings order by variable asc";
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	$acceptedips = array();
 	while($row = $result->fetch_assoc()){
-		if (strpos($row['variable'], 'acceptedip') === 0) { 
-			array_push($acceptedips, $row['value']);
-		} else {
-			$$row['variable'] = $row['value'];
-		}
+		if (strpos($row['variable'], 'acceptedip') === 0) array_push($acceptedips, $row['value']);
+		else $$row['variable'] = $row['value'];
 	}
 	$result->free();
 $authenticated = false;
 if(in_array($_SERVER['REMOTE_ADDR'], $acceptedips)) $authenticated = true; 
 session_start();
-if(isset($_SESSION['authenticated'])) {
-	if ($_SESSION['authenticated'] == true) {
-		$authenticated = true;
-	}
-}
-if($authenticated==true && $debug=='yes') {
-	error_reporting(E_ALL); 
-	ini_set("display_errors", "on");
-} 
+if(isset($_SESSION['authenticated'])) {if ($_SESSION['authenticated'] == true) {$authenticated = true;}}
+if($authenticated==true && $debug=='yes') {error_reporting(E_ALL);ini_set("display_errors", "on");} 
 $actual_page = "ndex.php";
 if(isset($_SERVER['PHP_SELF'])) $actual_page = substr($_SERVER['PHP_SELF'], -9);
 if ($actual_page=="index.php") {

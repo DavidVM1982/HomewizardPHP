@@ -34,13 +34,12 @@ if($switchstatus1=='on') {
 		$sql ="select timestamp, type from switchhistory WHERE id_switch = $switchid1 order by timestamp DESC limit 0,1;";
 		if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 		$row = $result->fetch_assoc();
-		if($row['timestamp']<(time()-7200) || $row['type']=='off') {
-			schakel(1, 'off', 'c');
-		}
+		if($row['timestamp']<(time()-7200) || $row['type']=='off') {schakel(1, 'off', 'c');}
 		$result->free();
 	} 
 }
 sleep(1);
 //END ACTION LICHT GARAGE
+
 $db->close();
 ?>

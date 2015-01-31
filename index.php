@@ -8,7 +8,7 @@ if($authenticated == true) {
 		else if (isset($_POST['schakel'])) echo schakel($_POST['switch'],$_POST['schakel'],'m');
 	} 
 	if(isset($_POST['radiator']) && isset($_POST['set_temp'])) echo radiator($_POST['radiator'],$_POST['set_temp'],'m');
-	if (isset($_POST['schakelscene'])) echo schakel($_POST['scene'],$_POST['schakelscene'],'m');
+	if (isset($_POST['schakelscene'])) echo scene($_POST['scene'],$_POST['schakelscene'],'m');
 }
 include "data.php";
 echo '<div class="isotope">';
