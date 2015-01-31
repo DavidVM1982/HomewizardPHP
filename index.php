@@ -160,7 +160,7 @@ if($toon_schakelaars=='yes') {
 			echo '<tr><form method="post" action="#">
 				<td><img id="'.$row['type'].'Icon" src="images/empty.gif" width="1px" height="1px" /></td>
 				<td align="right" '.$tdstyle.'>'.$row['name'].'</td>
-				<td width="100px" '.$tdstyle.' ><input type="hidden" name="switch" value="'.$row['id_switch'].'"/><input type="hidden" name="schakel" value="'.$switchon.'"/>';
+				<td width="250px" '.$tdstyle.' ><input type="hidden" name="switch" value="'.$row['id_switch'].'"/><input type="hidden" name="schakel" value="'.$switchon.'"/>';
 			if($row['type']=='dimmer') {
 				print '<select name="dimlevel"  class="abutton handje gradient" onChange="this.form.submit()" style="margin-top:4px">
 				<option '.${'switchstatus'.$row['id_switch']}.') selected>'.${'switchstatus'.$row['id_switch']}.'</option>
@@ -183,6 +183,9 @@ if($toon_schakelaars=='yes') {
 				<input type="checkbox" value="switch'.$row['id_switch'].'" id="switch'.$row['id_switch'].'" name="switch'.$row['id_switch'].'" '; if(${'switchstatus'.$row['id_switch']}==1) {print 'checked';} print ' onChange="this.form.submit()"/>
 				<label for="switch'.$row['id_switch'].'"></label>
 				</section>';
+			} else if($row['type']=='virtual') {
+				print '
+				<form method="post" action="#"><input type="submit" name="schakel" value="on" class="abutton handje gradient"/><input type="submit" name="schakel" value="off" class="abutton handje gradient"/></form>';
 			} else {
 				print '
 				<section class="slider">	
@@ -192,10 +195,10 @@ if($toon_schakelaars=='yes') {
 			}
 			print '</td></form></tr>';
 		}
-		$result->free();
 		echo "</tbody></table>";
 	}
-	echo '</div>';
+	$result->free();
+	echo '<div class="gradient handje" style=" width:60px; height:15px;align:left;">Historiek</div></div>';
 }
 
 /* SCENES */
@@ -239,8 +242,8 @@ if($toon_scenes=='yes') {
 			}
 		}
 		echo '</tbody></table>';
-		$result->free();
 	}
+	$result->free();
 	echo '</div>';
 }
 
@@ -271,9 +274,9 @@ if($toon_somfy=='yes') {
 			<input type="submit" id="somfyupIcon" name="somfy" value="up" class="abuttonsomfy handje gradient"/>
 			</form></td></tr>';
 		}
-		$result->free();
 		echo "</tbody></table>";
 	}
+	$result->free();
 	echo '</div>';
 }
 
@@ -323,9 +326,9 @@ if($toon_radiatoren=='yes') {
 				</form>
 			</td></tr>';
 		}
-		$result->free();
 		echo '</tbody></table>';
 	}
+	$result->free();
 	echo '</div>';
 }
 

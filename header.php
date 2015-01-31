@@ -17,6 +17,7 @@ $time = $time[1] + $time[0];
 $start = $time;
 include "parameters.php"; 
 setlocale(LC_ALL,'nl_NL.UTF-8');
+setlocale(LC_ALL, 'nld_nld');
 date_default_timezone_set('Europe/Brussels');
 $sql="select variable, value from settings order by variable asc";
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
