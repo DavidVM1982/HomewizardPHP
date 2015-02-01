@@ -1,5 +1,5 @@
 <?php
-$laatsteversie = 20150131;
+$laatsteversie = 20150201;
 if($authenticated==true) {
 	
 //BEGIN UPDATE	
@@ -108,6 +108,12 @@ if(isset($_POST['updatedatabasenow'])) {
 		$sql="ALTER TABLE `switches` ADD `temp` SMALLINT NULL ;";
 		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 		$sql="insert into versie (versie) VALUES ('20150131');";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+	}
+	if($versie<20150201) {
+		$sql="INSERT IGNORE INTO `settings` (`variable`, `value`) VALUES ('css_td_newgroup', 'border-top:1px solid black; padding-top:10px;')";
+		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="insert into versie (versie) VALUES ('20150201');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
 }

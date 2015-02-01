@@ -14,14 +14,14 @@ if($authenticated==true) {
 if(isset($_POST['deleteswitch'])) { 
 	$id_switch=($_POST['id_switch']);
 	$sql="delete from switches where id_switch = $id_switch";
-	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	$showeditswitches=true;
 	$showparameters = false;
 }
 if(isset($_POST['deletesensor'])) { 
 	$id_sensor=($_POST['id_sensor']);
 	$sql="delete from sensors where id_sensor = $id_sensor";
-	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	$showeditsensors=true;
 	$showparameters = false;
 }
@@ -31,7 +31,7 @@ if(isset($_POST['editswitch'])) {
 	$type=($_POST['soort']);
 	$favorite=($_POST['favorite']);
 	$sql="update switches set volgorde = '$volgorde', favorite = '$favorite' where id_switch = $id_switch AND type like '$type'";
-	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	$showeditswitches=true;
 	$showparameters = false;
 }
@@ -41,7 +41,7 @@ if(isset($_POST['editsensor'])) {
 	$type=($_POST['soort']);
 	$favorite=($_POST['favorite']);
 	$sql="update sensors set volgorde = '$volgorde', favorite = '$favorite' where id_sensor = $id_sensor AND type like '$type'";
-	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	$showeditsensors=true;
 	$showparameters = false;
 }
@@ -49,67 +49,67 @@ if(isset($_POST['upd'])) {
 	$variable=$db->real_escape_string($_POST['variable']);
 	$value=$db->real_escape_string($_POST['value']);
 	if(!isset($_POST['value'])) $value = 'no';
-	echo 'update settings set value = '.$value.' where variable like '.$variable.'';
+	echo '<div class="item wide gradient"><p class="number">2</p><br/>update settings set value = '.$value.' where variable like '.$variable.'</div>';
 	$sql="update settings set value = '$value' where variable like '$variable'";
-	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 }
 if(isset($_POST['add'])) { 
 	$variable=$db->real_escape_string($_POST['variable']);
 	$value=$db->real_escape_string($_POST['value']);
 	$sql="insert into settings (variable, value) VALUES ('$variable', '$value')";
-	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 }
 if(isset($_POST['updateswitches'])) { 
 	$showparameters=false;
-	echo '<div class="item wide gradient"><p class="number">2</p>';
+	echo '<div class="item wide gradient"><p class="number">9</p>';
 	include "history_to_sql.php";
 	echo '</div>';
 }
 if(isset($_POST['actionscron'])) { 
 	$showparameters=false;
-	echo '<div class="item wide gradient"><p class="number">2</p>';
+	echo '<div class="item wide gradient"><p class="number">9</p>';
 	include "actionscron.php";
 	echo '</div>';
 }
 if(isset($_POST['updatedatabase'])) { 
 	$showparameters=false;
-	echo '<div class="item wide gradient"><p class="number">2</p>';
+	echo '<div class="item wide gradient"><p class="number">9</p>';
 	include "update.php";
 	echo '</div>';
 }
 if(isset($_POST['jsongetsensors'])) { 
 	$showparameters=false;
-	echo '<div class="item wide gradient"><p class="number">2</p><textarea rows="50" cols="68">';
+	echo '<div class="item wide gradient"><p class="number">9</p><textarea rows="50" cols="68">';
 	$json = file_get_contents($jsonurl.'get-sensors');
 	echo $json.'</textarea></div>';
 }
 if(isset($_POST['jsongetstatus'])) { 
 	$showparameters=false;
-	echo '<div class="item wide gradient"><p class="number">2</p><textarea rows="50" cols="68">';
+	echo '<div class="item wide gradient"><p class="number">9</p><textarea rows="50" cols="68">';
 	$json = file_get_contents($jsonurl.'get-status');
 	echo $json.'</textarea></div>';
 }
 if(isset($_POST['jsongetsuntimes'])) { 
 	$showparameters=false;
-	echo '<div class="item wide gradient"><p class="number">2</p><textarea rows="50" cols="68">';
+	echo '<div class="item wide gradient"><p class="number">9</p><textarea rows="50" cols="68">';
 	$json = file_get_contents($jsonurl.'suntimes/today');
 	echo $json.'</textarea></div>';
 }
 if(isset($_POST['jsongettimers'])) { 
 	$showparameters=false;
-	echo '<div class="item wide gradient"><p class="number">2</p><textarea rows="50" cols="68">';
+	echo '<div class="item wide gradient"><p class="number">9</p><textarea rows="50" cols="68">';
 	$json = file_get_contents($jsonurl.'timers');
 	echo $json.'</textarea></div>';
 }
 if(isset($_POST['jsongetnotifications'])) { 
 	$showparameters=false;
-	echo '<div class="item wide gradient"><p class="number">2</p><textarea rows="50" cols="68">';
+	echo '<div class="item wide gradient"><p class="number">9</p><textarea rows="50" cols="68">';
 	$json = file_get_contents($jsonurl.'notifications');
 	echo $json.'</textarea></div>';
 }
 if(isset($_POST['jsongetswlist'])) { 
 	$showparameters=false;
-	echo '<div class="item wide gradient"><p class="number">2</p><textarea rows="50" cols="68">';
+	echo '<div class="item wide gradient"><p class="number">9</p><textarea rows="50" cols="68">';
 	$json = file_get_contents($jsonurl.'swlist');
 	echo $json.'</textarea></div>';
 }
@@ -127,7 +127,7 @@ if(!isset($_SESSION['authenticated'])) {
 			$error = 'Incorrect username or password';
 		}
 	}
-   if(isset($error)) echo '<div class="error gradient">'.$error.'</div>';
+   if(isset($error)) echo '<div class="item wide gradient"><p class="number">2</p><br/>'.$error.'</div>';
 	}
 if($authenticated==true) {
 //BEGIN AUTHENTICATED STUFF	

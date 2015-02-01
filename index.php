@@ -30,7 +30,7 @@ if($toon_schakelaars=='yes') {
 		while($row = $result->fetch_assoc()){
 			$switchon = "";
 			$tdstyle = '';
-			if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black; padding-top:10px;"';
+			if($group != $row['volgorde']) $tdstyle = 'style="'.$css_td_newgroup.'"';
 			$group = $row['volgorde'];
 			if($row['type']=='asun') {if(${'switchstatus'.$row['id_switch']}=="1") {$switchon = "off";} else {$switchon = "on";}}
 			else {if(${'switchstatus'.$row['id_switch']}=="on") {$switchon = "off";} else {$switchon = "on";}}
@@ -140,7 +140,7 @@ if($toon_somfy=='yes') {
 		echo '<table align="center"><tbody>';
 		while($row = $result->fetch_assoc()){
 			$tdstyle = '';
-			if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black; padding-top:10px; "';
+			if($group != $row['volgorde']) $tdstyle = 'style="'.$css_td_newgroup.'"';
 			$group = $row['volgorde'];
 			print '<tr><td><img id="somfyIcon" src="images/empty.gif" width="1px" height="1px" /></td><td align="right" '.$tdstyle.'>'.$row['name'].'</td>
 			<td width="185px" '.$tdstyle.'><form method="post" action="#">
@@ -173,7 +173,7 @@ if($toon_radiatoren=='yes') {
 		echo '<table align="center"><tbody>';
 		while($row = $result->fetch_assoc()){
 			$tdstyle = '';
-			if($group != $row['volgorde']) $tdstyle = 'style="border-top:1px solid black; padding-top:10px; "';
+			if($group != $row['volgorde']) $tdstyle = 'style="'.$css_td_newgroup.'"';
 			$group = $row['volgorde'];
 			print '<tr>
 			<td><img id="radiatorIcon" src="images/empty.gif" width="1px" height="1px" /></td>
@@ -316,7 +316,7 @@ if($toon_wind=='yes') {
 //--ENERGYLINKS--
 if($toon_energylink=='yes') {
 	if(!empty($energylinks)) {
-		echo '<div class="item handje gradient"><p class="number">'.$positie_wind.'</p><h2>Energylink</h2><table width="100%">';
+		echo '<div class="item handje gradient"><p class="number">'.$positie_energylink.'</p><h2>Energylink</h2><table width="100%">';
 		foreach($energylinks as $energylink){
 			if($authenticated == true && $debug=='yes') print_r($energylink);
 				echo '<tr><td>S1 PO</td><td>'.$energylink['s1']['po'].'</td></tr>';
