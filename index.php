@@ -75,7 +75,7 @@ if($toon_schakelaars=='yes') {
 		echo "</tbody></table>";
 	}
 	$result->free();
-	echo '<div class="gradient handje" style=" width:60px; height:18px;align:left;" onclick="window.location=\'switchhistory.php\';">Historiek</div></div>';
+	echo '<br/><br/><div class="gradient handje divknopje" onclick="window.location=\'switchhistory.php\';">Historiek</div></div>';
 }
 
 /* SCENES */
@@ -213,7 +213,7 @@ if($toon_radiatoren=='yes') {
 		echo '</tbody></table>';
 	}
 	$result->free();
-	echo '</div>';
+	echo '<br/><br/><div class="gradient handje divknopje" onclick="window.location=\'switchhistory.php\';">Historiek</div></div>';
 }
 
 //---SENSORS--

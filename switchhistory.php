@@ -25,10 +25,11 @@ print '</select></form>';
 
 $sql = "SELECT h.id_switch, h.timestamp, h.type, h.who, s.name 
 FROM switchhistory h 
-LEFT JOIN switches s ON h.id_switch=s.id_switch";
+LEFT JOIN switches s ON h.id_switch=s.id_switch 
+WHERE s.type not like 'scene'";
 if(isset($_POST['filter'])) {
 	$filter = $_POST['filter'];
-	if($filter != "All") $sql .= " WHERE s.name like '$filter'";
+	if($filter != "All") $sql .= " AND s.name like '$filter'";
 }
 if($authenticated==true) {
 	if(isset($_POST['limit'])) { $limit = $_POST['limit']; } else { $limit = 20;}
