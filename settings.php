@@ -5,9 +5,13 @@ $showparameters = true;
 $showupdatesensors  = false;
 $showeditswitches = false;
 $showeditsensors = false;
+$showopmaak = false;
+$showacties = false;
 if(isset($_POST['updatesensors'])) {$showupdatesensors = true; $showparameters = false;}
 if(isset($_POST['editswitches'])) {$showeditswitches = true; $showparameters = false;}
 if(isset($_POST['editsensors'])) {$showeditsensors = true; $showparameters = false;}
+if(isset($_POST['showopmaak'])) {$showopmaak = true; $showparameters = false;}
+if(isset($_POST['showacties'])) {$showacties = true; $showparameters = false;}
 
 if(isset($_POST['logout'])) {session_destroy();$authenticated = false;header("location:settings.php");exit();}
 if($authenticated==true) {
@@ -69,6 +73,13 @@ if(isset($_POST['actionscron'])) {
 	$showparameters=false;
 	echo '<div class="item wide gradient"><p class="number">9</p>';
 	include "actionscron.php";
+	echo '</div>';
+}
+if(isset($_POST['showtest'])) { 
+	$showparameters=false;
+	echo '<div class="item wide gradient"><p class="number">2</p><br/>Output van test.php file. Handig om actions voor te bereiden</div>';
+	echo '<div class="item wide gradient"><p class="number">9</p>';
+	include "test.php";
 	echo '</div>';
 }
 if(isset($_POST['updatedatabase'])) { 
@@ -134,6 +145,8 @@ if($authenticated==true) {
 
 	echo '<div class="item gradient"><p class="number">1</p>
 	<form method="post"><input type="submit" name="parameters" value="Parameters" class="abutton settings gradient"/></form>
+	<form method="post"><input type="submit" name="showopmaak" value="Opmaak" class="abutton settings gradient"/></form>
+	<form method="post"><input type="submit" name="showacties" value="Acties" class="abutton settings gradient"/></form>
 	<form method="post"><input type="submit" name="editsensors" value="Bewerk sensoren" class="abutton settings gradient"/></form>
 	<form method="post"><input type="submit" name="editswitches" value="Bewerk schakelaars" class="abutton settings gradient"/></form>
 	<form method="post"><input type="submit" name="updateswitches" value="Import schakelaars, historiek" class="abutton settings gradient"/></form>
@@ -144,16 +157,17 @@ if($authenticated==true) {
 	<form method="post"><input type="submit" name="jsongetsuntimes" value="JSON suntimes" class="abutton settings gradient"/></form>
 	<form method="post"><input type="submit" name="jsongettimers" value="JSON timers" class="abutton settings gradient"/></form>
 	<form method="post"><input type="submit" name="jsongetnotifications" value="JSON notifications" class="abutton settings gradient"/></form><br/>
+	<form method="post"><input type="submit" name="showtest" value="Test" class="abutton settings gradient"/></form><br/>
 	<form method="post"><input type="submit" name="actionscron" value="Actions cron" class="abutton settings gradient"/></form><br/>
 	<br/><br/><br/><br/><br/><br/><form method="post"><input type="submit" name="logout" value="Uitloggen" class="abutton settings gradient"/></form><br/>
 	Kijk op de <a href="https://github.com/Egregius/HomewizardPHP/wiki/Settings-en-parameters" target="_blank">wiki</a> voor uitleg.<br/></div>
 	';
 
-if($showeditsensors==true || $showeditswitches==true || $showparameters==true || $showupdatesensors==true) echo '<div class="item wide gradient">';
+if($showeditsensors==true || $showeditswitches==true || $showparameters==true || $showopmaak==true || $showupdatesensors==true) echo '<div class="item wide gradient">';
 if($showparameters==true) {
 	echo '<center><table width="400px" style="text-align:center"><tbody>';
-	$sql="select variable, value from settings order by variable asc";
-	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+	$sql="select variable, value from settings where variable not like 'css_%' and variable not like 'positie_%' and variable not like 'toon_%' and variable not like 'actie_%' order by variable asc";
+	if(!$result = $db->query($sql)){ die('<div class="item wide gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
 		echo '<form method="post" >
 		<tr>
@@ -186,6 +200,64 @@ if($showparameters==true) {
 	}
 	$result->free();
 	echo '<form method="post"><tr><td><input type="text" name="variable" id="variable" value=""/></td><td><input type="text" name="value" id="value" value=""/></td><td><input type="submit" name="add" value="add" class="abutton gradient"/></td></tr></form></tbody></table></center>';
+}
+if($showopmaak==true) {
+	echo '<center><table width="400px" style="text-align:center"><tbody>';
+	$sql="select variable, value from settings where variable like 'css_%' OR variable like 'positie_%' OR variable like 'toon_%' order by variable asc";
+	if(!$result = $db->query($sql)){ die('<div class="item wide gradient">There was an error running the query [' . $db->error . ']</div>');}
+	while($row = $result->fetch_assoc()){
+		echo '<form method="post" ><input type="hidden" name="showopmaak" value="Opmaak"/>
+		<tr>
+			<td align="left">'.$row['variable'].'</td>
+			<td><input type="hidden" name="variable" id="variable" value="'.$row['variable'].'"/>';
+		if(in_array($row['variable'], array('developerjson'))) { echo '<textarea name="value" id="value" cols="32" rows="5">'.$row['value'].'</textarea>';} 
+		else if(in_array($row['variable'], array('debug','developermode','toon_radiatoren','toon_regen','toon_scenes','toon_schakelaars','toon_sensoren','toon_somfy','toon_temperatuur','toon_wind','toon_energylink'))) {
+			if($row['value']=="yes") {echo '<input type="hidden" name="value" id="value" value="no"/>';} else {echo '<input type="hidden" name="value" id="value" value="yes"/>';}
+		echo '
+		<section class="slider">	
+			<input type="hidden" name="upd" value="update">
+			<input type="checkbox" value="'.$row['value'].'" id="'.$row['variable'].'" name="'.$row['variable'].'" '; if($row['value']=="yes") {print 'checked';} print ' onChange="this.form.submit()"/>
+			<label for="'.$row['variable'].'"></label>
+		</section>
+			' ;}
+		else if(in_array($row['variable'], array('detailscenes'))) {
+		echo '<input type="hidden" name="upd" value="update">
+		<select name="value" class="abutton handje gradient settings" onChange="this.form.submit()" >	
+			<option '.$row['value'].' selected>'.$row['value'].'</option>
+			<option>yes</option>
+			<option>optional</option>
+			<option>no</option>
+		</select>
+			' ;}	
+		else {echo '<input type="text" name="value" id="value" value="'.$row['value'].'" size="40px"/>' ;}
+		
+		echo '</td><td><input type="hidden" name="parameters" value="Parameters" />';
+		if(!in_array($row['variable'], array('debug','developermode','detailscenes','toon_radiatoren','toon_regen','toon_scenes','toon_schakelaars','toon_sensoren','toon_somfy','toon_temperatuur','toon_wind','toon_energylink'))) echo '<input type="submit" name="upd" value="update" class="abutton gradient">';
+		echo '</td></tr></form>';
+	}
+	$result->free();
+	echo '<form method="post"><tr><td><input type="text" name="variable" id="variable" value=""/></td><td><input type="text" name="value" id="value" value=""/></td><td><input type="submit" name="add" value="add" class="abutton gradient"/></td></tr></form></tbody></table></center>';
+}
+if($showacties==true) {
+	echo '<div class="item wide gradient"><p class="number">9</p><center><table width="400px" style="text-align:center"><tbody>';
+	$sql="select variable, value from settings where variable like 'actie_%' order by variable asc";
+	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+	while($row = $result->fetch_assoc()){
+		echo '<form method="post" ><input type="hidden" name="showacties" value="Acties"/>
+		<tr>
+			<td align="left">'.$row['variable'].'</td>
+			<td><input type="hidden" name="variable" id="variable" value="'.$row['variable'].'"/>';
+		if($row['value']=="yes") {echo '<input type="hidden" name="value" id="value" value="no"/>';} else {echo '<input type="hidden" name="value" id="value" value="yes"/>';}
+		echo '
+		<section class="slider">	
+			<input type="hidden" name="upd" value="update">
+			<input type="checkbox" value="'.$row['value'].'" id="'.$row['variable'].'" name="'.$row['variable'].'" '; if($row['value']=="yes") {print 'checked';} print ' onChange="this.form.submit()"/>
+			<label for="'.$row['variable'].'"></label>
+		</section>
+		</td></tr></form>';
+	}
+	$result->free();
+	echo '<form method="post"><tr><td align="left"><input type="hidden" name="showacties" value="Acties"/><input type="text" name="variable" id="variable" value="" size="40"/></td><td><input type="submit" name="add" value="add" class="abutton gradient"/></td></tr></form></tbody></table></center>';
 }
 if($showeditswitches==true) {
 	echo '<center><table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Name</th><th>type</th><th>favorite</th><th>order</th></thead><tbody>';
