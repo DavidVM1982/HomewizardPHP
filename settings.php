@@ -272,7 +272,7 @@ if($showacties==true) {
 		</td></tr></form>';
 	}
 	$result->free();
-	echo '<form method="post"><tr><td align="left"><input type="hidden" name="showacties" value="Acties"/><input type="text" name="variable" id="variable" value="" size="40"/></td><td><input type="submit" name="add" value="add" class="abutton gradient"/></td></tr></form></tbody></table></center>';
+	echo '<form method="post"><tr><td align="left"><input type="hidden" name="showacties" value="Acties"/><input type="text" name="variable" id="variable" value="actie_" size="40"/></td><td><input type="submit" name="add" value="add" class="abutton gradient"/></td></tr></form></tbody></table></center>';
 }
 if($showeditswitches==true) {
 	echo '<div class="item wide gradient"><center><table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Name</th><th>type</th><th>favorite</th><th>order</th></thead><tbody>';

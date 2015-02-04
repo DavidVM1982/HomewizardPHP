@@ -44,11 +44,12 @@ foreach($thermometers as $thermometer) {
 $rainmeters =  $data['response']['rainmeters'];
 foreach($rainmeters as $rainmeter) {
 	${'rainmeter'.$rainmeter['id']} = $rainmeter['id'];
+	${'rainmetermm'.$rainmeter['mm']} = $rainmeter['mm'];
 	${'rainmeter3h'.$rainmeter['id']} = $rainmeter['3h'];
 }
 $windmeters =  $data['response']['windmeters'];	
 foreach($windmeters as $windmeter) {
-	${'windmeter'.$windmeter['id']} = $windmeter['id'];
+	${'windmeterid'.$windmeter['id']} = $windmeter['id'];
 	if(!empty($windmeter['ws'])) ${'windmeterws'.$windmeter['id']} = $windmeter['ws'];
 	if(!empty($windmeter['gu'])) ${'windmetergu'.$windmeter['id']} = $windmeter['gu'];
 }
