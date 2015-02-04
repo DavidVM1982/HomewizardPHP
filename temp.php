@@ -67,7 +67,7 @@ print '<option>20</option>
 
 if(isset($_POST['limit'])) { $limit = $_POST['limit']; } else { $limit = 20;}
 if(isset($_POST['sensor'])) { $sensor = $_POST['sensor']; } else { $sensor = 1;}
-$sql = "SELECT timestamp, te, hu FROM temperature WHERE id_sensor = $sensor GROUP BY left(timestamp,13) ORDER BY timestamp DESC LIMIT 0,$limit";
+$sql = "SELECT timestamp, te, hu FROM temperature WHERE id_sensor = $sensor /* GROUP BY left(timestamp,13) */ ORDER BY timestamp DESC LIMIT 0,$limit";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 
 while($row = $result->fetch_assoc()){

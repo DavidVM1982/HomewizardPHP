@@ -14,7 +14,7 @@ print '<option>20</option>
 <option>100000</option>
 </select>
 <select name="filter" class="abutton abuttonhistory gradient" onChange="this.form.submit()"><option ';if(isset($_POST['filter'])) { if($_POST['filter']=='all') print 'selected';} print '>All</option>';
-$sql = "SELECT name FROM sensors ORDER BY name ASC";
+$sql = "SELECT name FROM sensors WHERE type not like 'temp' ORDER BY name ASC";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 while($row = $result->fetch_assoc()){
 	print '<option ';if(isset($_POST['filter'])) { if($_POST['filter']==$row['name']) print 'selected';} print '>'.$row['name'].'</option>';
@@ -23,10 +23,10 @@ $result->free();
 print '</select></form>';
 
 if(isset($_POST['update'])) include_once('history_to_sql.php');
-$sql = "SELECT h.id_sensor, h.time, s.name, t.omschrijving FROM history h LEFT JOIN statusses t ON h.status=t.status LEFT JOIN sensors s ON h.id_sensor=s.id_sensor";
+$sql = "SELECT h.id_sensor, h.time, s.name, t.omschrijving FROM history h LEFT JOIN statusses t ON h.status=t.status LEFT JOIN sensors s ON h.id_sensor=s.id_sensor WHERE s.type not like 'temp'";
 if(isset($_POST['filter'])) {
 	$filter = $_POST['filter'];
-	if($filter != "All") $sql .= " WHERE s.name like '$filter'";
+	if($filter != "All") $sql .= " AND s.name like '$filter'";
 }
 if($authenticated==true) {
 	if(isset($_POST['limit'])) { $limit = $_POST['limit']; } else { $limit = 20;}

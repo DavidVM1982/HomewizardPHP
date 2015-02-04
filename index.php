@@ -203,8 +203,10 @@ if($toon_radiatoren=='yes') {
 				</form>
 			</td>
 			<td width="60px" '.$tdstyle.'>';
-			if($row['temp']>0) {
-				if(${'thermometerte'.$row['temp']}>${'switchstatus'.$row['id_switch']}) echo '<font color="#880000">'; else echo '<font color="#000088">';
+			if(!empty($row['temp'])) {
+				if(${'thermometerte'.$row['temp']}>${'switchstatus'.$row['id_switch']}+1) echo '<font color="#880000">';
+				else if(${'thermometerte'.$row['temp']}<${'switchstatus'.$row['id_switch']}-1) echo '<font color="#000088">';
+				else echo '<font color="#008800">';
 				echo ${'thermometerte'.$row['temp']}.'°C';
 			}
 			echo '</font></td>

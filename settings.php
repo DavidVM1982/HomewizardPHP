@@ -7,11 +7,13 @@ $showeditswitches = false;
 $showeditsensors = false;
 $showopmaak = false;
 $showacties = false;
+$cleandatabase = false;
 if(isset($_POST['updatesensors'])) {$showupdatesensors = true; $showparameters = false;}
 if(isset($_POST['editswitches'])) {$showeditswitches = true; $showparameters = false;}
 if(isset($_POST['editsensors'])) {$showeditsensors = true; $showparameters = false;}
 if(isset($_POST['showopmaak'])) {$showopmaak = true; $showparameters = false;}
 if(isset($_POST['showacties'])) {$showacties = true; $showparameters = false;}
+if(isset($_POST['cleandatabase'])) {$cleandatabase = true; $showparameters = false;}
 
 if(isset($_POST['logout'])) {session_destroy();$authenticated = false;header("location:settings.php");exit();}
 if($authenticated==true) {
@@ -63,6 +65,19 @@ if(isset($_POST['add'])) {
 	$sql="insert into settings (variable, value) VALUES ('$variable', '$value')";
 	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 }
+if(isset($_POST['cleansensorhistory'])) { 
+	$id_sensor=($_POST['id_sensor']);
+	$old = time()-($_POST['daystokeep']*86400);
+	$old = date("Y-m-d H:i:s", $old);
+	$sql="delete from history where id_sensor = $id_sensor and time < '$old'";
+	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	echo '<div class="item wide gradient"><p class="number">7</p><br>'.$db->affected_rows.' Records verwijderd voor sensor '.$id_sensor.', tot datum '.$old.'</div>';
+
+}
+
+
+
+
 if(isset($_POST['updateswitches'])) { 
 	$showparameters=false;
 	echo '<div class="item wide gradient"><p class="number">9</p>';
@@ -157,15 +172,15 @@ if($authenticated==true) {
 	<form method="post"><input type="submit" name="jsongetsuntimes" value="JSON suntimes" class="abutton settings gradient"/></form>
 	<form method="post"><input type="submit" name="jsongettimers" value="JSON timers" class="abutton settings gradient"/></form>
 	<form method="post"><input type="submit" name="jsongetnotifications" value="JSON notifications" class="abutton settings gradient"/></form><br/>
+	<form method="post"><input type="submit" name="cleandatabase" value="Clean Database" class="abutton settings gradient"/></form><br/>
 	<form method="post"><input type="submit" name="showtest" value="Test" class="abutton settings gradient"/></form><br/>
-	<form method="post"><input type="submit" name="actionscron" value="Actions cron" class="abutton settings gradient"/></form><br/>
+	<form method="post"><input type="submit" name="actionscron" value="Actions cron" class="abutton settings gradient"/></form><br/><br/><br/>
 	<br/><br/><br/><br/><br/><br/><form method="post"><input type="submit" name="logout" value="Uitloggen" class="abutton settings gradient"/></form><br/>
 	Kijk op de <a href="https://github.com/Egregius/HomewizardPHP/wiki/Settings-en-parameters" target="_blank">wiki</a> voor uitleg.<br/></div>
 	';
 
-if($showeditsensors==true || $showeditswitches==true || $showparameters==true || $showopmaak==true || $showupdatesensors==true) echo '<div class="item wide gradient">';
 if($showparameters==true) {
-	echo '<center><table width="400px" style="text-align:center"><tbody>';
+	echo '<div class="item wide gradient"><center><table width="400px" style="text-align:center"><tbody>';
 	$sql="select variable, value from settings where variable not like 'css_%' and variable not like 'positie_%' and variable not like 'toon_%' and variable not like 'actie_%' order by variable asc";
 	if(!$result = $db->query($sql)){ die('<div class="item wide gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
@@ -202,7 +217,7 @@ if($showparameters==true) {
 	echo '<form method="post"><tr><td><input type="text" name="variable" id="variable" value=""/></td><td><input type="text" name="value" id="value" value=""/></td><td><input type="submit" name="add" value="add" class="abutton gradient"/></td></tr></form></tbody></table></center>';
 }
 if($showopmaak==true) {
-	echo '<center><table width="400px" style="text-align:center"><tbody>';
+	echo '<div class="item wide gradient"><center><table width="400px" style="text-align:center"><tbody>';
 	$sql="select variable, value from settings where variable like 'css_%' OR variable like 'positie_%' OR variable like 'toon_%' order by variable asc";
 	if(!$result = $db->query($sql)){ die('<div class="item wide gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
@@ -260,7 +275,7 @@ if($showacties==true) {
 	echo '<form method="post"><tr><td align="left"><input type="hidden" name="showacties" value="Acties"/><input type="text" name="variable" id="variable" value="" size="40"/></td><td><input type="submit" name="add" value="add" class="abutton gradient"/></td></tr></form></tbody></table></center>';
 }
 if($showeditswitches==true) {
-	echo '<center><table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Name</th><th>type</th><th>favorite</th><th>order</th></thead><tbody>';
+	echo '<div class="item wide gradient"><center><table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Name</th><th>type</th><th>favorite</th><th>order</th></thead><tbody>';
 	$sql="select id_switch, name, type, favorite, volgorde from switches order by type asc, volgorde asc, name asc";
 	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
@@ -295,7 +310,7 @@ if($showeditswitches==true) {
 	echo '</tbody></table></center>';
 }
 if($showeditsensors==true) {
-	echo '<center><table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Name</th><th>type</th><th>favorite</th><th>order</th></thead><tbody>';
+	echo '<div class="item wide gradient"><center><table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Name</th><th>type</th><th>favorite</th><th>order</th></thead><tbody>';
 	$sql="select id_sensor, name, type, favorite, volgorde from sensors order by volgorde asc, name asc";
 	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
@@ -331,7 +346,38 @@ if($showeditsensors==true) {
 	$result->free();
 	echo '</tbody></table></center>';
 }
-
+if($cleandatabase==true) {
+	echo '<div class="item wide gradient"><center>
+	<br/><big><b>Verwijder oude historieken van sensoren.</b></big><br/><br/>
+	<table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Naam</th><th>Aantal Records</th><th>Dagen te behouden</th></thead><tbody>';
+	$sql="select id_sensor, name, type volgorde from sensors where type not like 'temp' order by volgorde asc, name asc";
+	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+	while($row = $result->fetch_assoc()){
+		$id_sensor = $row['id_sensor'];
+		$sqlcount = "select count(id_sensor) as aantal from history where id_sensor = $id_sensor;";
+		if(!$resultcount = $db->query($sqlcount)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+		$rowcount = $resultcount->fetch_assoc();
+		echo '
+			<tr>
+				<td>'.$row['id_sensor'].'</td>
+				<td>'.$row['name'].'</td>
+				<td>'.$rowcount['aantal'].'</td>
+				<td>
+					<form method="post">
+						<input type="hidden" name="cleandatabase" value="cleandatabase"/>
+						<input type="hidden" name="id_sensor" value="'.$row['id_sensor'].'" />
+						<input type="text" name="daystokeep" value="365" size="5"/>
+						<input type="submit" name="cleansensorhistory" value="Clean" class="abutton gradient"/>
+					</form>
+				</td>
+			</tr>';
+				
+		
+	}
+	$resultcount->free();
+	$result->free();
+	echo '</tbody></table></center>';
+}
 //END AUTHENTICATED STUFF	
 
 } else {

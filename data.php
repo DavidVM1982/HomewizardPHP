@@ -49,8 +49,8 @@ foreach($rainmeters as $rainmeter) {
 $windmeters =  $data['response']['windmeters'];	
 foreach($windmeters as $windmeter) {
 	${'windmeter'.$windmeter['id']} = $windmeter['id'];
-	${'windmeterws'.$windmeter['id']} = $windmeter['ws'];
-	${'windmetergu'.$windmeter['id']} = $windmeter['gu'];
+	if(!empty($windmeter['ws'])) ${'windmeterws'.$windmeter['id']} = $windmeter['ws'];
+	if(!empty($windmeter['gu'])) ${'windmetergu'.$windmeter['id']} = $windmeter['gu'];
 }
 $energylinks = $data['response']['energylinks'];
 
