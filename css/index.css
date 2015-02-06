@@ -1,5 +1,5 @@
 html{min-height:100%;margin:0 auto;}
-body{cursor:default;font-size:12px;font-family:"Lucida Sans","Verdana",Arial,Helvetica,sans-serif;line-height:10px;font-weight:200;padding:0px;text-align:center;margin:0 auto;width:98%;max-width:1500px;color:#444;background:#bbb;background-repeat:no-repeat;background-attachment:fixed;}
+body{cursor:default;font-size:12px;font-family:"Lucida Sans","Verdana",Arial,Helvetica,sans-serif;line-height:12px;font-weight:200;padding:0px;text-align:center;margin:0 auto;width:98%;max-width:1500px;color:#444;background:#bbb;background-repeat:no-repeat;background-attachment:fixed;}
 h1{font-weight:100;font-size:40px;}
 h2{font-weight:200;font-size:22px;}
 h3{font-weight:200;font-size:18px;}

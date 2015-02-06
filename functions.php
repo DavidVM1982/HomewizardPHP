@@ -5,7 +5,7 @@ function schakel($switch, $action, $who) {
 	$response = json_decode($responsejson, true);
 	if($response['status']=='ok') {
 		$timestamp = time();
-		$reply = '<div class="error gradient">OK</div>';
+		if($debug=='yes') $reply = '<div class="error gradient">OK</div>';
 		$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($switch, $timestamp, '$action', '$who');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	} else {
@@ -20,7 +20,7 @@ function dim($switch, $action, $who) {
 	$response = json_decode($responsejson, true);
 	if($response['status']=='ok') {
 		$timestamp = time();
-		$reply = '<div class="error gradient">OK</div>';
+		if($debug=='yes') $reply = '<div class="error gradient">OK</div>';
 		$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($switch, $timestamp, '$action', '$who');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	} else {
@@ -35,7 +35,7 @@ function somfy($switch, $action, $who) {
 	$response = json_decode($responsejson, true);
 	if($response['status']=='ok') {
 		$timestamp = time();
-		$reply = '<div class="error gradient">OK</div>';
+		if($debug=='yes') $reply = '<div class="error gradient">OK</div>';
 		$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($switch, $timestamp, '$action', '$who');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	} else {
@@ -50,7 +50,7 @@ function radiator($switch, $action, $who) {
 	$response = json_decode($responsejson, true);
 	if($response['status']=='ok') {
 		$timestamp = time();
-		$reply = '<div class="error gradient">OK</div>';
+		if($debug=='yes') $reply = '<div class="error gradient">OK</div>';
 		$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($switch, $timestamp, '$action', '$who');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	} else {
@@ -64,7 +64,7 @@ function scene($switch, $action, $who) {
 	$responsejson = file_get_contents($jsonurl.'gp/'.$switch.'/'.$action);
 	$response = json_decode($responsejson, true);
 	if($response['status']=='ok') {
-		$reply = '<div class="error gradient">OK</div>';
+		if($debug=='yes') $reply = '<div class="error gradient">OK</div>';
 	} else {
 		$reply = '<div class="error gradient">response = ';$reply .= print_r($response); $reply .= '</div>';
 	}

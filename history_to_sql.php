@@ -137,14 +137,19 @@ if(!empty($thermometers)) {
 			echo "No information available...";
 		} else {
 			echo '<hr>Importing Temperature<br/>';
+			$lasttime = '123';
 			foreach($datas['response'] as $data){
 				$id_sensor=$thermometer['id'];
-				$time = $data['t'];
-				$temp = str_replace(',', '.', str_replace('.', '', $data['te']));
-				$hum = $data['hu'];
-				echo $time.' - '.$temp.' - '.$hum.'<br/>';
-				$sql = "INSERT INTO temperature (`timestamp`, `te`, `hu`, `id_sensor`) values ('$time', '$temp', '$hum', '$id_sensor') ON DUPLICATE KEY UPDATE `te`='$temp', `hu`='$hum'";
-				if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
+				$time = substr($data['t'],0,-2).'00';
+				if($time!=$lasttime) {
+					$temp = str_replace(',', '.', str_replace('.', '', $data['te']));
+					$hum = $data['hu'];
+					echo $time.' - '.$temp.' - '.$hum.'<br/>';
+					//$sql = "INSERT INTO temperature (`timestamp`, `te`, `hu`, `id_sensor`) values ('$time', '$temp', '$hum', '$id_sensor') ON DUPLICATE KEY UPDATE `te`='$temp', `hu`='$hum'";
+					$sql = "INSERT IGNORE INTO temperature (`timestamp`, `te`, `hu`, `id_sensor`) values ('$time', '$temp', '$hum', '$id_sensor')";
+					if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
+					$lasttime = $time;
+				}
 			}
 		}
 	}

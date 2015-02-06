@@ -38,7 +38,7 @@ foreach($sensors as $sensor) {
 $thermometers =  $data['response']['thermometers'];
 foreach($thermometers as $thermometer) {
 	${'thermometerid'.$thermometer['id']} = $thermometer['id'];
-	${'thermometerte'.$thermometer['id']} = $thermometer['te'];
+	${'thermometerte'.$thermometer['id']} = $thermometer['te']+${'temp_correctie'.$thermometer['id']};
 	${'thermometerhu'.$thermometer['id']} = $thermometer['hu'];
 }
 $rainmeters =  $data['response']['rainmeters'];

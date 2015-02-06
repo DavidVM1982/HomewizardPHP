@@ -86,16 +86,12 @@ if(isset($_POST['updateswitches'])) {
 }
 if(isset($_POST['actionscron'])) { 
 	$showparameters=false;
-	echo '<div class="item wide gradient"><p class="number">9</p>';
 	include "actionscron.php";
-	echo '</div>';
 }
 if(isset($_POST['showtest'])) { 
 	$showparameters=false;
-	echo '<div class="item wide gradient"><p class="number">2</p><br/>Output van test.php file. Handig om actions voor te bereiden</div>';
-	echo '<div class="item wide gradient"><p class="number">9</p>';
+	echo '<div class="item wide gradient"><p class="number">2</p><br/><font color="#A00"> Output van test.php file. Handig om actions voor te bereiden</font></div>';
 	include "test.php";
-	echo '</div>';
 }
 if(isset($_POST['updatedatabase'])) { 
 	$showparameters=false;
