@@ -19,29 +19,40 @@ if(!empty($thermometers)) {
 	}
 }
 if($authenticated==true) {
-if(!empty($thermometers)) {
-	echo '<div class="gradient"><table width="100%">';
-	foreach($thermometers as $thermometer){
-		if($authenticated == true && $debug=='yes') print_r($thermometer);
-		echo '<tr>';
-		if(count($thermometers)>1) {echo '<td>'.$thermometer['name'].'</td>';} else { echo '<td></td>';}
-		echo '<td>'.$thermometer['te'].' °C</td><td>'.$thermometer['hu'].' %</td></tr>';
+	if(!empty($thermometers)) {
+		echo '<div class="gradient"><table width="100%">';
+		foreach($thermometers as $thermometer){
+			if($authenticated == true && $debug=='yes') print_r($thermometer);
+			echo '<tr>';
+			if(count($thermometers)>1) {echo '<td>'.$thermometer['name'].'</td>';} else { echo '<td></td>';}
+			echo '<td>'.$thermometer['te'].' °C</td><td>'.$thermometer['hu'].' %</td></tr>';
+		}
+		echo "</table></div>";
 	}
-	echo "</table></div>";
 }
+if(isset($_POST['limit'])) { $limit = $_POST['limit']; } else { $limit = 20;}
+if(isset($_POST['sensor'])) { $sensor = $_POST['sensor']; $sensornaam = ${'thermometernaam'.$_POST['sensor']};} else { $sensor = 1;}
+if(isset($_POST['filter'])) { 
+	$filter = $_POST['filter'];
+	$sql = "SELECT id_sensor, name FROM sensors WHERE name like '$filter' AND type like 'temp'";
+	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+	$row = $result->fetch_assoc();
+	$sensor = $row['id_sensor'];
+	$sensornaam = $row['name'];
+	$result->free();
 }
 
 echo '</div><div class="threecolumn"><br/>
 <form method="post" name="filter" id="filter">';
 if(!empty($thermometers) && $authenticated==true) {
 	echo '<select name="sensor" class="abutton settings gradient" onChange="this.form.submit()">';
-	if(isset($_POST['sensor'])) {
-		print '<option value="'.$_POST['sensor'].'" selected>'.$_POST['sensor'].' - '.${'thermometernaam'.$_POST['sensor']}.'</option>';
+	if($sensornaam) {
+		echo '<option value="'.$sensor.'" selected>'.$sensor.' - '.$sensornaam.'</option>';
 	} else {
-		print '<option value="'.${'thermometerid'.$defaultthermometer}.'" selected>'.${'thermometerid'.$defaultthermometer}.' - '.${'thermometernaam'.$defaultthermometer}.'</option>';
+		echo '<option value="'.${'thermometerid'.$defaultthermometer}.'" selected>'.${'thermometerid'.$defaultthermometer}.' - '.${'thermometernaam'.$defaultthermometer}.'</option>';
 	}
 	foreach($thermometers as $thermometer){
-		print '<option value="'.$thermometer['id'].'">'.$thermometer['id'].' - '.$thermometer['name'].'</option>';
+		echo '<option value="'.$thermometer['id'].'">'.$thermometer['id'].' - '.$thermometer['name'].'</option>';
 	}
 	echo '
 	</select>
@@ -49,8 +60,8 @@ if(!empty($thermometers) && $authenticated==true) {
 }
 echo '<select name="limit" class="abutton settings gradient" onChange="this.form.submit()">';
 
-if(isset($_POST['limit'])) print '<option selected>'.$_POST['limit'].'</option>';
-print '<option>20</option>
+echo '<option selected>'.$limit.'</option>';
+echo '<option>20</option>
 <option>50</option>
 <option>100</option>
 <option>500</option>
@@ -65,8 +76,8 @@ print '<option>20</option>
 	<h2>Laatste '.$limit.' uur</h2>
 	<table id="table" align="center"><thead><tr><th>Tijd</th><th>Temp</th><th>Rel Voch</th></tr></thead><tbody>';
 
-if(isset($_POST['limit'])) { $limit = $_POST['limit']; } else { $limit = 20;}
-if(isset($_POST['sensor'])) { $sensor = $_POST['sensor']; } else { $sensor = 1;}
+
+
 $sql = "SELECT timestamp, te, hu FROM temperature WHERE id_sensor = $sensor ORDER BY timestamp DESC LIMIT 0,$limit";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 

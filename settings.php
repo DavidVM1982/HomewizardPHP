@@ -72,12 +72,24 @@ if(isset($_POST['cleansensorhistory'])) {
 	$sql="delete from history where id_sensor = $id_sensor and time < '$old'";
 	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	echo '<div class="item wide gradient"><p class="number">7</p><br>'.$db->affected_rows.' Records verwijderd voor sensor '.$id_sensor.', tot datum '.$old.'</div>';
-
 }
-
-
-
-
+if(isset($_POST['cleanswitchhistory'])) { 
+	$id_switch=($_POST['id_switch']);
+	$old = time()-($_POST['daystokeep']*86400);
+	$sql="delete from switchhistory where id_switch = $id_switch and timestamp < '$old'";
+	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	echo '<div class="item wide gradient"><p class="number">7</p><br>'.$db->affected_rows.' Records verwijderd voor schakelaar '.$id_switch.', tot datum '.date("Y-m-d H:i:s", $old).'</div>';
+}
+if(isset($_POST['cleanhistoryfromremovedswitches'])) { 
+	$sql="DELETE FROM `switchhistory` WHERE id_switch not in (select id_switch from switches where type not like 'scene')";
+	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	echo '<div class="item wide gradient"><p class="number">7</p><br>'.$db->affected_rows.' Records verwijderd voor gewiste schakelaars</div>';
+}
+if(isset($_POST['cleanhistoryfromremovedsensors'])) { 
+	$sql="DELETE FROM `history` WHERE id_sensor not in (select id_sensor from sensors where type not like 'temp')";
+	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	echo '<div class="item wide gradient"><p class="number">7</p><br>'.$db->affected_rows.' Records verwijderd voor gewiste sensoren</div>';
+}
 if(isset($_POST['updateswitches'])) { 
 	$showparameters=false;
 	echo '<div class="item wide gradient"><p class="number">9</p>';
@@ -343,6 +355,14 @@ if($showeditsensors==true) {
 	echo '</tbody></table></center>';
 }
 if($cleandatabase==true) {
+	echo '<div class="item wide gradient"><br/>
+			<form method="post"><input type="hidden" name="cleandatabase" value="cleandatabase"/>
+				<input type="submit" name="cleanhistoryfromremovedswitches" value="Verwijder historiek van gewiste schakelaars" class="abutton settings gradient"/>
+			</form>
+			<form method="post"><input type="hidden" name="cleandatabase" value="cleandatabase"/>
+				<input type="submit" name="cleanhistoryfromremovedsensors" value="Verwijder historiek van gewiste sensoren" class="abutton settings gradient"/>
+			</form>
+		</div>';
 	echo '<div class="item wide gradient"><center>
 	<br/><big><b>Verwijder oude historieken van sensoren.</b></big><br/><br/>
 	<table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Naam</th><th>Aantal Records</th><th>Dagen te behouden</th></thead><tbody>';
@@ -372,7 +392,38 @@ if($cleandatabase==true) {
 	}
 	$resultcount->free();
 	$result->free();
-	echo '</tbody></table></center>';
+	echo '</tbody></table></center></div>';
+	echo '<div class="item wide gradient"><center>
+	<br/><big><b>Verwijder oude historieken van schakelaars.</b></big><br/><br/>
+	<table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Naam</th><th>Aantal Records</th><th>Dagen te behouden</th></thead><tbody>';
+	$sql="select id_switch, name, type from switches where type not like 'scene' order by volgorde asc, name asc";
+	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+	while($row = $result->fetch_assoc()){
+		$id_switch = $row['id_switch'];
+		$sqlcount = "select count(id_switch) as aantal from switchhistory where id_switch = $id_switch;";
+		if(!$resultcount = $db->query($sqlcount)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+		$rowcount = $resultcount->fetch_assoc();
+		echo '
+			<tr>
+				<td>'.$row['id_switch'].'</td>
+				<td>'.$row['name'].'</td>
+				<td>'.$rowcount['aantal'].'</td>
+				<td>
+					<form method="post">
+						<input type="hidden" name="cleandatabase" value="cleandatabase"/>
+						<input type="hidden" name="id_switch" value="'.$row['id_switch'].'" />
+						<input type="text" name="daystokeep" value="365" size="5"/>
+						<input type="submit" name="cleanswitchhistory" value="Clean" class="abutton gradient"/>
+					</form>
+				</td>
+			</tr>';
+				
+		
+	}
+	$resultcount->free();
+	$result->free();
+	echo '</tbody></table></center></div>';
+	
 }
 //END AUTHENTICATED STUFF	
 

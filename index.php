@@ -34,10 +34,15 @@ if($toon_schakelaars=='yes') {
 			$group = $row['volgorde'];
 			if($row['type']=='asun') {if(${'switchstatus'.$row['id_switch']}=="1") {$switchon = "off";} else {$switchon = "on";}}
 			else {if(${'switchstatus'.$row['id_switch']}=="on") {$switchon = "off";} else {$switchon = "on";}}
-			echo '<tr><form method="post" action="#">
+			echo '<tr>
 				<td><img id="'.$row['type'].'Icon" src="images/empty.gif" width="1px" height="1px" /></td>
-				<td align="right" '.$tdstyle.'>'.$row['name'].'</td>
-				<td width="115px" '.$tdstyle.' ><input type="hidden" name="switch" value="'.$row['id_switch'].'"/><input type="hidden" name="schakel" value="'.$switchon.'"/>';
+				<td align="right" '.$tdstyle.'>
+					<form action="switchhistory.php" method="post" id="'.$row['name'].'">
+						<input type="hidden" name="filter" value="'.$row['name'].'">
+						<a href="#" onclick="document.getElementById(\''.$row['name'].'\').submit();" style="text-decoration:none">'.$row['name'].'</a>
+					</form>
+				</td>
+				<td width="115px" '.$tdstyle.' ><form method="post" action="#"><input type="hidden" name="switch" value="'.$row['id_switch'].'"/><input type="hidden" name="schakel" value="'.$switchon.'"/>';
 			if($row['type']=='dimmer') {
 				print '<select name="dimlevel"  class="abutton handje gradient" onChange="this.form.submit()" style="margin-top:4px">
 				<option '.${'switchstatus'.$row['id_switch']}.') selected>'.${'switchstatus'.$row['id_switch']}.'</option>
@@ -75,7 +80,7 @@ if($toon_schakelaars=='yes') {
 		echo "</tbody></table>";
 	}
 	$result->free();
-	echo '<br/><br/><div class="gradient handje divknopje" onclick="window.location=\'switchhistory.php\';">Historiek</div></div>';
+	echo '<br/><br/></div>';
 }
 
 /* SCENES */
@@ -142,7 +147,13 @@ if($toon_somfy=='yes') {
 			$tdstyle = '';
 			if($group != $row['volgorde']) $tdstyle = 'style="'.$css_td_newgroup.'"';
 			$group = $row['volgorde'];
-			print '<tr><td><img id="somfyIcon" src="images/empty.gif" width="1px" height="1px" /></td><td align="right" '.$tdstyle.'>'.$row['name'].'</td>
+			print '<tr>
+			<td><img id="somfyIcon" src="images/empty.gif" width="1px" height="1px" /></td>
+			<td align="right" '.$tdstyle.'>
+				<form action="switchhistory.php" method="post" id="'.$row['name'].'">
+					<input type="hidden" name="filter" value="'.$row['name'].'">
+					<a href="#" onclick="document.getElementById(\''.$row['name'].'\').submit();" style="text-decoration:none">'.$row['name'].'</a>
+				</form></td>
 			<td width="185px" '.$tdstyle.'><form method="post" action="#">
 			<input type="hidden" name="switch" value="'.$row['id_switch'].'"/>
 			<input type="hidden" name="schakel" value="'.$row['id_switch'].'"/>
@@ -177,7 +188,11 @@ if($toon_radiatoren=='yes') {
 			$group = $row['volgorde'];
 			print '<tr>
 			<td><img id="radiatorIcon" src="images/empty.gif" width="1px" height="1px" /></td>
-			<td align="right" '.$tdstyle.'>'.$row['name'].'</td>
+			<td align="right" '.$tdstyle.'>
+				<form action="switchhistory.php" method="post" id="'.$row['name'].'">
+					<input type="hidden" name="filter" value="'.$row['name'].'">
+					<a href="#" onclick="document.getElementById(\''.$row['name'].'\').submit();" style="text-decoration:none">'.$row['name'].'</a>
+				</form></td>
 			<td width="60px" '.$tdstyle.'>
 				<form method="post" action="#">
 					<input type="hidden" name="radiator" value="'.$row['id_switch'].'"/>
@@ -215,7 +230,7 @@ if($toon_radiatoren=='yes') {
 		echo '</tbody></table>';
 	}
 	$result->free();
-	echo '<br/><br/><div class="gradient handje divknopje" onclick="window.location=\'switchhistory.php\';">Historiek</div></div>';
+	echo '<br/><br/></div>';
 }
 
 //---SENSORS--
@@ -231,7 +246,7 @@ if($toon_sensoren=='yes') {
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	if($result->num_rows>0) {
 		$group = 0;
-		echo '<div class="handje" onclick="window.location=\'history.php\';"><table align="center" width="100%">';
+		echo '<div ><table align="center" width="100%">';
 		while($row = $result->fetch_assoc()){
        		echo '<tr>';
        		$type = $row['type'];
@@ -240,7 +255,19 @@ if($toon_sensoren=='yes') {
 			if($type=="motion") $type = "Beweging";
 			if($type=="doorbell") $type = "Deurbel";
 			if($type=="smoke") $type = "Rook";
-			if(${'sensorstatus'.$row['id_sensor']} == "yes") {echo '<td style="color:#F00; font-weight:bold">'.$row['name'].'</td>';} else {echo '<td>'.$row['name'].'</td>';}
+			if(${'sensorstatus'.$row['id_sensor']} == "yes") {
+				echo '<td style="color:#F00; font-weight:bold">
+						<form action="history.php" method="post" id="'.$row['name'].'">
+						<input type="hidden" name="filter" value="'.$row['name'].'">
+						<a href="#" onclick="document.getElementById(\''.$row['name'].'\').submit();" style="text-decoration:none">'.$row['name'].'</a>
+						</form>
+					</td>';
+					} else {
+						echo '<td><form action="history.php" method="post" id="'.$row['name'].'">
+						<input type="hidden" name="filter" value="'.$row['name'].'">
+						<a href="#" onclick="document.getElementById(\''.$row['name'].'\').submit();" style="text-decoration:none">'.$row['name'].'</a>
+					</form></td>';
+					}
        		if(${'sensorstatus'.$row['id_sensor']} == "yes") {echo '<td style="color:#F00; font-weight:bold">';} else {echo '<td>';}
 			if($type=="Magneet" && ${'sensorstatus'.$row['id_sensor']} == "no") { echo 'Gesloten'; }
 			else if ($type=="Magneet" && ${'sensorstatus'.$row['id_sensor']} == "yes") { echo 'Open'; }
@@ -273,10 +300,13 @@ if($toon_temperatuur=='yes') {
 	$sql.=" order by volgorde asc, favorite desc, name asc";
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 	if($result->num_rows>0) {	
-		echo '<div class="handje" onclick="window.location=\'temp.php\';"><table width="100%"><tr><th></th><th>temp</th><th>hum</th></tr>';
+		echo '<div><table width="100%"><tr><th></th><th>temp</th><th>hum</th></tr>';
 		while($row = $result->fetch_assoc()){
 			echo '<tr>';
-			if($result->num_rows>1) {echo '<td>'.$row['name'].'</td>';} else { echo '<td></td>';}
+			if($result->num_rows>1) {echo '<td><form action="temp.php" method="post" id="temp'.$row['name'].'">
+						<input type="hidden" name="filter" value="'.$row['name'].'">
+						<a href="#" onclick="document.getElementById(\'temp'.$row['name'].'\').submit();" style="text-decoration:none">'.$row['name'].'</a>
+					</form></td>';} else { echo '<td></td>';}
 			echo '<td>'.${'thermometerte'.$row['id_sensor']}.' °C</td><td>'.${'thermometerhu'.$row['id_sensor']}.' %</td></tr>';
 		}
 		echo "</table></div>";

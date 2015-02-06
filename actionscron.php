@@ -25,16 +25,16 @@ echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>A
 if($actie_brander=='yes') {
 	echo ' actief</b><br/><br/>';
 	$aantalradiatoren = 0;
+	if($switchstatus6>$thermometerte4) {$aantalradiatoren = $aantalradiatoren + 1;}
+	if($switchstatus7>$thermometerte6) {$aantalradiatoren = $aantalradiatoren + 1;}
+	if($switchstatus8>$thermometerte7) {$aantalradiatoren = $aantalradiatoren + 1;}
+	if($switchstatus14>$thermometerte5) {$aantalradiatoren = $aantalradiatoren + 1;}
+	if($switchstatus15>$thermometerte5) {$aantalradiatoren = $aantalradiatoren + 1;}
 	echo 'Temperatuur Eetplaats is '.$thermometerte5.'°C, radiator staat op '.$switchstatus14.'°C.<br/>';
 	echo 'Temperatuur Zithoek is '.$thermometerte5.'°C, radiator staat op '.$switchstatus15.'°C.<br/>';
 	echo 'Temperatuur Badkamer is '.$thermometerte4.'°C, radiator staat op '.$switchstatus6.'°C.<br/>';
 	echo 'Temperatuur Slaapkamer is '.$thermometerte6.'°C, radiator staat op '.$switchstatus7.'°C.<br/>';
 	echo 'Temperatuur Slaapkamer Tobi is '.$thermometerte7.'°C, radiator staat op '.$switchstatus8.'°C.<br/>';
-	if($switchstatus6>$thermometerte4) $aantalradiatoren = $aantalradiatoren + 1;
-	if($switchstatus7>$thermometerte6) $aantalradiatoren = $aantalradiatoren + 1;
-	if($switchstatus8>$thermometerte7) $aantalradiatoren = $aantalradiatoren + 1;
-	if($switchstatus14>$thermometerte5) $aantalradiatoren = $aantalradiatoren + 1;
-	if($switchstatus15>$thermometerte5) $aantalradiatoren = $aantalradiatoren + 1; 
 	if($aantalradiatoren==1) {
 		echo $aantalradiatoren.' radiator heeft warmte nodig<br/>';
 	} else {
@@ -55,7 +55,7 @@ if($actie_brander=='yes') {
 echo '</div>';
 
 //Timer radiatoren living
-echo '<div class="item wide gradient"><p class="number">3</p><br/>Actie timer radiatoren living';
+echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie timer radiatoren living';
 $tempw = 20;
 $tempk = 17;
 if($actie_timer_living=='yes'){
@@ -102,7 +102,7 @@ if($actie_timer_living=='yes'){
 echo '</div>';
 
 //Timer radiator badkamer
-echo '<div class="item wide gradient"><p class="number">3</p><br/>Actie timer radiator badkamer';
+echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie timer radiator badkamer';
 $tempw = 24;
 $tempk = 17;
 if($actie_timer_badkamer=='yes'){
@@ -140,7 +140,7 @@ if($actie_timer_badkamer=='yes'){
 echo '</div>';
 
 //Timer radiator slaapkamer
-echo '<div class="item wide gradient"><p class="number">3</p><br/>Actie timer radiator slaapkamer ';
+echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie timer radiator slaapkamer ';
 if($actie_timer_slaapkamer=='yes'){
 	echo ' actief</b><br/><br/>';
 	$tempw = 18;
@@ -176,7 +176,7 @@ if($actie_timer_slaapkamer=='yes'){
 echo '</div>';
 
 //Timer radiator slaapkamer Tobi
-echo '<div class="item wide gradient"><p class="number">3</p><br/>Actie timer radiator slaapkamer Tobi';
+echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie timer radiator slaapkamer Tobi';
 $tempw = 18;
 $tempk = 8;
 if($actie_timer_slaapkamertobi=='yes'){
@@ -208,7 +208,7 @@ if($actie_timer_slaapkamertobi=='yes'){
 echo '</div>';
 
 //Uitschakelen licht garage
-echo '<div class="item wide gradient"><p class="number">3</p><br/>Actie timer uitschakelen licht garage';
+echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie timer uitschakelen licht garage';
 if($actie_lichtgarage=='yes') {
 	echo ' actief</b><br/><br/>';
 	if($switchstatus1=='on') {
@@ -228,7 +228,7 @@ if($actie_lichtgarage=='yes') {
 echo '</div>';
 
 //Schakel Pluto
-echo '<div class="item wide gradient"><p class="number">3</p><br/>Actie timer Pluto';
+echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie timer Pluto';
 if($actie_timer_pluto=='yes'){
 	echo ' actief</b><br/><br/>';
 	if((time()>(strtotime('11:00'))) && (time()<(strtotime('23:00')))) {
@@ -236,6 +236,8 @@ if($actie_timer_pluto=='yes'){
 		if($switchstatus0=='off') {
 			echo "schakel(0, 'on', 'c');sleep(2)<br/>";
 			if(!isset($_POST['showtest'])) schakel(0, 'on', 'c', 'guy@egregius.be', 'yes');sleep(2);
+		} else if ($switchstatus0=='on') {
+			echo "Pluto is al actief.<br/>";
 		}
 	} else {
 		echo 'Geen tijd voor Pluto';
@@ -245,6 +247,8 @@ if($actie_timer_pluto=='yes'){
 				echo "schakel(0, 'off', 'c');sleep(2)<br/>";
 				if(!isset($_POST['showtest'])) schakel(0, 'off', 'c', 'guy@egregius.be', 'yes');sleep(2);
 			}
+		} else if ($switchstatus0=='off') {
+			echo "Pluto is al uitgeschakeld.<br/>";
 		}
 	}
 } else {
