@@ -46,4 +46,4 @@ body {'.$css_body.';}
 
 </head>
 <body>
-<div class="header"><a href="index.php" class="abutton settings gradient" style="padding:10px 0px;">Home</a></div>
+<div class="header"><a href="index.php" class="abutton home gradient" style="padding:10px 0px;">Home</a></div>
