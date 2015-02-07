@@ -107,22 +107,39 @@ $tempw = 24;
 $tempk = 17;
 if($actie_timer_badkamer=='yes'){
 	echo ' actief</b><br/><br/>';
-	if((time()>(strtotime('6:00')-(($tempw-$thermometerte4)*(($tempw-$thermometerte1)*60)))) && (time()<(strtotime('7:30'))) && ($switchstatus6<$tempw) && in_array(date('N', time()), array(1,2,3,4,5))) {
-		if($switchstatus6<$tempk) {
-			echo "radiator(6, ".$tempw.", 'c');sleep(2)<br/>";
-			if(!isset($_POST['showtest'])) {
-				radiator(6, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);
-				radiator(6, $tempw, 'd', 'guy@egregius.be', 'yes');sleep(2);
-			}
-		}
-	} else {
-		if($switchstatus6>$tempk) {
-			$laatsteschakel = laatsteschakeltijd(6,null, 'm');
-			if($laatsteschakel['timestamp']<(time()-7200)) {
-				echo "radiator(6, ".$tempk.", 'c');sleep(2)<br/>";
+	if(in_array(date('N', time()), array(1,2,3,4,5))) {
+		echo 'Vandaag is het een werkdag<br/>';
+		if((time()>(strtotime('6:00')-(($tempw-$thermometerte4)*(($tempw-$thermometerte1)*60)))) && (time()<(strtotime('7:30')))) {
+			echo 'Tussen 6 en 7:30, tijd voor warmte<br/>';
+			if($switchstatus6<$tempk) {
+				echo "radiator(6, ".$tempw.", 'c');sleep(2)<br/>";
 				if(!isset($_POST['showtest'])) {
-					radiator(6, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);
-					radiator(6, $tempk, 'd', 'guy@egregius.be', 'yes');sleep(2);
+					radiator(6, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);
+					radiator(6, $tempw, 'd', 'guy@egregius.be', 'yes');sleep(2);
+				}
+			}
+		} 
+	} else if(in_array(date('N', time()), array(6,7))) {
+		echo 'Vandaag is het een weekend<br/>';
+		if((time()>(strtotime('7:30')-(($tempw-$thermometerte4)*(($tempw-$thermometerte1)*60)))) && (time()<(strtotime('9:30')))) {
+			echo 'Tussen 7:30 en 9:30, tijd voor warmte<br/>';
+			if($switchstatus6<$tempk) {
+				echo "radiator(6, ".$tempw.", 'c');sleep(2)<br/>";
+				if(!isset($_POST['showtest'])) {
+					radiator(6, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);
+					radiator(6, $tempw, 'd', 'guy@egregius.be', 'yes');sleep(2);
+				}
+			}
+		} else {
+			echo 'Geen tijd voor warmte<br/>';
+			if($switchstatus6>$tempk) {
+				$laatsteschakel = laatsteschakeltijd(6,null, 'm');
+				if($laatsteschakel['timestamp']<(time()-7200)) {
+					echo "radiator(6, ".$tempk.", 'c');sleep(2)<br/>";
+					if(!isset($_POST['showtest'])) {
+						radiator(6, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);
+						radiator(6, $tempk, 'd', 'guy@egregius.be', 'yes');sleep(2);
+					}
 				}
 			}
 		}
@@ -130,6 +147,7 @@ if($actie_timer_badkamer=='yes'){
 } else {
 	echo ' niet actief<br/>';
 	if($switchstatus6>$tempk) {
+		echo 'Radiotor ingesteld op '.$switchstatus6.'°C terwijl de actie niet actief is. Manueel geschakeld in de laatste 2 uur?';
 		$laatsteschakel = laatsteschakeltijd(6,null, 'm');
 		if($laatsteschakel['timestamp']<(time()-7200)) {
 			echo "radiator(6, ".$tempk.", 'c');sleep(2)<br/>";
@@ -240,7 +258,7 @@ if($actie_timer_pluto=='yes'){
 			echo "Pluto is al actief.<br/>";
 		}
 	} else {
-		echo 'Geen tijd voor Pluto';
+		echo 'Geen tijd voor Pluto<br/>';
 		if($switchstatus0=='on') {
 			$laatsteschakel = laatsteschakeltijd(0,null, 'm');
 			if($laatsteschakel['timestamp']<(time()-7200))  {

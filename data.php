@@ -38,9 +38,16 @@ foreach($sensors as $sensor) {
 $thermometers =  $data['response']['thermometers'];
 foreach($thermometers as $thermometer) {
 	${'thermometerid'.$thermometer['id']} = $thermometer['id'];
-	${'thermometerte'.$thermometer['id']} = $thermometer['te']+${'temp_correctie'.$thermometer['id']};
+	${'thermometerte'.$thermometer['id']} = $thermometer['te'];
 	${'thermometerhu'.$thermometer['id']} = $thermometer['hu'];
 }
+$sql = "select id_sensor, correctie from sensors where type like 'temp'";
+if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+while($row = $result->fetch_assoc()){
+	${'thermometerte'.$row['id_sensor']} = ${'thermometerte'.$row['id_sensor']} + $row['correctie'];
+}
+$result->free();
+
 $rainmeters =  $data['response']['rainmeters'];
 foreach($rainmeters as $rainmeter) {
 	${'rainmeter'.$rainmeter['id']} = $rainmeter['id'];

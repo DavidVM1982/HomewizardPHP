@@ -1,5 +1,5 @@
 html{min-height:100%;margin:0 auto;}
-body{cursor:default;font-size:12px;font-family:"Lucida Sans","Verdana",Arial,Helvetica,sans-serif;line-height:12px;font-weight:200;padding:0px;text-align:center;margin:0 auto;width:98%;max-width:1500px;color:#444;background:#bbb;background-repeat:no-repeat;background-attachment:fixed;}
+body{cursor:default;font-size:12px;font-family:"Lucida Sans","Verdana",Arial,Helvetica,sans-serif;line-height:12px;font-weight:200;padding:0px;text-align:center;margin:0 auto;width:98%;max-width:1500px;color:#444;background:#bbb;background-repeat:no-repeat;background-attachment:fixed;background:#000;background:-webkit-gradient(linear, left top, left bottom, from(#aaa), to(#000));background:-webkit-linear-gradient(top, #aaa, #000);background:-moz-linear-gradient(-90deg, #aaa, #000);background:-ms-linear-gradient(top, #aaa, #000);background:-o-linear-gradient(top, #aaa, #000);background:linear-gradient(to bottom, #aaa, #000);background-repeat:no-repeat;}
 h1{font-weight:100;font-size:40px;}
 h2{font-weight:200;font-size:22px;}
 h3{font-weight:200;font-size:18px;}
@@ -8,7 +8,10 @@ a:visited{text-decoration:bold;color:#000}
 a:hover{text-decoration:underline;color:#000;}
 a:active{text-decoration:underline;color:#000}
 .header{clear:both;padding-bottom:10px;width:400px;max-width:90%;margin:0 auto;}
-.footer{clear:both;padding:20px;width:400px;max-width:90%;margin:0 auto;}
+.footer{clear:both;padding:20px;width:400px;max-width:90%;margin:0 auto; color:#666;}
+.footer a:visited{text-decoration:bold;color:#777}
+.footer a:hover{text-decoration:underline;color:#777;}
+.footer a:active{text-decoration:underline;color:#777}
 .onecolumn{width:98%;max-width:270px;margin:0 auto;}
 .twocolumn{width:98%;max-width:550px;margin:0 auto;}
 .threecolumn{width:98%;max-width:850px;margin:0 auto;}
@@ -20,7 +23,6 @@ a:active{text-decoration:underline;color:#000}
 .wide{min-width:500px;}
 .actions{width:100%;margin:0 auto;border:1px solid #ccc;background:#cacaca;padding-bottom:15px;-moz-border-radius:16px;-webkit-border-radius:16px;border-radius:16px;margin-right:3px;margin-bottom:6px;}
 .item .number{position:absolute;left:8px;top:5px;display:none;}
-.history{min-width:270px;}
 .temprain{min-width:270px;}
 pre{white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-wrap:break-word;-webkit-user-select:text !important}
 @media only screen and (max-width:1319px){.item{width:24.1%;max-width:326px;}
@@ -32,7 +34,7 @@ pre{white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-s
 @media only screen and (max-width:550px){select.abutton{min-width:50px;padding-left:18px}
 .item{width:99%;max-width:538px;}
 }
-.gradient{background:#bbb;background:-webkit-gradient(linear, left top, left bottom, from(#fff), to(#bbb));background:-webkit-linear-gradient(top, #fff, #bbb);background:-moz-linear-gradient(-90deg, #fff, #bbb);background:-ms-linear-gradient(top, #fff, #999);background:-o-linear-gradient(top, #fff, #bbb);background:linear-gradient(to bottom, #fff, #bbb);background-repeat:no-repeat;}
+.gradient{background:#888;background:-webkit-gradient(linear, left top, left bottom, from(#eee), to(#888));background:-webkit-linear-gradient(top, #eee, #888);background:-moz-linear-gradient(-90deg, #eee, #888);background:-ms-linear-gradient(top, #eee, #999);background:-o-linear-gradient(top, #eee, #999);background:linear-gradient(to bottom, #eee, #999);background-repeat:no-repeat;}
 .abutton{border:0px solid #aaa;display:inline-block;padding:9px 0px;text-decoration:none;margin:0;width:50px;min-width:52px;box-shadow:0px 0px 0px 1px #999 inset;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;}
 .settings{width:100%;max-width:300px;padding:4px 0px;}
 .abuttonsomfy{border:0px solid #f00;padding:0px 0px;text-decoration:none;margin:0;width:150px;font-size:0px;}

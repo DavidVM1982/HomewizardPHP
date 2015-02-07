@@ -18,18 +18,6 @@ if(!empty($thermometers)) {
 		${'thermometernaam'.$thermometer['id']} = $thermometer['name'];
 	}
 }
-if($authenticated==true) {
-	if(!empty($thermometers)) {
-		echo '<div class="gradient"><table width="100%">';
-		foreach($thermometers as $thermometer){
-			if($authenticated == true && $debug=='yes') print_r($thermometer);
-			echo '<tr>';
-			if(count($thermometers)>1) {echo '<td>'.$thermometer['name'].'</td>';} else { echo '<td></td>';}
-			echo '<td>'.$thermometer['te'].' °C</td><td>'.$thermometer['hu'].' %</td></tr>';
-		}
-		echo "</table></div>";
-	}
-}
 if(isset($_POST['limit'])) { $limit = $_POST['limit']; } else { $limit = 20;}
 if(isset($_POST['sensor'])) { $sensor = $_POST['sensor']; $sensornaam = ${'thermometernaam'.$_POST['sensor']};} else { $sensor = 1;}
 if(isset($_POST['filter'])) { 
@@ -44,22 +32,7 @@ if(isset($_POST['filter'])) {
 
 echo '</div><div class="threecolumn"><br/>
 <form method="post" name="filter" id="filter">';
-if(!empty($thermometers) && $authenticated==true) {
-	echo '<select name="sensor" class="abutton settings gradient" onChange="this.form.submit()">';
-	if($sensornaam) {
-		echo '<option value="'.$sensor.'" selected>'.$sensor.' - '.$sensornaam.'</option>';
-	} else {
-		echo '<option value="'.${'thermometerid'.$defaultthermometer}.'" selected>'.${'thermometerid'.$defaultthermometer}.' - '.${'thermometernaam'.$defaultthermometer}.'</option>';
-	}
-	foreach($thermometers as $thermometer){
-		echo '<option value="'.$thermometer['id'].'">'.$thermometer['id'].' - '.$thermometer['name'].'</option>';
-	}
-	echo '
-	</select>
-	<br/>';
-}
-echo '<select name="limit" class="abutton settings gradient" onChange="this.form.submit()">';
-
+echo '<select name="limit" class="abutton settings gradient" onChange="this.form.submit()" style="max-width:90px;">';
 echo '<option selected>'.$limit.'</option>';
 echo '<option>20</option>
 <option>50</option>
@@ -70,7 +43,22 @@ echo '<option>20</option>
 <option>10000</option>
 <option>50000</option>
 <option>100000</option>
-</select>
+</select>';
+if(!empty($thermometers) && $authenticated==true) {
+	echo '<select name="sensor" class="abutton settings gradient" onChange="this.form.submit()" style="max-width:200px;">';
+	if($sensornaam) {
+		echo '<option value="'.$sensor.'" selected>'.$sensor.' - '.$sensornaam.'</option>';
+	} else {
+		echo '<option value="'.${'thermometerid'.$defaultthermometer}.'" selected>'.${'thermometerid'.$defaultthermometer}.' - '.${'thermometernaam'.$defaultthermometer}.'</option>';
+	}
+	foreach($thermometers as $thermometer){
+		echo '<option value="'.$thermometer['id'].'">'.$thermometer['id'].' - '.$thermometer['name'].'</option>';
+	}
+	echo '
+	</select>
+	';
+}
+echo '
 </form>
 <div class="isotope"><div class="item temprain gradient">
 	<h2>Laatste '.$limit.' uur</h2>

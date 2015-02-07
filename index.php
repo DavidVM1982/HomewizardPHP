@@ -218,7 +218,7 @@ if($toon_radiatoren=='yes') {
 				</form>
 			</td>
 			<td width="60px" '.$tdstyle.'>';
-			if(!empty($row['temp'])) {
+			if(!empty($row['temp']) || $row['temp']==0) {
 				if(${'thermometerte'.$row['temp']}>${'switchstatus'.$row['id_switch']}+1) echo '<font color="#880000">';
 				else if(${'thermometerte'.$row['temp']}<${'switchstatus'.$row['id_switch']}-1) echo '<font color="#000088">';
 				else echo '<font color="#008800">';
@@ -268,7 +268,7 @@ if($toon_sensoren=='yes') {
 						<a href="#" onclick="document.getElementById(\''.$row['name'].'\').submit();" style="text-decoration:none">'.$row['name'].'</a>
 					</form></td>';
 					}
-       		if(${'sensorstatus'.$row['id_sensor']} == "yes") {echo '<td style="color:#F00; font-weight:bold">';} else {echo '<td>';}
+       		if(${'sensorstatus'.$row['id_sensor']} == "yes") {echo '<td style="color:#A00; font-weight:bold">';} else {echo '<td>';}
 			if($type=="Magneet" && ${'sensorstatus'.$row['id_sensor']} == "no") { echo 'Gesloten'; }
 			else if ($type=="Magneet" && ${'sensorstatus'.$row['id_sensor']} == "yes") { echo 'Open'; }
 			else if ($type=="Beweging" && ${'sensorstatus'.$row['id_sensor']} == "yes") { echo 'Beweging'; }
@@ -279,7 +279,7 @@ if($toon_sensoren=='yes') {
 			else if ($type=="Rook" && ${'sensorstatus'.$row['id_sensor']} == "yes") { echo 'ROOK!!!'; }
 			else echo ${'sensorstatus'.$row['id_sensor']};
 			echo '</td>';
-			if(${'sensorstatus'.$row['id_sensor']} == "yes") {echo '<td style="color:#F00; font-weight:bold">'.${'sensortimestamp'.$row['id_sensor']}.'</td>';} else {echo '<td>'.${'sensortimestamp'.$row['id_sensor']}.'</td>';}
+			if(${'sensorstatus'.$row['id_sensor']} == "yes") {echo '<td style="color:#A00; font-weight:bold">'.${'sensortimestamp'.$row['id_sensor']}.'</td>';} else {echo '<td>'.${'sensortimestamp'.$row['id_sensor']}.'</td>';}
 			echo '</tr>';
 		}
 		echo "</table></div>";
@@ -295,7 +295,7 @@ if($toon_temperatuur=='yes') {
 				<input type="hidden" name="showalltemps" value="yes"/>
 				<a href="#" onclick="document.getElementById(\'showalltemps\').submit();" style="text-decoration:none"><h2>Temperatuur</h2></a>
 			</form>';
-	$sql="select id_sensor, name, volgorde from sensors WHERE type in ('temp')";
+	$sql="select id_sensor, name, volgorde, tempk, tempw from sensors WHERE type in ('temp')";
 	if (!isset($_POST['showalltemps'])) $sql.=" AND favorite like 'yes'";
 	$sql.=" order by volgorde asc, favorite desc, name asc";
 	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
@@ -307,7 +307,15 @@ if($toon_temperatuur=='yes') {
 						<input type="hidden" name="filter" value="'.$row['name'].'">
 						<a href="#" onclick="document.getElementById(\'temp'.$row['name'].'\').submit();" style="text-decoration:none">'.$row['name'].'</a>
 					</form></td>';} else { echo '<td></td>';}
-			echo '<td>'.${'thermometerte'.$row['id_sensor']}.' °C</td><td>'.${'thermometerhu'.$row['id_sensor']}.' %</td></tr>';
+			if(${'thermometerte'.$row['id_sensor']} < $row['tempk']) {
+				echo '<td style="color:#00A;">';
+			} else if(${'thermometerte'.$row['id_sensor']} > $row['tempw']) {
+				echo '<td style="color:#A00;">';
+			} else {
+				echo '<td>';
+			}
+			echo ${'thermometerte'.$row['id_sensor']}.' °C</td>';
+			echo '<td>'.${'thermometerhu'.$row['id_sensor']}.' %</td></tr>';
 		}
 		echo "</table></div>";
 	}

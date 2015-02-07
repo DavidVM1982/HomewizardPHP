@@ -1,5 +1,5 @@
 <?php
-$laatsteversie = 20150204;
+$laatsteversie = 20150207;
 if($authenticated==true) {
 	
 //BEGIN UPDATE	
@@ -117,9 +117,15 @@ if(isset($_POST['updatedatabasenow'])) {
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
 	if($versie<20150204) {
-		$sql="INSERT IGNORE INTO `settings` (`variable`, `value`) VALUES ('temp_correctie1', '0'),('temp_correctie2', '0'),('temp_correctie3', '0'),('temp_correctie4', '0'),('temp_correctie5', '0'),('temp_correctie6', '0'),('temp_correctie7', '0'),('temp_correctie8', '0'),('temp_correctie9', '0'),('temp_correctie10', '0')";
+		$sql="INSERT IGNORE INTO `settings` (`variable`, `value`) VALUES ('temp_correctie0', '0'),('temp_correctie1', '0'),('temp_correctie2', '0'),('temp_correctie3', '0'),('temp_correctie4', '0'),('temp_correctie5', '0'),('temp_correctie6', '0'),('temp_correctie7', '0'),('temp_correctie8', '0'),('temp_correctie9', '0'),('temp_correctie10', '0')";
 		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 		$sql="insert into versie (versie) VALUES ('20150204');";
+		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+	}
+	if($versie<20150207) {
+		$sql="DELETE FROM settings WHERE variable like 'temp_correctie%'";
+		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="insert into versie (versie) VALUES ('20150207');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
 }

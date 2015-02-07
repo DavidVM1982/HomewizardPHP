@@ -1,8 +1,8 @@
 <?php 
 include "header.php"; 
-echo '<div class="twocolumn"><div class="history gradient"><br/><br/>
+echo '<div class="twocolumn"><div class="item wide gradient"><br/><br/>
 <form method="post" name="filter" id="filter">
-<select name="limit" class="abutton gradient" onChange="this.form.submit()">';
+<select name="limit" class="abutton gradient" onChange="this.form.submit()" style="max-width:80px">';
 if(isset($_POST['limit'])) print '<option selected>'.$_POST['limit'].'</option>';
 echo '<option>20</option>
 <option>50</option>
@@ -28,12 +28,7 @@ while($row = $result->fetch_assoc()){
 $result->free();
 print '</select>
 <select name="filtertype" class="abutton abuttonhistory gradient" onChange="this.form.submit()"><option ';if(isset($_POST['filtertype'])) { if($_POST['filtertype']=='all') print 'selected';} print '>All</option>';
-$sql = "SELECT type FROM switches WHERE type not like 'scene'";
-if(isset($_POST['filter'])) {
-	$filter = $_POST['filter'];
-	if($filter != "All") $sql .= " AND name like '$filter'";
-}
-$sql .= " GROUP BY type ORDER BY type ASC";
+$sql = "SELECT type FROM switches WHERE type not like 'scene' GROUP BY type ORDER BY type ASC";
 if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
 while($row = $result->fetch_assoc()){
 	print '<option ';if(isset($_POST['filtertype'])) { if($_POST['filtertype']==$row['type']) print 'selected';} print '>'.$row['type'].'</option>';

@@ -39,5 +39,5 @@ if ($actual_page=="index.php") {
 }
 ?>
 </head>
-<body class="gradient">
+<body>
 <div class="header"><a href="index.php" class="abutton settings gradient" style="padding:10px 0px;">Home</a></div>

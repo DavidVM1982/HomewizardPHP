@@ -46,7 +46,10 @@ if(isset($_POST['editsensor'])) {
 	$volgorde=($_POST['volgorde']);
 	$type=($_POST['soort']);
 	$favorite=($_POST['favorite']);
-	$sql="update sensors set volgorde = '$volgorde', favorite = '$favorite' where id_sensor = $id_sensor AND type like '$type'";
+	if(isset($_POST['tempk'])) $tempk=($_POST['tempk']); else $tempk = 0;
+	if(isset($_POST['tempw'])) $tempw=($_POST['tempw']); else $tempw = 0;
+	if(isset($_POST['correctie'])) $correctie=($_POST['correctie']); else $correctie = 0;
+	$sql="update sensors set volgorde = '$volgorde', favorite = '$favorite', tempk = '$tempk', tempw = '$tempw', correctie = '$correctie' where id_sensor = $id_sensor AND type like '$type'";
 	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	$showeditsensors=true;
 	$showparameters = false;
@@ -319,7 +322,7 @@ if($showeditswitches==true) {
 }
 if($showeditsensors==true) {
 	echo '<div class="item wide gradient"><center><table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Name</th><th>type</th><th>favorite</th><th>order</th></thead><tbody>';
-	$sql="select id_sensor, name, type, favorite, volgorde from sensors order by volgorde asc, name asc";
+	$sql="select id_sensor, name, type, favorite, volgorde from sensors where type not like 'temp' order by volgorde asc, name asc";
 	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
 		echo '
@@ -352,7 +355,46 @@ if($showeditsensors==true) {
 			</tr></form>';
 	}
 	$result->free();
-	echo '</tbody></table></center>';
+	echo '</tbody></table></center></div>';
+	echo '<div class="item wide gradient"><center><table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Name</th><th>type</th><th>favorite</th><th>opties</th></thead><tbody>';
+	$sql="select id_sensor, name, type, favorite, volgorde, tempk, tempw, correctie from sensors where type like 'temp' order by volgorde asc, name asc";
+	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+	while($row = $result->fetch_assoc()){
+		echo '
+			<tr>
+				<td style="border-bottom:1px solid black">'.$row['id_sensor'].'</td>
+				<td style="border-bottom:1px solid black">'.$row['name'].'</td>
+				<td style="border-bottom:1px solid black">'.$row['type'].'</td>
+				<td style="border-bottom:1px solid black">';
+				
+		echo '
+		<section class="slider"><form method="post">';
+		if($row['favorite']=="yes") {echo '<input type="hidden" name="favorite" id="favorite" value="no"/>';} else {echo '<input type="hidden" name="favorite" id="favorite" value="yes"/>';}
+		echo '
+			<input type="hidden" name="editsensor" value="update">
+			<input type="hidden" name="id_sensor" id="id_sensor" value="'.$row['id_sensor'].'"/>
+			<input type="hidden" name="soort" id="soort" value="'.$row['type'].'"/>
+			<input type="hidden" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/>
+			<input type="checkbox" value="'.$row['favorite'].'" id="'.$row['type'].$row['id_sensor'].'" name="'.$row['id_sensor'].'" '; if($row['favorite']=="yes") {print 'checked';} print ' onChange="this.form.submit()"/>
+			<label for="'.$row['type'].$row['id_sensor'].'"></label>
+		</form></section>
+		</td>
+				<td align="right" style="border-bottom:1px solid black"><form method="post">
+				<input type="hidden" name="editsensor" value="update">
+				<input type="hidden" name="id_sensor" id="id_sensor" value="'.$row['id_sensor'].'"/>
+				<input type="hidden" name="soort" id="soort" value="'.$row['type'].'"/>
+				<label for="volgorde">Volgorde</label><input type="text" name="volgorde" id="volgorde" value="'.$row['volgorde'].'" size="5"/><br/>
+				<label for="tempk">tempk</label><input type="text" name="tempk" id="tempk" value="'.$row['tempk'].'" size="5"/><br/>
+				<label for="tempw">tempw</label><input type="text" name="tempw" id="tempw" value="'.$row['tempw'].'" size="5"/><br/>
+				<label for="correctie">correctie</label><input type="text" name="correctie" id="correctie" value="'.$row['correctie'].'" size="5"/>
+				<input type="hidden" name="favorite" id="favorite" value="'.$row['favorite'].'" />
+			</td>
+			<td  style="border-bottom:1px solid black"><input type="submit" name="editsensortemp" value="Update" class="abutton gradient">
+				<input type="submit" name="deletesensor" value="Wissen" class="abutton gradient"></td>
+			</tr></form>';
+	}
+	$result->free();
+	echo '</tbody></table></center></div>';
 }
 if($cleandatabase==true) {
 	echo '<div class="item wide gradient"><br/>

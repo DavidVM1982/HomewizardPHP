@@ -1,5 +1,5 @@
 <?php include "header.php"; 
-print '<div class="twocolumn"><div class="history gradient"><br/><br/>
+print '<div class="twocolumn"><div class="item wide gradient"><br/><br/>
 <form method="post" name="filter" id="filter">
 <select name="limit" class="abutton gradient" onChange="this.form.submit()">';
 if(isset($_POST['limit'])) print '<option selected>'.$_POST['limit'].'</option>';
