@@ -43,11 +43,11 @@ if($actie_brander=='yes') {
 	if($switchstatus12=='off') echo 'De brander brandt niet.<br/>'; else echo 'De brander brandt.<br/>';
 	if($aantalradiatoren>0 && $switchstatus12=='off') {
 			echo "schakel(12, 'on', 'c');sleep(5);schakel(12, 'on', 'd');sleep(5)";
-			if(!isset($_POST['showtest'])) schakel(12, 'on', 'c', 'guy@egregius.be', 'yes');sleep(5);schakel(12, 'on', 'd', 'guy@egregius.be', 'yes');sleep(5);
+			if(!isset($_POST['showtest'])) schakel(12, 'on', 'c', 'guy@egregius.be', 'yes');sleep(2);schakel(12, 'on', 'd', 'guy@egregius.be', 'yes');sleep(2);
 		
 	} else if($aantalradiatoren==0 && $switchstatus12=='on'){
 		echo "schakel(12, 'off', 'c');sleep(5);schakel(12, 'off', 'd');sleep(5)";
-		if(!isset($_POST['showtest'])) schakel(12, 'off', 'c', 'guy@egregius.be', 'yes');sleep(5);schakel(12, 'off', 'd', 'guy@egregius.be', 'yes');sleep(5);
+		if(!isset($_POST['showtest'])) schakel(12, 'off', 'c', 'guy@egregius.be', 'yes');sleep(2);schakel(12, 'off', 'd', 'guy@egregius.be', 'yes');sleep(2);
 	}
 } else {
 	echo ' niet actief<br/>';
@@ -60,18 +60,34 @@ $tempw = 20;
 $tempk = 17;
 if($actie_timer_living=='yes' && $switchstatus16=='on'){
 	echo ' actief</b><br/><br/>';
-	if(time()>(strtotime('18:00')-(($tempw-$thermometerte5)*(($tempw-$thermometerte1)*60))) && (time()<(strtotime('22:00'))) && ($switchstatus14<$tempw || $switchstatus15<$tempw) && in_array(date('N', time()), array(1,2,3,4))) {
-		echo "radiator(14, ".$tempw.", 'c');sleep(2)<br/>";
-		if(!isset($_POST['showtest'])) radiator(14, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);
-		echo "radiator(15, ".$tempw.", 'c');sleep(2)<br/>";
-		if(!isset($_POST['showtest'])) radiator(15, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);
-	} else if(time()>(strtotime('18:00')-(($tempw-$thermometerte5)*(($tempw-$thermometerte1)*60))) && (time()<(strtotime('23:00'))) && ($switchstatus14<$tempw || $switchstatus15<$tempw) && in_array(date('N', time()), array(5,6,7))) {
-		echo "radiator(14, ".$tempw.", 'c');sleep(2)<br/>";
-		if(!isset($_POST['showtest'])) radiator(14, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);
-		echo "radiator(15, ".$tempw.", 'c');sleep(2)<br/>";
-		if(!isset($_POST['showtest'])) radiator(15, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);
+	if(in_array(date('N', time()), array(1,2,3,4))) {
+		echo 'Vandaag is het een werkdag.<br/>';
+		if(time()>(strtotime('18:00')-(($tempw-$thermometerte5)*(($tempw-$thermometerte1)*60))) && (time()<(strtotime('22:00')))) {
+			echo 'Het is nu tussen 18:00 en 22:00.<br/>';
+			if($switchstatus14<$tempw || $switchstatus15<$tempw) {
+				echo "Een van de radiatoren staat kouder dan ".$tempw."°C<br/>";
+				echo "radiator(14, ".$tempw.", 'c');sleep(2)<br/>";
+				if(!isset($_POST['showtest'])) {radiator(14, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);}
+				echo "radiator(15, ".$tempw.", 'c');sleep(2)<br/>";
+				if(!isset($_POST['showtest'])) {radiator(15, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);}
+			}
+		}
+	} else if (in_array(date('N', time()), array(5,6,7))) {
+		echo 'Vandaag is het weekend.<br/>';
+		if(time()>(strtotime('18:00')-(($tempw-$thermometerte5)*(($tempw-$thermometerte1)*60))) && (time()<(strtotime('23:00')))) {
+			echo 'Het is nu tussen 18:00 en 23:00.<br/>';
+			if($switchstatus14<$tempw || $switchstatus15<$tempw) {
+				echo "Een van de radiatoren staat kouder dan ".$tempw."°C<br/>";
+				echo "radiator(14, ".$tempw.", 'c');sleep(2)<br/>";
+				if(!isset($_POST['showtest'])) {radiator(14, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);}
+				echo "radiator(15, ".$tempw.", 'c');sleep(2)<br/>";
+				if(!isset($_POST['showtest'])) {radiator(15, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);}
+			} else {
+				echo "Beide radiatoren staan reeds warmer dan ".$tempw."°C.<br/>";
+			}
+		}
 	} else if(time()>(strtotime('8:00')) && (time()<(strtotime('23:00'))) && ($switchstatus14>$tempk || $switchstatus15>$tempk)) {
-		echo 'Manueel hoger gezet, niks doen dus.';
+			echo 'Manueel hoger gezet, niks doen dus.';
 	} else {
 		if($switchstatus14>$tempk || $switchstatus15>$tempk) {
 			echo "Buiten de daguren en van de radiatoren staat warmer dan ".$tempk." °C<br/> Lager zetten indien niet manueel gezet in de laatste 2 uur. ";
@@ -80,9 +96,9 @@ if($actie_timer_living=='yes' && $switchstatus16=='on'){
 			if($laatsteschakel2>$laatsteschakel) $laatsteschakel = $laatsteschakel2;
 			if($laatsteschakel['timestamp']<(time()-7200))  {
 				echo "radiator(14, ".$tempk.", 'c');sleep(2)<br/>";
-				if(!isset($_POST['showtest'])) radiator(14, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);
+				if(!isset($_POST['showtest'])) {radiator(14, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);}
 				echo "radiator(15, ".$tempk.", 'c');sleep(2)<br/>";
-				if(!isset($_POST['showtest'])) radiator(15, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);
+				if(!isset($_POST['showtest'])) {radiator(15, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);}
 			}
 		}
 	}
@@ -204,20 +220,31 @@ $tempw = 18;
 $tempk = 8;
 if($actie_timer_slaapkamertobi=='yes' && $switchstatus16=='on'){
 	echo ' actief</b><br/><br/>';
-	if(time()>(strtotime('21:20')-(($tempw-$thermometerte7)*(($tempw-$thermometerte1)*60))) && (time()<(strtotime('21:30'))) && ($switchstatus7<$tempw) && ((in_array(date('N', time()), array(5,6)) && date('W', time()) %2 == 0) || (in_array(date('N', time()), array(3,4))))) {
-		if($switchstatus8<$tempk) {
-			echo "radiator(8, ".$tempw.", 'c');sleep(2)<br/>";
-			if(!isset($_POST['showtest'])) radiator(8, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);
-		}
-	} else {
-		if($switchstatus8>$tempk) {
-			$laatsteschakel = laatsteschakeltijd(8,null, 'm');
-			if($laatsteschakel['timestamp']<(time()-7200))  {
-				echo "radiator(8, ".$tempk.", 'c');sleep(2)<br/>";
-				if(!isset($_POST['showtest'])) radiator(8, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);
+	if(date('W', time()) %2 == 0) {
+		echo 'Het is een even weeknummer.<br/>';
+		if(in_array(date('N', time()), array(3,4,5,6))) {
+			echo 'Het is wo, do, vr of za.<br/>';
+			if(time()>(strtotime('21:20')-(($tempw-$thermometerte7)*(($tempw-$thermometerte1)*60))) && (time()<(strtotime('21:30')))) {
+				echo 'Bijna slaaptijd.<br/>';
+				if($switchstatus8<$tempw) {
+					echo "radiator(8, ".$tempw.", 'c');sleep(2)<br/>";
+					if(!isset($_POST['showtest'])) {radiator(8, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);}
+				}
 			}
 		}
-	}
+	} else {
+		echo 'Het is een onevenen weeknummer.<br/>';
+		if(in_array(date('N', time()), array(3,4))) {
+			echo 'Het is wo of do.<br/>';
+			if(time()>(strtotime('21:20')-(($tempw-$thermometerte7)*(($tempw-$thermometerte1)*60))) && (time()<(strtotime('21:30')))) {
+				echo 'Bijna slaaptijd.<br/>';
+				if($switchstatus8<$tempw) {
+					echo "radiator(8, ".$tempw.", 'c');sleep(2)<br/>";
+					if(!isset($_POST['showtest'])) {radiator(8, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);}
+				}
+			}
+		}
+	} 
 } else {
 	echo ' niet actief<br/>';
 	if($switchstatus8>$tempk) {
