@@ -125,6 +125,14 @@ if(isset($_POST['updatedatabasenow'])) {
 	if($versie<20150207) {
 		$sql="DELETE FROM settings WHERE variable like 'temp_correctie%'";
 		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="ALTER TABLE `sensors` ADD `tempk` FLOAT NOT NULL DEFAULT '0' ;";
+		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="ALTER TABLE `sensors` ADD `tempw` FLOAT NOT NULL DEFAULT '22' ;";
+		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="ALTER TABLE `sensors` ADD `correctie` FLOAT NOT NULL DEFAULT '0' ;";
+		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="INSERT IGNORE INTO `settings` (`variable`, `value`) VALUES ('css_body', 'width:98%;max-width:1500px;'),('css_item', 'width:297px;max-width:297px;')";
+		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 		$sql="insert into versie (versie) VALUES ('20150207');";
 		if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}

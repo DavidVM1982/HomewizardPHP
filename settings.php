@@ -236,7 +236,7 @@ if($showopmaak==true) {
 		<tr>
 			<td align="left">'.$row['variable'].'</td>
 			<td><input type="hidden" name="variable" id="variable" value="'.$row['variable'].'"/>';
-		if(in_array($row['variable'], array('developerjson'))) { echo '<textarea name="value" id="value" cols="32" rows="5">'.$row['value'].'</textarea>';} 
+		if((strpos($row['variable'], 'css') === 0)) { echo '<textarea name="value" id="value" cols="32" rows="5">'.$row['value'].'</textarea>';} 
 		else if(in_array($row['variable'], array('debug','developermode','toon_radiatoren','toon_regen','toon_scenes','toon_schakelaars','toon_sensoren','toon_somfy','toon_temperatuur','toon_wind','toon_energylink'))) {
 			if($row['value']=="yes") {echo '<input type="hidden" name="value" id="value" value="no"/>';} else {echo '<input type="hidden" name="value" id="value" value="yes"/>';}
 		echo '
@@ -257,12 +257,12 @@ if($showopmaak==true) {
 			' ;}	
 		else {echo '<input type="text" name="value" id="value" value="'.$row['value'].'" size="40px"/>' ;}
 		
-		echo '</td><td><input type="hidden" name="parameters" value="Parameters" />';
+		echo '</td><td>';
 		if(!in_array($row['variable'], array('debug','developermode','detailscenes','toon_radiatoren','toon_regen','toon_scenes','toon_schakelaars','toon_sensoren','toon_somfy','toon_temperatuur','toon_wind','toon_energylink'))) echo '<input type="submit" name="upd" value="update" class="abutton gradient">';
 		echo '</td></tr></form>';
 	}
 	$result->free();
-	echo '<form method="post"><tr><td><input type="text" name="variable" id="variable" value=""/></td><td><input type="text" name="value" id="value" value=""/></td><td><input type="submit" name="add" value="add" class="abutton gradient"/></td></tr></form></tbody></table></center>';
+	echo '<form method="post"><tr><td><input type="hidden" name="showopmaak" value="Opmaak"/><input type="text" name="variable" id="variable" value=""/></td><td><input type="text" name="value" id="value" value=""/></td><td><input type="submit" name="add" value="add" class="abutton gradient"/></td></tr></form></tbody></table></center>';
 }
 if($showacties==true) {
 	echo '<div class="item wide gradient"><p class="number">9</p><center><table width="400px" style="text-align:center"><tbody>';

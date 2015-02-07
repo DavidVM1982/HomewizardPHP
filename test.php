@@ -6,7 +6,7 @@ include "functions.php";
 echo '<div class="item wide gradient"><p class="number">2</p><br/>';
 $subject = "testmail van HomewizardPHP";
 $message = "Hello ".$email_notifications.",\r\n\r\nDit is een testmail van HomewizardPHP.";
-mail ($email_notifications ,$subject ,$message );
+mail ('guy@xafax.be,guy@egregius.be' ,$subject ,$message );
 
 
 echo '</div>';

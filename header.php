@@ -37,7 +37,13 @@ if(isset($_SERVER['PHP_SELF'])) $actual_page = substr($_SERVER['PHP_SELF'], -9);
 if ($actual_page=="index.php") {
 	print '<meta http-equiv="refresh" content="'.$refreshinterval.'" />';
 }
+echo '
+<style>
+body {'.$css_body.';}
+.item {'.$css_item.';}
+</style>';
 ?>
+
 </head>
 <body>
 <div class="header"><a href="index.php" class="abutton settings gradient" style="padding:10px 0px;">Home</a></div>
