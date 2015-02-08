@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS `energylink` (
   `netto` float NOT NULL,
   `S1` float NOT NULL,
   `S2` float NOT NULL,
-  `gas` float NOT NULL
+  `gas` float NOT NULL,
+  `verbruik` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `history` (
