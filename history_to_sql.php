@@ -1,5 +1,5 @@
 <?php
-include "parameters.php";
+include_once "parameters.php";
 setlocale(LC_ALL,'nl_NL.UTF-8');
 date_default_timezone_set('Europe/Brussels');
 $sql="select variable, value from settings order by variable asc";
@@ -71,11 +71,11 @@ if (!$data) {
 			       			$time = $devicehistory['t'];
 							$status = $device['type'].$devicehistory['status'];
 							$sql = "INSERT IGNORE INTO history (`id_sensor`, `time`, `status`) values ($id_sensor, '$time', '$status')";
-							echo $id_sensor.'-'.$time.': '.$status.'<br/>';
+							if(isset($_POST['updateswitches'])) echo $id_sensor.'-'.$time.': '.$status.'<br/>';
 							if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
 				    	}
 					}
-					echo '<hr>';
+					if(isset($_POST['updateswitches'])) echo '<hr>';
 				}
 			}
 			if(isset($_POST['updateswitches'])) {
@@ -136,7 +136,7 @@ if(!empty($thermometers)) {
 		if (!$datas) {
 			echo "No information available...";
 		} else {
-			echo '<hr>Importing Temperature<br/>';
+			if(isset($_POST['updateswitches'])) echo '<hr>Importing Temperature<br/>';
 			$lasttime = '123';
 			foreach($datas['response'] as $data){
 				$id_sensor=$thermometer['id'];
@@ -144,7 +144,7 @@ if(!empty($thermometers)) {
 				if($time!=$lasttime) {
 					$temp = str_replace(',', '.', str_replace('.', '', $data['te']));
 					$hum = $data['hu'];
-					echo $time.' - '.$temp.' - '.$hum.'<br/>';
+					if(isset($_POST['updateswitches'])) echo $time.' - '.$temp.' - '.$hum.'<br/>';
 					//$sql = "INSERT INTO temperature (`timestamp`, `te`, `hu`, `id_sensor`) values ('$time', '$temp', '$hum', '$id_sensor') ON DUPLICATE KEY UPDATE `te`='$temp', `hu`='$hum'";
 					$sql = "INSERT IGNORE INTO temperature (`timestamp`, `te`, `hu`, `id_sensor`) values ('$time', '$temp', '$hum', '$id_sensor')";
 					if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
@@ -167,13 +167,13 @@ if(!empty($thermometers)) {
 	if (!$datas) {
 		echo "No information available...";
 	} else {
-		echo '<hr>Importing Min Max Temperatures per day<br/>';
+		if(isset($_POST['updateswitches'])) echo '<hr>Importing Min Max Temperatures per day<br/>';
 		foreach($datas['response'] as $data){
 			$id_sensor=$data['id'];
 			$datum = date('Y-m-d');
 			$mintemp = str_replace(',', '.', str_replace('.', '', $data['te-']));
 			$maxtemp = str_replace(',', '.', str_replace('.', '', $data['te+']));
-			echo $datum.': '.$mintemp.' - '.$maxtemp;
+			if(isset($_POST['updateswitches'])) echo $datum.': '.$mintemp.' - '.$maxtemp;
 			$sql = "INSERT INTO temp_day (`date`, `min`, `max`, `id_sensor`) values ('$datum', '$mintemp', '$maxtemp', '$id_sensor') ON DUPLICATE KEY UPDATE `min`='$mintemp', `max`='$maxtemp'";
 			if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
 		}
@@ -191,11 +191,11 @@ try {
 if (!$datas) {
   echo "No information available...";
 } else {
-  echo '<hr>Importing Rain<br/>';
+  if(isset($_POST['updateswitches'])) echo '<hr>Importing Rain<br/>';
   foreach($datas['response'] as $data){
 	  $datum = date('Y-m-d');
 	  $mm = str_replace(',', '.', str_replace('.', '', $data['mm']));
-	  echo $datum.': '.$mm;
+	  if(isset($_POST['updateswitches'])) echo $datum.': '.$mm;
 	  $sql = "INSERT INTO rain (`date`, `mm`, `id_sensor`) values ('$datum', '$mm', '$id_sensor') ON DUPLICATE KEY UPDATE `mm`='$mm'";
 	  if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
   }
@@ -215,14 +215,14 @@ if(!empty($windmeters)) {
 		if (!$datas) {
 			echo "No information available...";
 		} else {
-			echo '<hr>Importing Wind<br/>';
+			if(isset($_POST['updateswitches'])) echo '<hr>Importing Wind<br/>';
 			foreach($datas['response'] as $data){
 				$id_sensor=$windmeter['id'];
 				$time = $data['t'];
 				$windspeed = str_replace(',', '.', str_replace('.', '', $data['ws']));
 				$gust = str_replace(',', '.', str_replace('.', '', $data['gu']));
 				$direction = $data['dir'];
-				echo $time.' - '.$windspeed.' - '.$gust.' - '.$direction.'<br/>';
+				if(isset($_POST['updateswitches'])) echo $time.' - '.$windspeed.' - '.$gust.' - '.$direction.'<br/>';
 				$sql = "INSERT IGNORE INTO wind (`timestamp`, `wi`, `gu`, `dir`, `id_sensor`) values ('$time', '$windspeed', '$gust', '$direction', '$id_sensor') ";
 				if(!$result = $db->query($sql)){ die('There was an error running the query ['.$sql.'] > [' . $db->error . ']');}
 			}
@@ -258,6 +258,9 @@ if(!empty($energylinks)) {
 		}
 	}
 }
+if(!isset($_POST['updateswitches'])) ob_clean();
+if(isset($_POST['importall'])) ob_clean();
+
 ?>
 </body>
 </html>

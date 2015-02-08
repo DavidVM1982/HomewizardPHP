@@ -1,4 +1,6 @@
-<?php include "header.php"; 
+<?php 
+if(isset($_POST['importall'])) include('history_to_sql.php');
+include "header.php"; 
 print '<div class="twocolumn"><div class="item wide gradient"><br/><br/>
 <form method="post" name="filter" id="filter">
 <select name="limit" class="abutton gradient" onChange="this.form.submit()">';
@@ -45,7 +47,7 @@ while($row = $result->fetch_assoc()){
 	<td>&nbsp;'.$row['omschrijving'].'</td>
 	</tr>';
 }
-echo "</tbody></table></div></div>";
+echo '</tbody></table><br/><br/><form method="post"><input type="submit" name="importall" value="Historiek updaten" class="abutton settings gradient"/></form></div></div>';
 $result->free();
 include "footer.php";
 ?>
