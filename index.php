@@ -3,12 +3,12 @@ include "header.php";
 include "functions.php";
 if($authenticated == true) {
 	if (isset($_POST['schakel'])) {
-		if (isset($_POST['dimlevel'])) echo dim($_POST['switch'],$_POST['dimlevel'],'m');
-		else if (isset($_POST['somfy'])) echo somfy($_POST['switch'],$_POST['somfy'],'m');
-		else if (isset($_POST['schakel'])) echo schakel($_POST['switch'],$_POST['schakel'],'m');
+		if (isset($_POST['dimlevel'])) echo dim($_POST['switch'],$_POST['dimlevel'],'m',null,null);
+		else if (isset($_POST['somfy'])) echo somfy($_POST['switch'],$_POST['somfy'],'m',null,null);
+		else if (isset($_POST['schakel'])) echo schakel($_POST['switch'],$_POST['schakel'],'m',null,null);
 	} 
-	if(isset($_POST['radiator']) && isset($_POST['set_temp'])) echo radiator($_POST['radiator'],$_POST['set_temp'],'m');
-	if (isset($_POST['schakelscene'])) echo scene($_POST['scene'],$_POST['schakelscene'],'m');
+	if(isset($_POST['radiator']) && isset($_POST['set_temp'])) echo radiator($_POST['radiator'],$_POST['set_temp'],'m',null,null);
+	if (isset($_POST['schakelscene'])) echo scene($_POST['scene'],$_POST['schakelscene'],'m',null,null);
 }
 include "data.php";
 echo '<div class="isotope">';
@@ -22,7 +22,7 @@ if($toon_schakelaars=='yes') {
 	$sql="select id_switch, name, type, favorite, volgorde from switches where type in ('switch', 'dimmer', 'virtual')";
 	if (!isset($_POST['showallswitches'])) $sql.=" AND favorite like 'yes'";
 	$sql.=" order by volgorde asc, favorite desc, name asc";
-	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+	if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 	if($result->num_rows>0) {
 		$group = 0;
  		echo '
@@ -93,7 +93,7 @@ if($toon_scenes=='yes') {
 	$sql="select id_switch, name, type, favorite, volgorde from switches where type in ('scene')";
 	if (!isset($_POST['showallscenes'])) $sql.=" AND favorite like 'yes'";
 	$sql.=" order by volgorde asc, favorite desc, name asc";
-	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+	if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 	if($result->num_rows>0) {
 		$group = 0;
 		while($row = $result->fetch_assoc()){
@@ -139,7 +139,7 @@ if($toon_somfy=='yes') {
 	$sql="select id_switch, name, volgorde from switches where type like 'somfy'";
 	if (!isset($_POST['showallsomfy'])) $sql.=" AND favorite like 'yes'";
 	$sql.=" order by volgorde asc, favorite desc, name asc";
-	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+	if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 	if($result->num_rows>0) {
 		$group = 0;
 		echo '<table align="center"><tbody>';
@@ -243,7 +243,7 @@ if($toon_sensoren=='yes') {
 	$sql="select id_sensor, name, type, volgorde from sensors WHERE type in ('smoke','contact','doorbell','motion')";
 	if (!isset($_POST['showallsensors'])) $sql.=" AND favorite like 'yes'";
 	$sql.=" order by volgorde asc, favorite desc, name asc";
-	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+	if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 	if($result->num_rows>0) {
 		$group = 0;
 		echo '<div ><table align="center" width="100%">';
@@ -298,7 +298,7 @@ if($toon_temperatuur=='yes') {
 	$sql="select id_sensor, name, volgorde, tempk, tempw from sensors WHERE type in ('temp')";
 	if (!isset($_POST['showalltemps'])) $sql.=" AND favorite like 'yes'";
 	$sql.=" order by volgorde asc, favorite desc, name asc";
-	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+	if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 	if($result->num_rows>0) {	
 		echo '<div><table width="100%"><tr><th></th><th>temp</th><th>hum</th></tr>';
 		while($row = $result->fetch_assoc()){

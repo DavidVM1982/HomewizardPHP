@@ -20,7 +20,7 @@ setlocale(LC_ALL,'nl_NL.UTF-8');
 setlocale(LC_ALL, 'nld_nld');
 date_default_timezone_set('Europe/Brussels');
 $sql="select variable, value from settings order by variable asc";
-	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+	if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 	$acceptedips = array();
 	while($row = $result->fetch_assoc()){
 		if (strpos($row['variable'], 'acceptedip') === 0) array_push($acceptedips, $row['value']);

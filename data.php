@@ -42,7 +42,7 @@ foreach($thermometers as $thermometer) {
 	${'thermometerhu'.$thermometer['id']} = $thermometer['hu'];
 }
 $sql = "select id_sensor, correctie from sensors where type like 'temp'";
-if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 while($row = $result->fetch_assoc()){
 	${'thermometerte'.$row['id_sensor']} = ${'thermometerte'.$row['id_sensor']} + $row['correctie'];
 }

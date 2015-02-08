@@ -8,7 +8,7 @@ function schakel($switch, $action, $who, $notify, $failonly) {
 		$timestamp = time();
 		if($debug=='yes') $reply = '<div class="error gradient">OK</div>';
 		$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($switch, $timestamp, '$action', '$who');";
-		if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+		if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 	} else {
 		sleep(5);
 		$responsejson = file_get_contents($jsonurl.'sw/'.$switch.'/'.$action);
@@ -18,14 +18,14 @@ function schakel($switch, $action, $who, $notify, $failonly) {
 			$timestamp = time();
 			if($debug=='yes') $reply = '<div class="error gradient">OK</div>';
 			$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($switch, $timestamp, '$action', '$who');";
-			if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+			if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 		} else {
 			if(isset($notify)) notificatie($notify, "Schakelaar ".$switch." op ".$action." zetten mislukt.", "Hello ".$notify.",\r\n\r\nSchakelaar ".$switch." op ".$action." zetten mislukt.");
 			$reply = '<div class="error gradient">response = ';$reply .= print_r($response); $reply .= '</div>';
 		}
 	}
 	if($debug=='yes') {$reply .= '<div class="error gradient">$_POST = ';$reply .= print_r($_POST);$reply .=  "<br/>sw/".$switch."/".$action."</div>";}
-	return $reply;
+	if($debug=='yes') return $reply;
 }
 function dim($switch, $action, $who, $notify, $failonly) {
 	global $jsonurl, $db, $debug;
@@ -36,7 +36,7 @@ function dim($switch, $action, $who, $notify, $failonly) {
 		$timestamp = time();
 		if($debug=='yes') $reply = '<div class="error gradient">OK</div>';
 		$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($switch, $timestamp, '$action', '$who');";
-		if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+		if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 	} else {
 		sleep(5);
 		$responsejson = file_get_contents($jsonurl.'sw/dim/'.$switch.'/'.$action);
@@ -46,14 +46,14 @@ function dim($switch, $action, $who, $notify, $failonly) {
 			$timestamp = time();
 			if($debug=='yes') $reply = '<div class="error gradient">OK</div>';
 			$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($switch, $timestamp, '$action', '$who');";
-			if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+			if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 		} else {
 			if(isset($notify)) notificatie($notify, "Dimmer ".$switch." instellen op ".$action." mislukt.", "Hello ".$notify.",\r\n\r\nDimmer ".$switch." werd NIET ingesteld op ".$action.".");
 			$reply = '<div class="error gradient">response = ';$reply .= print_r($response); $reply .= '</div>';
 		}
 	}
 	if($debug=='yes') {$reply .= '<div class="error gradient">$_POST = ';$reply .= print_r($_POST);$reply .=  "<br/>sw/".$switch."/".$action."</div>";}
-	return $reply;
+	if($debug=='yes') return $reply;
 }
 function somfy($switch, $action, $who, $notify, $failonly) {
 	global $jsonurl, $db, $debug;
@@ -64,7 +64,7 @@ function somfy($switch, $action, $who, $notify, $failonly) {
 		$timestamp = time();
 		if($debug=='yes') $reply = '<div class="error gradient">OK</div>';
 		$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($switch, $timestamp, '$action', '$who');";
-		if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+		if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 	} else {
 		sleep(5);
 		$responsejson = file_get_contents($jsonurl.'sf/'.$switch.'/'.$action);
@@ -74,14 +74,14 @@ function somfy($switch, $action, $who, $notify, $failonly) {
 			$timestamp = time();
 			if($debug=='yes') $reply = '<div class="error gradient">OK</div>';
 			$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($switch, $timestamp, '$action', '$who');";
-			if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+			if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 		} else {
 			if(isset($notify)) notificatie($notify, "Somfy ".$switch." instellen op ".$action." mislukt.", "Hello ".$notify.",\r\n\r\nSomfy ".$switch." werd NIET ingesteld op ".$action.".");
 			$reply = '<div class="error gradient">response = ';$reply .= print_r($response); $reply .= '</div>';
 		}
 	}
 	if($debug=='yes') {$reply .= '<div class="error gradient">$_POST = ';$reply .= print_r($_POST);$reply .=  "<br/>sw/".$switch."/".$action."</div>";}
-	return $reply;
+	if($debug=='yes') return $reply;
 }
 function radiator($switch, $action, $who, $notify, $failonly) {
 	global $jsonurl, $db, $debug;
@@ -92,7 +92,7 @@ function radiator($switch, $action, $who, $notify, $failonly) {
 		$timestamp = time();
 		if($debug=='yes') $reply = '<div class="error gradient">OK</div>';
 		$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($switch, $timestamp, '$action', '$who');";
-		if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+		if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 	} else {
 		sleep(5);
 		$responsejson = file_get_contents($jsonurl.'sw/'.$switch.'/settarget/'.$action);
@@ -102,14 +102,14 @@ function radiator($switch, $action, $who, $notify, $failonly) {
 			$timestamp = time();
 			if($debug=='yes') $reply = '<div class="error gradient">OK</div>';
 			$sql ="insert into switchhistory (`id_switch`,`timestamp`,`type`,`who`) values ($switch, $timestamp, '$action', '$who');";
-			if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+			if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 		} else {
 			if(isset($notify)) notificatie($notify, "Radiator ".$switch." instellen op ".$action." mislukt.", "Hello ".$notify.",\r\n\r\nRadiator ".$switch." werd NIET ingesteld op ".$action.".");
 			$reply = '<div class="error gradient">response = ';$reply .= print_r($response); $reply .= '</div>';
 		}
 	}
 	if($debug=='yes') {$reply .= '<div class="error gradient">$_POST = ';$reply .= print_r($_POST);$reply .=  "<br/>sw/".$switch."/".$action."</div>";}
-	return $reply;
+	if($debug=='yes') return $reply;
 }
 function scene($switch, $action, $who, $notify, $failonly) {
 	global $jsonurl, $db, $debug;
@@ -131,7 +131,7 @@ function scene($switch, $action, $who, $notify, $failonly) {
 		}
 	}
 	if($debug=='yes') {$reply .= '<div class="error gradient">$_POST = ';$reply .= print_r($_POST);$reply .=  "<br/>sw/".$switch."/".$action."</div>";}
-	return $reply;
+	if($debug=='yes') return $reply;
 }
 function laatsteschakeltijd($switch, $action, $who, $notify, $failonly) {
 	global $jsonurl, $db, $debug;
@@ -153,6 +153,14 @@ function laatstesensortijd($sensor, $status, $notify, $failonly) {
 	return $row;	
 }
 function notificatie($notify, $onderwerp, $bericht) {
-	mail ($notify ,$onderwerp ,$bericht );
+	global $email_from, $email_notificatie;
+	if(!isset($notify)) $notify = $email_notificatie;
+	$message = 'Hello '.$email_notificatie.",\r\n\r\n";
+	$message .= $bericht;
+	$message .= "\r\n\r\n\r\nVerzonden door HomeWizardPHP op ".strftime("%A %e %B %Y",time())." om ".strftime("%k:%M",time());
+	$headers = 'From: HomeWizardPHP <'.$email_from. ">\r\n";
+	$headers .='Reply-To: '.$email_from . "\r\n";
+	$headers .='X-Mailer: PHP/' . phpversion();
+	mail ($notify ,$onderwerp ,$message, $headers );
 }
 ?>

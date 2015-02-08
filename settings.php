@@ -20,14 +20,14 @@ if($authenticated==true) {
 if(isset($_POST['deleteswitch'])) { 
 	$id_switch=($_POST['id_switch']);
 	$sql="delete from switches where id_switch = $id_switch";
-	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	$showeditswitches=true;
 	$showparameters = false;
 }
 if(isset($_POST['deletesensor'])) { 
 	$id_sensor=($_POST['id_sensor']);
 	$sql="delete from sensors where id_sensor = $id_sensor";
-	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	$showeditsensors=true;
 	$showparameters = false;
 }
@@ -37,7 +37,7 @@ if(isset($_POST['editswitch'])) {
 	$type=($_POST['soort']);
 	$favorite=($_POST['favorite']);
 	$sql="update switches set volgorde = '$volgorde', favorite = '$favorite' where id_switch = $id_switch AND type like '$type'";
-	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	$showeditswitches=true;
 	$showparameters = false;
 }
@@ -50,7 +50,7 @@ if(isset($_POST['editsensor'])) {
 	if(isset($_POST['tempw'])) $tempw=($_POST['tempw']); else $tempw = 0;
 	if(isset($_POST['correctie'])) $correctie=($_POST['correctie']); else $correctie = 0;
 	$sql="update sensors set volgorde = '$volgorde', favorite = '$favorite', tempk = '$tempk', tempw = '$tempw', correctie = '$correctie' where id_sensor = $id_sensor AND type like '$type'";
-	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	$showeditsensors=true;
 	$showparameters = false;
 }
@@ -60,37 +60,37 @@ if(isset($_POST['upd'])) {
 	if(!isset($_POST['value'])) $value = 'no';
 	echo '<div class="item wide gradient"><p class="number">2</p><br/>update settings set value = '.$value.' where variable like '.$variable.'</div>';
 	$sql="update settings set value = '$value' where variable like '$variable'";
-	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 }
 if(isset($_POST['add'])) { 
 	$variable=$db->real_escape_string($_POST['variable']);
 	$value=$db->real_escape_string($_POST['value']);
 	$sql="insert into settings (variable, value) VALUES ('$variable', '$value')";
-	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 }
 if(isset($_POST['cleansensorhistory'])) { 
 	$id_sensor=($_POST['id_sensor']);
 	$old = time()-($_POST['daystokeep']*86400);
 	$old = date("Y-m-d H:i:s", $old);
 	$sql="delete from history where id_sensor = $id_sensor and time < '$old'";
-	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	echo '<div class="item wide gradient"><p class="number">7</p><br>'.$db->affected_rows.' Records verwijderd voor sensor '.$id_sensor.', tot datum '.$old.'</div>';
 }
 if(isset($_POST['cleanswitchhistory'])) { 
 	$id_switch=($_POST['id_switch']);
 	$old = time()-($_POST['daystokeep']*86400);
 	$sql="delete from switchhistory where id_switch = $id_switch and timestamp < '$old'";
-	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	echo '<div class="item wide gradient"><p class="number">7</p><br>'.$db->affected_rows.' Records verwijderd voor schakelaar '.$id_switch.', tot datum '.date("Y-m-d H:i:s", $old).'</div>';
 }
 if(isset($_POST['cleanhistoryfromremovedswitches'])) { 
 	$sql="DELETE FROM `switchhistory` WHERE id_switch not in (select id_switch from switches where type not like 'scene')";
-	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	echo '<div class="item wide gradient"><p class="number">7</p><br>'.$db->affected_rows.' Records verwijderd voor gewiste schakelaars</div>';
 }
 if(isset($_POST['cleanhistoryfromremovedsensors'])) { 
 	$sql="DELETE FROM `history` WHERE id_sensor not in (select id_sensor from sensors where type not like 'temp')";
-	if(!$result = $db->query($sql)){ die('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 	echo '<div class="item wide gradient"><p class="number">7</p><br>'.$db->affected_rows.' Records verwijderd voor gewiste sensoren</div>';
 }
 if(isset($_POST['updateswitches'])) { 
@@ -193,7 +193,7 @@ if($authenticated==true) {
 if($showparameters==true) {
 	echo '<div class="item wide gradient"><center><table width="400px" style="text-align:center"><tbody>';
 	$sql="select variable, value from settings where variable not like 'css_%' and variable not like 'positie_%' and variable not like 'toon_%' and variable not like 'actie_%' order by variable asc";
-	if(!$result = $db->query($sql)){ die('<div class="item wide gradient">There was an error running the query [' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="item wide gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
 		echo '<form method="post" >
 		<tr>
@@ -230,7 +230,7 @@ if($showparameters==true) {
 if($showopmaak==true) {
 	echo '<div class="item wide gradient"><center><table width="400px" style="text-align:center"><tbody>';
 	$sql="select variable, value from settings where variable like 'css_%' OR variable like 'positie_%' OR variable like 'toon_%' order by variable asc";
-	if(!$result = $db->query($sql)){ die('<div class="item wide gradient">There was an error running the query [' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="item wide gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
 		echo '<form method="post" ><input type="hidden" name="showopmaak" value="Opmaak"/>
 		<tr>
@@ -267,7 +267,7 @@ if($showopmaak==true) {
 if($showacties==true) {
 	echo '<div class="item wide gradient"><p class="number">9</p><center><table width="400px" style="text-align:center"><tbody>';
 	$sql="select variable, value from settings where variable like 'actie_%' order by variable asc";
-	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
 		echo '<form method="post" ><input type="hidden" name="showacties" value="Acties"/>
 		<tr>
@@ -283,12 +283,12 @@ if($showacties==true) {
 		</td></tr></form>';
 	}
 	$result->free();
-	echo '<form method="post"><tr><td align="left"><input type="hidden" name="showacties" value="Acties"/><input type="text" name="variable" id="variable" value="actie_" size="40"/></td><td><input type="submit" name="add" value="add" class="abutton gradient"/></td></tr></form></tbody></table></center>';
+	echo '<form method="post"><tr><td align="left"><input type="hidden" name="showacties" value="Acties"/><input type="hidden" name="value" value="yes"/><input type="text" name="variable" id="variable" value="actie_" size="40"/></td><td><input type="submit" name="add" value="add" class="abutton gradient"/></td></tr></form></tbody></table></center>';
 }
 if($showeditswitches==true) {
 	echo '<div class="item wide gradient"><center><table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Name</th><th>type</th><th>favorite</th><th>order</th></thead><tbody>';
 	$sql="select id_switch, name, type, favorite, volgorde from switches order by type asc, volgorde asc, name asc";
-	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
 		echo '
 			<tr>
@@ -323,7 +323,7 @@ if($showeditswitches==true) {
 if($showeditsensors==true) {
 	echo '<div class="item wide gradient"><center><table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Name</th><th>type</th><th>favorite</th><th>order</th></thead><tbody>';
 	$sql="select id_sensor, name, type, favorite, volgorde from sensors where type not like 'temp' order by volgorde asc, name asc";
-	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
 		echo '
 			<tr>
@@ -358,7 +358,7 @@ if($showeditsensors==true) {
 	echo '</tbody></table></center></div>';
 	echo '<div class="item wide gradient"><center><table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Name</th><th>type</th><th>favorite</th><th>opties</th></thead><tbody>';
 	$sql="select id_sensor, name, type, favorite, volgorde, tempk, tempw, correctie from sensors where type like 'temp' order by volgorde asc, name asc";
-	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
 		echo '
 			<tr>
@@ -409,11 +409,11 @@ if($cleandatabase==true) {
 	<br/><big><b>Verwijder oude historieken van sensoren.</b></big><br/><br/>
 	<table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Naam</th><th>Aantal Records</th><th>Dagen te behouden</th></thead><tbody>';
 	$sql="select id_sensor, name, type volgorde from sensors where type not like 'temp' order by volgorde asc, name asc";
-	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
 		$id_sensor = $row['id_sensor'];
 		$sqlcount = "select count(id_sensor) as aantal from history where id_sensor = $id_sensor;";
-		if(!$resultcount = $db->query($sqlcount)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+		if(!$resultcount = $db->query($sqlcount)){ echo('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 		$rowcount = $resultcount->fetch_assoc();
 		echo '
 			<tr>
@@ -439,11 +439,11 @@ if($cleandatabase==true) {
 	<br/><big><b>Verwijder oude historieken van schakelaars.</b></big><br/><br/>
 	<table width="500px" style="text-align:center"><thead><tr><th>id</th><th>Naam</th><th>Aantal Records</th><th>Dagen te behouden</th></thead><tbody>';
 	$sql="select id_switch, name, type from switches where type not like 'scene' order by volgorde asc, name asc";
-	if(!$result = $db->query($sql)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+	if(!$result = $db->query($sql)){ echo('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
 		$id_switch = $row['id_switch'];
 		$sqlcount = "select count(id_switch) as aantal from switchhistory where id_switch = $id_switch;";
-		if(!$resultcount = $db->query($sqlcount)){ die('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
+		if(!$resultcount = $db->query($sqlcount)){ echo('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 		$rowcount = $resultcount->fetch_assoc();
 		echo '
 			<tr>

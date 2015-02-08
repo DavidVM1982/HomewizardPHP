@@ -2,7 +2,7 @@
 if(!isset($_POST['actionscron'])) {
 include "parameters.php";
 	$sql="select variable, value from settings order by variable asc";
-	if(!$result = $db->query($sql)){ die('There was an error running the query [' . $db->error . ']');}
+	if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 	$acceptedips = array();
 	while($row = $result->fetch_assoc()){
 		if (strpos($row['variable'], 'acceptedip') === 0) { 
@@ -43,11 +43,11 @@ if($actie_brander=='yes') {
 	if($switchstatus12=='off') echo 'De brander brandt niet.<br/>'; else echo 'De brander brandt.<br/>';
 	if($aantalradiatoren>0 && $switchstatus12=='off') {
 			echo "schakel(12, 'on', 'c');sleep(5);schakel(12, 'on', 'd');sleep(5)";
-			if(!isset($_POST['showtest'])) schakel(12, 'on', 'c', 'guy@egregius.be', 'yes');sleep(2);schakel(12, 'on', 'd', 'guy@egregius.be', 'yes');sleep(2);
+			if(!isset($_POST['showtest'])) schakel(12, 'on', 'c', $email_notificatie, 'yes');sleep(2);schakel(12, 'on', 'd', $email_notificatie, 'yes');sleep(2);
 		
 	} else if($aantalradiatoren==0 && $switchstatus12=='on'){
 		echo "schakel(12, 'off', 'c');sleep(5);schakel(12, 'off', 'd');sleep(5)";
-		if(!isset($_POST['showtest'])) schakel(12, 'off', 'c', 'guy@egregius.be', 'yes');sleep(2);schakel(12, 'off', 'd', 'guy@egregius.be', 'yes');sleep(2);
+		if(!isset($_POST['showtest'])) schakel(12, 'off', 'c', $email_notificatie, 'yes');sleep(2);schakel(12, 'off', 'd', $email_notificatie, 'yes');sleep(2);
 	}
 } else {
 	echo ' niet actief<br/>';
@@ -58,30 +58,34 @@ echo '</div>';
 echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie timer radiatoren living';
 $tempw = 20;
 $tempk = 17;
+$voorwarmen = ceil(($tempw-$thermometerte5)*($tempw-$thermometerte1)*60);
 if($actie_timer_living=='yes' && $switchstatus16=='on'){
 	echo ' actief</b><br/><br/>';
 	if(in_array(date('N', time()), array(1,2,3,4))) {
-		echo 'Vandaag is het een werkdag.<br/>';
+		echo 'Vandaag is het een werkdag en het is nu '.date('H:i', time()).'.<br/>';
+		echo 'We willen warmte van 18:00 tem 22:00.<br/>';
 		if(time()>(strtotime('18:00')-(($tempw-$thermometerte5)*(($tempw-$thermometerte1)*60))) && (time()<(strtotime('22:00')))) {
 			echo 'Het is nu tussen 18:00 en 22:00.<br/>';
 			if($switchstatus14<$tempw || $switchstatus15<$tempw) {
 				echo "Een van de radiatoren staat kouder dan ".$tempw."°C<br/>";
 				echo "radiator(14, ".$tempw.", 'c');sleep(2)<br/>";
-				if(!isset($_POST['showtest'])) {radiator(14, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);}
+				if(!isset($_POST['showtest'])) {radiator(14, $tempw, 'c', $email_notificatie, 'yes');sleep(2);}
 				echo "radiator(15, ".$tempw.", 'c');sleep(2)<br/>";
-				if(!isset($_POST['showtest'])) {radiator(15, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);}
+				if(!isset($_POST['showtest'])) {radiator(15, $tempw, 'c', $email_notificatie, 'yes');sleep(2);}
 			}
 		}
 	} else if (in_array(date('N', time()), array(5,6,7))) {
-		echo 'Vandaag is het weekend.<br/>';
-		if(time()>(strtotime('18:00')-(($tempw-$thermometerte5)*(($tempw-$thermometerte1)*60))) && (time()<(strtotime('23:00')))) {
-			echo 'Het is nu tussen 18:00 en 23:00.<br/>';
+		echo 'Vandaag is het weekend en het is nu '.date('H:i', time()).'.<br/>';
+		echo 'We willen warmte van 7:00 tem 22:00.<br/>';
+		echo 'We verwarmen '.($tempw-$thermometerte5).' x '.($tempw-$thermometerte1).' x 60 = '.$voorwarmen.' sec vooraf.<br/>';
+		if(time()>(strtotime('7:00')-$voorwarmen) && (time()<(strtotime('23:00')))) {
+			echo 'Het is nu tussen '.date('H:i', (strtotime('7:00')-$voorwarmen)).' en 23:00.<br/>';
 			if($switchstatus14<$tempw || $switchstatus15<$tempw) {
 				echo "Een van de radiatoren staat kouder dan ".$tempw."°C<br/>";
 				echo "radiator(14, ".$tempw.", 'c');sleep(2)<br/>";
-				if(!isset($_POST['showtest'])) {radiator(14, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);}
+				if(!isset($_POST['showtest'])) {radiator(14, $tempw, 'c', $email_notificatie, 'yes');sleep(2);}
 				echo "radiator(15, ".$tempw.", 'c');sleep(2)<br/>";
-				if(!isset($_POST['showtest'])) {radiator(15, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);}
+				if(!isset($_POST['showtest'])) {radiator(15, $tempw, 'c', $email_notificatie, 'yes');sleep(2);}
 			} else {
 				echo "Beide radiatoren staan reeds warmer dan ".$tempw."°C.<br/>";
 			}
@@ -96,9 +100,9 @@ if($actie_timer_living=='yes' && $switchstatus16=='on'){
 			if($laatsteschakel2>$laatsteschakel) $laatsteschakel = $laatsteschakel2;
 			if($laatsteschakel['timestamp']<(time()-7200))  {
 				echo "radiator(14, ".$tempk.", 'c');sleep(2)<br/>";
-				if(!isset($_POST['showtest'])) {radiator(14, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);}
+				if(!isset($_POST['showtest'])) {radiator(14, $tempk, 'c', $email_notificatie, 'yes');sleep(2);}
 				echo "radiator(15, ".$tempk.", 'c');sleep(2)<br/>";
-				if(!isset($_POST['showtest'])) {radiator(15, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);}
+				if(!isset($_POST['showtest'])) {radiator(15, $tempk, 'c', $email_notificatie, 'yes');sleep(2);}
 			}
 		}
 	}
@@ -111,8 +115,8 @@ if($actie_timer_living=='yes' && $switchstatus16=='on'){
 		if($laatsteschakel['timestamp']<(time()-7200))  {
 			echo "radiator(14, ".$tempk.", 'c');sleep(2);<br/>radiator(15, ".$tempk.", 'c');sleep(2)<br/>";
 			if(!isset($_POST['showtest'])) {
-				radiator(14, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);
-				radiator(15, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);
+				radiator(14, $tempk, 'c', $email_notificatie, 'yes');sleep(2);
+				radiator(15, $tempk, 'c', $email_notificatie, 'yes');sleep(2);
 			}
 		}
 	}
@@ -121,7 +125,7 @@ echo '</div>';
 
 //Timer radiator badkamer
 echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie timer radiator badkamer';
-$tempw = 24;
+$tempw = 22;
 $tempk = 18;
 if($actie_timer_badkamer=='yes' && $switchstatus16=='on'){
 	echo ' actief</b><br/><br/>';
@@ -132,8 +136,8 @@ if($actie_timer_badkamer=='yes' && $switchstatus16=='on'){
 			if($switchstatus6<$tempk) {
 				echo "radiator(6, ".$tempw.", 'c');sleep(2)<br/>";
 				if(!isset($_POST['showtest'])) {
-					radiator(6, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);
-					radiator(6, $tempw, 'd', 'guy@egregius.be', 'yes');sleep(2);
+					radiator(6, $tempw, 'c', $email_notificatie, 'yes');sleep(2);
+					radiator(6, $tempw, 'd', $email_notificatie, 'yes');sleep(2);
 				}
 			}
 		} 
@@ -144,8 +148,8 @@ if($actie_timer_badkamer=='yes' && $switchstatus16=='on'){
 			if($switchstatus6<$tempw) {
 				echo "radiator(6, ".$tempw.", 'c');sleep(2)<br/>";
 				if(!isset($_POST['showtest'])) {
-					radiator(6, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);
-					radiator(6, $tempw, 'd', 'guy@egregius.be', 'yes');sleep(2);
+					radiator(6, $tempw, 'c', $email_notificatie, 'yes');sleep(2);
+					radiator(6, $tempw, 'd', $email_notificatie, 'yes');sleep(2);
 				}
 			}
 		} else {
@@ -158,8 +162,8 @@ if($actie_timer_badkamer=='yes' && $switchstatus16=='on'){
 				if($laatsteschakel['timestamp']<(time()-7200)) {
 					echo "radiator(6, ".$tempk.", 'c');sleep(2)<br/>";
 					if(!isset($_POST['showtest'])) {
-						radiator(6, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);
-						radiator(6, $tempk, 'd', 'guy@egregius.be', 'yes');sleep(2);
+						radiator(6, $tempk, 'c', $email_notificatie, 'yes');sleep(2);
+						radiator(6, $tempk, 'd', $email_notificatie, 'yes');sleep(2);
 					}
 				}
 			}
@@ -172,7 +176,7 @@ if($actie_timer_badkamer=='yes' && $switchstatus16=='on'){
 		$laatsteschakel = laatsteschakeltijd(6,null, 'm');
 		if($laatsteschakel['timestamp']<(time()-7200)) {
 			echo "radiator(6, ".$tempk.", 'c');sleep(2)<br/>";
-			if(!isset($_POST['showtest'])) {radiator(6, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);radiator(6, $tempk, 'd', 'guy@egregius.be', 'yes');sleep(2);}
+			if(!isset($_POST['showtest'])) {radiator(6, $tempk, 'c', $email_notificatie, 'yes');sleep(2);radiator(6, $tempk, 'd', $email_notificatie, 'yes');sleep(2);}
 		}
 	}
 }
@@ -188,7 +192,7 @@ if($actie_timer_slaapkamer=='yes' && $switchstatus16=='on'){
 		echo 'Tijd voor warmte<br/>';
 		if($switchstatus7<$tempw) {
 			echo "Radiator 7 verhogen naar ".$tempw." °C.<br/>";
-			if(!isset($_POST['showtest'])) radiator(7, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);
+			if(!isset($_POST['showtest'])) radiator(7, $tempw, 'c', $email_notificatie, 'yes');sleep(2);
 		} else {
 			echo "Radiator al ingesteld op minstens ".$tempw." °C.<br/>";
 		}
@@ -198,7 +202,7 @@ if($actie_timer_slaapkamer=='yes' && $switchstatus16=='on'){
 			$laatsteschakel = laatsteschakeltijd(7,null, 'm');
 			if($laatsteschakel['timestamp']<(time()-7200))  {
 				echo "radiator(7, ".$tempk.", 'c');sleep(2)<br/>";
-			if(!isset($_POST['showtest'])) radiator(7, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);
+			if(!isset($_POST['showtest'])) radiator(7, $tempk, 'c', $email_notificatie, 'yes');sleep(2);
 			}
 		}
 	}
@@ -208,7 +212,7 @@ if($actie_timer_slaapkamer=='yes' && $switchstatus16=='on'){
 		$laatsteschakel = laatsteschakeltijd(7,null, 'm');
 		if($laatsteschakel['timestamp']<(time()-7200)) {
 			echo "radiator(7, ".$tempk.", 'c')<br/>";
-			if(!isset($_POST['showtest'])) radiator(7, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);
+			if(!isset($_POST['showtest'])) radiator(7, $tempk, 'c', $email_notificatie, 'yes');sleep(2);
 		}
 	}
 }
@@ -228,7 +232,7 @@ if($actie_timer_slaapkamertobi=='yes' && $switchstatus16=='on'){
 				echo 'Bijna slaaptijd.<br/>';
 				if($switchstatus8<$tempw) {
 					echo "radiator(8, ".$tempw.", 'c');sleep(2)<br/>";
-					if(!isset($_POST['showtest'])) {radiator(8, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);}
+					if(!isset($_POST['showtest'])) {radiator(8, $tempw, 'c', $email_notificatie, 'yes');sleep(2);}
 				}
 			}
 		}
@@ -240,7 +244,7 @@ if($actie_timer_slaapkamertobi=='yes' && $switchstatus16=='on'){
 				echo 'Bijna slaaptijd.<br/>';
 				if($switchstatus8<$tempw) {
 					echo "radiator(8, ".$tempw.", 'c');sleep(2)<br/>";
-					if(!isset($_POST['showtest'])) {radiator(8, $tempw, 'c', 'guy@egregius.be', 'yes');sleep(2);}
+					if(!isset($_POST['showtest'])) {radiator(8, $tempw, 'c', $email_notificatie, 'yes');sleep(2);}
 				}
 			}
 		}
@@ -251,7 +255,7 @@ if($actie_timer_slaapkamertobi=='yes' && $switchstatus16=='on'){
 		$laatsteschakel = laatsteschakeltijd(8,null, 'm');
 		if($laatsteschakel['timestamp']<(time()-7200))  {
 			echo "radiator(8, ".$tempk.", 'c');sleep(2)<br/>";
-			if(!isset($_POST['showtest'])) radiator(8, $tempk, 'c', 'guy@egregius.be', 'yes');sleep(2);
+			if(!isset($_POST['showtest'])) radiator(8, $tempk, 'c', $email_notificatie, 'yes');sleep(2);
 		}
 	}
 }
@@ -268,7 +272,7 @@ if($actie_lichtgarage=='yes') {
 			$laatsteschakel = laatsteschakeltijd(1,null, 'm');
 			if($laatsteschakel['timestamp']<(time()-7200) || $laatsteschakel['type']=='off') {
 				echo "schakel(1, 'off', 'c');sleep(2)<br/>";
-				if(!isset($_POST['showtest'])) schakel(1, 'off', 'c', 'guy@egregius.be', 'yes');sleep(2);
+				if(!isset($_POST['showtest'])) schakel(1, 'off', 'c', $email_notificatie, 'yes');sleep(2);
 			}
 		} 
 	}
@@ -285,7 +289,7 @@ if($actie_timer_pluto=='yes'){
 		echo 'Tijd voor Pluto.<br/>';
 		if($switchstatus0=='off') {
 			echo "schakel(0, 'on', 'c');sleep(2)<br/>";
-			if(!isset($_POST['showtest'])) schakel(0, 'on', 'c', 'guy@egregius.be', 'yes');sleep(2);
+			if(!isset($_POST['showtest'])) schakel(0, 'on', 'c', $email_notificatie, 'yes');sleep(2);
 		} else if ($switchstatus0=='on') {
 			echo "Pluto is al actief.<br/>";
 		}
@@ -295,7 +299,7 @@ if($actie_timer_pluto=='yes'){
 			$laatsteschakel = laatsteschakeltijd(0,null, 'm');
 			if($laatsteschakel['timestamp']<(time()-7200))  {
 				echo "schakel(0, 'off', 'c');sleep(2)<br/>";
-				if(!isset($_POST['showtest'])) schakel(0, 'off', 'c', 'guy@egregius.be', 'yes');sleep(2);
+				if(!isset($_POST['showtest'])) schakel(0, 'off', 'c', $email_notificatie, 'yes');sleep(2);
 			}
 		} else if ($switchstatus0=='off') {
 			echo "Pluto is al uitgeschakeld.<br/>";
@@ -307,7 +311,7 @@ if($actie_timer_pluto=='yes'){
 		$laatsteschakel = laatsteschakeltijd(8,null, 'm');
 		if($laatsteschakel['timestamp']<(time()-7200))  {
 			echo "schakel(0, 'off', 'c');sleep(2)<br/>";
-			if(!isset($_POST['showtest'])) schakel(0, 'off', 'c', 'guy@egregius.be', 'yes');sleep(2);
+			if(!isset($_POST['showtest'])) schakel(0, 'off', 'c', $email_notificatie, 'yes');sleep(2);
 		}
 	}
 }
@@ -321,17 +325,51 @@ if($actie_thuis=='yes'){
 		echo 'We zijn thuis<br/>';
 	} else {
 		echo 'We zijn niet thuis<br/>';
-		if($sensorstatus0=='yes') mail ('guy@xafax.be,guy@egregius.be' ,'ROOK gedetecteerd op zolder' ,'ROOK gedetecteerd op zoldere' );
-		if($sensorstatus1=='yes') mail ('guy@xafax.be,guy@egregius.be' ,'Poort is geopend' ,'Poort is geopend' );
-		if($sensorstatus2=='yes') mail ('guy@xafax.be,guy@egregius.be' ,'Beweging gedetecteerd in garage' ,'Beweging gedetecteerd in garage' );
-		if($sensorstatus3=='yes') mail ('guy@xafax.be,guy@egregius.be' ,'ROOK gedetecteerd in de hall' ,'ROOK gedetecteerd in de hall' );
-		if($sensorstatus4=='yes') mail ('guy@xafax.be,guy@egregius.be' ,'Bel voordeur ingedrukt' ,'Bel voordeur ingedrukt' );
+		if($sensorstatus0=='yes') notificatie($email_notificatie ,'ROOK gedetecteerd op zolder' ,'ROOK gedetecteerd op zolder' );
+		if($sensorstatus1=='yes') notificatie($email_notificatie ,'Poort is geopend' ,'Poort is geopend' );
+		if($sensorstatus2=='yes') notificatie($email_notificatie ,'Beweging gedetecteerd in garage' ,'Beweging gedetecteerd in garage' );
+		if($sensorstatus3=='yes') notificatie($email_notificatie ,'ROOK gedetecteerd in de hall' ,'ROOK gedetecteerd in de hall' );
+		if($sensorstatus4=='yes') notificatie($email_notificatie ,'Bel voordeur ingedrukt' ,'Bel voordeur ingedrukt' );
 	}
 } else {
 	echo ' niet actief<br/>';
 	
 }
 echo '</div>';
+
+//Verstuur lege batterij waarschuwing
+echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie thuis';
+if($actie_batterij=='yes'){
+	echo ' actief</b><br/><br/>';
+	//Verstuur alleen om 16:43 elke 3 dagen. 
+	if(date('H:i',time())=="16:43" && date('z', time()) %3 == 0) {
+		echo 'Tijd om de batterijen op te vragen.<br/>';
+		$json = file_get_contents($jsonurl.'get-sensors');
+		$data = null;
+		$data = json_decode($json,true);
+		$thermometers =  $data['response']['thermometers'];
+			foreach ($thermometers as $thermometer) {
+				if($thermometer['lowBattery']=='yes') notificatie($email_notificatie, "Batterijleeg van ".$thermometer['name']."", "Batterijleeg van ".$thermometer['name']."");
+			}
+		$windmeters =  $data['response']['windmeters'];	
+			foreach ($windmeters as $windmeter) {
+				if($windmeter['lowBattery']=='yes') notificatie($email_notificatie, "Batterijleeg van ".$windmeter['name']."", "Batterijleeg van ".$windmeter['name']."");
+			}
+		$rainmeters =  $data['response']['rainmeters'];
+			foreach ($rainmeters as $rainmeter) {
+				if($rainmeter['lowBattery']=='yes') notificatie($email_notificatie, "Batterijleeg van ".$rainmeter['name']."", "Batterijleeg van ".$rainmeter['name']."");
+			}
+		
+	} else {
+		echo 'Niet nu<br/>';
+	}
+} else {
+	echo ' niet actief<br/>';
+	
+}
+echo '</div>';
+
+
 if(!isset($_POST['actionscron']) && !isset($_POST['showtest'])) {ob_clean(); $db->close();}
 
 ?>
