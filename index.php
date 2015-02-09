@@ -389,7 +389,7 @@ if($toon_energylink=='yes') {
 }
 
 //---ACTIES---
-if($toon_acties=='yes') {
+if($toon_acties=='yes' && $authenticated == true) {
 	echo '<div class="item gradient"><p class="number">'.$positie_acties.'</p>
 			<form id="showallacties" action="#" method="post">
 				<input type="hidden" name="showallacties" value="yes" />
