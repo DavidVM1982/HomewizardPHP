@@ -1,6 +1,7 @@
 <?php
 include "header.php";
 print '<div class="threecolumn"><div class="isotope">';	
+if($debug=='yes') {echo '<div class="item wide gradient"><p class="number">2</p><br/>';print_r($_POST);echo '</div>';}
 $showparameters = true;
 $showupdatesensors  = false;
 $showeditswitches = false;
@@ -58,8 +59,15 @@ if(isset($_POST['upd'])) {
 	$variable=$db->real_escape_string($_POST['variable']);
 	$value=$db->real_escape_string($_POST['value']);
 	if(!isset($_POST['value'])) $value = 'no';
-	echo '<div class="item wide gradient"><p class="number">2</p><br/>update settings set value = '.$value.' where variable like '.$variable.'</div>';
+	if($debug=='yes') echo '<div class="item wide gradient"><p class="number">2</p><br/>update settings set value = '.$value.', favorite = '.$favorite.' where variable like '.$variable.'</div>';
 	$sql="update settings set value = '$value' where variable like '$variable'";
+	if(!$result = $db->query($sql)){ echo('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
+}
+if(isset($_POST['upd_fav_acties'])) { 
+	$variable=$db->real_escape_string($_POST['variable']);
+	$favorite = $_POST['favorite'];
+	if($debug=='yes') echo '<div class="item wide gradient"><p class="number">2</p><br/>update settings set value = '.$value.', favorite = '.$favorite.' where variable like '.$variable.'</div>';
+	$sql="update settings set favorite = '$favorite' where variable like '$variable'";
 	if(!$result = $db->query($sql)){ echo('<div class="item wide gradient"><p class="number">2</p><br/>There was an error running the query '.$sql.'<br/>[' . $db->error . ']</div>');}
 }
 if(isset($_POST['add'])) { 
@@ -265,20 +273,35 @@ if($showopmaak==true) {
 	echo '<form method="post"><tr><td><input type="hidden" name="showopmaak" value="Opmaak"/><input type="text" name="variable" id="variable" value=""/></td><td><input type="text" name="value" id="value" value=""/></td><td><input type="submit" name="add" value="add" class="abutton gradient"/></td></tr></form></tbody></table></center>';
 }
 if($showacties==true) {
-	echo '<div class="item wide gradient"><p class="number">9</p><center><table width="400px" style="text-align:center"><tbody>';
-	$sql="select variable, value from settings where variable like 'actie_%' order by variable asc";
+	echo '<div class="item wide gradient"><p class="number">9</p><center><table width="400px" style="text-align:center"><thead><tr><th></th><th>Actief</th><th>Favoriet</th><tbody>';
+	$sql="select variable, value, favorite from settings where variable like 'actie_%' order by variable asc";
 	if(!$result = $db->query($sql)){ echo('<div class="error gradient">There was an error running the query [' . $db->error . ']</div>');}
 	while($row = $result->fetch_assoc()){
-		echo '<form method="post" ><input type="hidden" name="showacties" value="Acties"/>
+		echo '
 		<tr>
 			<td align="left">'.$row['variable'].'</td>
-			<td><input type="hidden" name="variable" id="variable" value="'.$row['variable'].'"/>';
+			<td>
+				<form method="post" >
+					<input type="hidden" name="showacties" value="Acties"/>
+						<input type="hidden" name="upd" value="update">
+						<input type="hidden" name="variable" id="variable" value="'.$row['variable'].'"/>';
 		if($row['value']=="yes") {echo '<input type="hidden" name="value" id="value" value="no"/>';} else {echo '<input type="hidden" name="value" id="value" value="yes"/>';}
 		echo '
 		<section class="slider">	
-			<input type="hidden" name="upd" value="update">
-			<input type="checkbox" value="'.$row['value'].'" id="'.$row['variable'].'" name="'.$row['variable'].'" '; if($row['value']=="yes") {print 'checked';} print ' onChange="this.form.submit()"/>
-			<label for="'.$row['variable'].'"></label>
+			<input type="checkbox" value="'.$row['value'].'" id="a'.$row['variable'].'" name="'.$row['variable'].'" '; if($row['value']=="yes") {print 'checked';} print ' onChange="this.form.submit()"/>
+			<label for="a'.$row['variable'].'"></label>
+		</section></form></td>
+		<td><form method="post" >
+					<input type="hidden" name="showacties" value="Acties"/>
+						<input type="hidden" name="upd_fav_acties" value="update">
+						<input type="hidden" name="variable" id="variable" value="'.$row['variable'].'"/>';
+		if($row['favorite']=="yes") {echo '<input type="hidden" name="favorite" id="favorite" value="no"/>';} else {echo '<input type="hidden" name="favorite" id="favorite" value="yes"/>';}
+		
+		echo '
+		<section class="slider">	
+			 
+			<input type="checkbox" value="'.$row['favorite'].'" id="f'.$row['variable'].'" name="'.$row['variable'].'" '; if($row['favorite']=="yes") {print 'checked';} print ' onChange="this.form.submit()"/>
+			<label for="f'.$row['variable'].'"></label>
 		</section>
 		</td></tr></form>';
 	}

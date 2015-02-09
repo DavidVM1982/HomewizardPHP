@@ -56,20 +56,24 @@ echo '</div>';
 
 //Timer radiatoren living
 echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie timer radiatoren living';
-$tempw = 20;
-$tempk = 17;
+$tempw = 19;
+$tempk = 14;
 $voorwarmen = ceil(($tempw-$thermometerte5)*($tempw-$thermometerte1)*60);
 if($actie_timer_living=='yes' && $actie_thuis=='yes'){
 	echo ' actief</b><br/><br/>';
 	if(in_array(date('N', time()), array(1,2,3,4))) {
 		echo 'Vandaag is het een werkdag en het is nu '.date('H:i', time()).'.<br/>';
 		echo 'We willen warmte van 18:00 tem 22:00.<br/>';
+		echo 'We verwarmen '.($tempw-$thermometerte5).' x '.($tempw-$thermometerte1).' x 60 = '.$voorwarmen.' sec vooraf.<br/>';
 		if(time()>(strtotime('18:00')-(($tempw-$thermometerte5)*(($tempw-$thermometerte1)*60))) && (time()<(strtotime('22:00')))) {
 			echo 'Het is nu tussen 18:00 en 22:00.<br/>';
-			if($switchstatus14<$tempw || $switchstatus15<$tempw) {
-				echo "Een van de radiatoren staat kouder dan ".$tempw."°C<br/>";
+			if($switchstatus14<$tempw) {
+				echo "Radiator eetplaats staat kouder dan ".$tempw."°C<br/>";
 				echo "radiator(14, ".$tempw.", 'c');sleep(2)<br/>";
 				if(!isset($_POST['showtest'])) {radiator(14, $tempw, 'c', $email_notificatie, 'yes');sleep(2);}
+			}
+			if($switchstatus15<$tempw) {
+				echo "Radiator zithoek staat kouder dan ".$tempw."°C<br/>";
 				echo "radiator(15, ".$tempw.", 'c');sleep(2)<br/>";
 				if(!isset($_POST['showtest'])) {radiator(15, $tempw, 'c', $email_notificatie, 'yes');sleep(2);}
 			}
@@ -126,7 +130,7 @@ echo '</div>';
 //Timer radiator badkamer
 echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie timer radiator badkamer';
 $tempw = 22;
-$tempk = 18;
+$tempk = 15;
 if($actie_timer_badkamer=='yes' && $actie_thuis=='yes'){
 	echo ' actief</b><br/><br/>';
 	if(in_array(date('N', time()), array(1,2,3,4,5))) {
@@ -187,8 +191,8 @@ echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>A
 if($actie_timer_slaapkamer=='yes' && $actie_thuis=='yes'){
 	echo ' actief</b><br/><br/>';
 	$tempw = 18;
-	$tempk = 8;
-	if(time()>(strtotime('22:50')-(($tempw-$thermometerte6)*(($tempw-$thermometerte1)*60))) && (time()<(strtotime('23:00')))) {
+	$tempk = 5;
+	if(time()>(strtotime('22:00')-(($tempw-$thermometerte6)*(($tempw-$thermometerte1)*60))) && (time()<(strtotime('23:00')))) {
 		echo 'Tijd voor warmte<br/>';
 		if($switchstatus7<$tempw) {
 			echo "Radiator 7 verhogen naar ".$tempw." °C.<br/>";
@@ -221,14 +225,14 @@ echo '</div>';
 //Timer radiator slaapkamer Tobi
 echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie timer radiator slaapkamer Tobi';
 $tempw = 18;
-$tempk = 8;
+$tempk = 5;
 if($actie_timer_slaapkamertobi=='yes' && $actie_thuis=='yes'){
 	echo ' actief</b><br/><br/>';
 	if(date('W', time()) %2 == 0) {
 		echo 'Het is een even weeknummer.<br/>';
 		if(in_array(date('N', time()), array(3,4,5,6))) {
 			echo 'Het is wo, do, vr of za.<br/>';
-			if(time()>(strtotime('21:20')-(($tempw-$thermometerte7)*(($tempw-$thermometerte1)*60))) && (time()<(strtotime('21:30')))) {
+			if(time()>(strtotime('20:30')-(($tempw-$thermometerte7)*(($tempw-$thermometerte1)*60))) && (time()<(strtotime('21:30')))) {
 				echo 'Bijna slaaptijd.<br/>';
 				if($switchstatus8<$tempw) {
 					echo "radiator(8, ".$tempw.", 'c');sleep(2)<br/>";
@@ -319,26 +323,21 @@ echo '</div>';
 
 //Thuis
 echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie thuis';
-if($$actie_thuis=='yes'){
-	echo ' actief</b><br/><br/>';
-	if($actie_thuis=='yes') {
-		echo 'We zijn thuis<br/>';
-	} else {
-		echo 'We zijn niet thuis<br/>';
-		if($sensorstatus0=='yes') notificatie($email_notificatie ,'ROOK gedetecteerd op zolder' ,'ROOK gedetecteerd op zolder' );
-		if($sensorstatus1=='yes') notificatie($email_notificatie ,'Poort is geopend' ,'Poort is geopend' );
-		if($sensorstatus2=='yes') notificatie($email_notificatie ,'Beweging gedetecteerd in garage' ,'Beweging gedetecteerd in garage' );
-		if($sensorstatus3=='yes') notificatie($email_notificatie ,'ROOK gedetecteerd in de hall' ,'ROOK gedetecteerd in de hall' );
-		if($sensorstatus4=='yes') notificatie($email_notificatie ,'Bel voordeur ingedrukt' ,'Bel voordeur ingedrukt' );
-	}
+if($actie_thuis=='yes'){
+	echo ' niet actief</b><br/><br/>';
 } else {
-	echo ' niet actief<br/>';
-	
+	echo ' actief<br/>';
+	echo 'We zijn thuis<br/>';
+	if($sensorstatus0=='yes') notificatie($email_notificatie ,'ROOK gedetecteerd op zolder' ,'ROOK gedetecteerd op zolder' );
+	if($sensorstatus1=='yes') notificatie($email_notificatie ,'Poort is geopend' ,'Poort is geopend' );
+	if($sensorstatus2=='yes') notificatie($email_notificatie ,'Beweging gedetecteerd in garage' ,'Beweging gedetecteerd in garage' );
+	if($sensorstatus3=='yes') notificatie($email_notificatie ,'ROOK gedetecteerd in de hall' ,'ROOK gedetecteerd in de hall' );
+	if($sensorstatus4=='yes') notificatie($email_notificatie ,'Bel voordeur ingedrukt' ,'Bel voordeur ingedrukt' );
 }
 echo '</div>';
 
 //Verstuur lege batterij waarschuwing
-echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie thuis';
+echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie batterij waarschuwing';
 if($actie_batterij=='yes'){
 	echo ' actief</b><br/><br/>';
 	//Verstuur alleen om 16:43 elke 3 dagen. 

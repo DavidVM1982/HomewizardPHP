@@ -396,8 +396,8 @@ if($toon_acties=='yes') {
 				<a href="#" onclick="document.getElementById(\'showallacties\').submit();" style="text-decoration:none"><h2 >Acties</h2></a>
 			</form>';
 	$sql="select variable, value from settings where variable like 'actie_%'";
+	if (!isset($_POST['showallacties'])) $sql.=" AND favorite like 'yes'";
 	$sql.=" order by variable";
-	if (!isset($_POST['showallacties'])) $sql.=" LIMIT 0,0";
 	if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
 	if($result->num_rows>0) {
 		$group = 0;

@@ -145,6 +145,8 @@ if(isset($_POST['updatedatabasenow'])) {
 	if($versie<20150209) {
 		$sql="INSERT IGNORE INTO `settings` (`variable`, `value`) VALUES ('toon_acties', 'yes'),('positie_acties', '9')";
 		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="ALTER TABLE `settings` ADD `favorite` VARCHAR(20) DEFAULT null;";
+		if(!$result = $db->query($sql)){ echo('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 		$sql="insert into versie (versie) VALUES ('20150208');";
 		if(!$result = $db->query($sql)){ echo('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
