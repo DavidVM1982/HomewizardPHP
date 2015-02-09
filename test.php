@@ -4,7 +4,7 @@
 include "data.php";
 include "functions.php";
 echo '<div class="item wide gradient"><p class="number">2</p><br/>';
-notificatie($email_notificatie ,'ROOK gedetecteerd op zolder' ,'ROOK gedetecteerd op zoldere' );
+echo $thermometerte5;
 echo '</div>';
 
 if(!isset($_POST['actionscron']) && !isset($_POST['showtest'])) {ob_clean(); $db->close();}

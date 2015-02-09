@@ -1,5 +1,5 @@
 <?php
-// Make database connection ('server', 'user', 'password', 'database') 
-$db = new mysqli('server', 'user', 'password', 'database');
-if($db->connect_errno > 0){ die('Unable to connect to database [' . $db->connect_error . ']');}
+// Make database connection ('server', 'database', 'password', 'user') 
+$db = new mysqli('localhost', 'homewizard', 'home!wizard', 'homewizard');
+if($db->connect_errno > 0){ echo('Unable to connect to database [' . $db->connect_error . ']');}
 ?>

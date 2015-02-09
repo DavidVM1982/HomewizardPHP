@@ -147,7 +147,11 @@ if(isset($_POST['updatedatabasenow'])) {
 		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 		$sql="ALTER TABLE `settings` ADD `favorite` VARCHAR(20) DEFAULT null;";
 		if(!$result = $db->query($sql)){ echo('There was an error running the query ['.$sql.'][' . $db->error . ']');}
-		$sql="insert into versie (versie) VALUES ('20150208');";
+		$sql="CREATE TABLE IF NOT EXISTS `cronhistory` (`cron` varchar(200) COLLATE utf8_unicode_ci NOT NULL,`timestamp` int(10) NOT NULL,`actie` varchar(200) COLLATE utf8_unicode_ci NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+		if(!$result = $db->query($sql)){ echo('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="ALTER TABLE `cronhistory` ADD PRIMARY KEY (`cron`,`timestamp`);";
+		if(!$result = $db->query($sql)){ echo('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="insert into versie (versie) VALUES ('20150209');";
 		if(!$result = $db->query($sql)){ echo('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 	}
 }
