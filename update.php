@@ -1,5 +1,5 @@
 <?php
-$laatsteversie = 20150208;
+$laatsteversie = 20150209;
 if($authenticated==true) {
 	
 //BEGIN UPDATE	
@@ -69,7 +69,7 @@ if(isset($_POST['updatedatabasenow'])) {
 	if($versie<20150126) {
 		$sql="INSERT IGNORE INTO settings (`variable`, `value`) VALUES ('positie_energylink', '7');";
 		if(!$result = $db->query($sql)){ echo('There was an error running the query ['.$sql.'][' . $db->error . ']');}
-		$sql="CREATE TABLE IF NOT EXISTS `energylink` (`timestamp` timestamp NOT NULL,`netto` float NOT NULL,`S1` float NOT NULL,`S2` float NOT NULL,`gas` float NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+		$sql="CREATE TABLE IF NOT EXISTS `energylink` (`timestamp` timestamp NOT NULL,`netto` float NOT NULL,`S1` float NOT NULL,`S2` float NOT NULL,`gas` float NOT NULL,`verbruik` float NOT NULL,) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 		if(!$result = $db->query($sql)){ echo('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 		$sql="ALTER TABLE energylink ADD PRIMARY KEY (timestamp);";
 		if(!$result = $db->query($sql)){ echo('There was an error running the query ['.$sql.'][' . $db->error . ']');}
@@ -138,6 +138,12 @@ if(isset($_POST['updatedatabasenow'])) {
 	}
 	if($versie<20150208) {
 		$sql="INSERT IGNORE INTO `settings` (`variable`, `value`) VALUES ('email_from', 'guy@egregius.be'),('email_notificatie', 'guy@egregius.be')";
+		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+		$sql="insert into versie (versie) VALUES ('20150208');";
+		if(!$result = $db->query($sql)){ echo('There was an error running the query ['.$sql.'][' . $db->error . ']');}
+	}
+	if($versie<20150209) {
+		$sql="INSERT IGNORE INTO `settings` (`variable`, `value`) VALUES ('toon_acties', 'yes'),('positie_acties', '9')";
 		if(!$result = $db->query($sql)){ echo ('There was an error running the query ['.$sql.'][' . $db->error . ']');}
 		$sql="insert into versie (versie) VALUES ('20150208');";
 		if(!$result = $db->query($sql)){ echo('There was an error running the query ['.$sql.'][' . $db->error . ']');}

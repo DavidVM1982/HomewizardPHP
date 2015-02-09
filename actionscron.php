@@ -59,7 +59,7 @@ echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>A
 $tempw = 20;
 $tempk = 17;
 $voorwarmen = ceil(($tempw-$thermometerte5)*($tempw-$thermometerte1)*60);
-if($actie_timer_living=='yes' && $switchstatus16=='on'){
+if($actie_timer_living=='yes' && $actie_thuis=='yes'){
 	echo ' actief</b><br/><br/>';
 	if(in_array(date('N', time()), array(1,2,3,4))) {
 		echo 'Vandaag is het een werkdag en het is nu '.date('H:i', time()).'.<br/>';
@@ -127,7 +127,7 @@ echo '</div>';
 echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie timer radiator badkamer';
 $tempw = 22;
 $tempk = 18;
-if($actie_timer_badkamer=='yes' && $switchstatus16=='on'){
+if($actie_timer_badkamer=='yes' && $actie_thuis=='yes'){
 	echo ' actief</b><br/><br/>';
 	if(in_array(date('N', time()), array(1,2,3,4,5))) {
 		echo 'Vandaag is het een werkdag<br/>';
@@ -184,7 +184,7 @@ echo '</div>';
 
 //Timer radiator slaapkamer
 echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie timer radiator slaapkamer ';
-if($actie_timer_slaapkamer=='yes' && $switchstatus16=='on'){
+if($actie_timer_slaapkamer=='yes' && $actie_thuis=='yes'){
 	echo ' actief</b><br/><br/>';
 	$tempw = 18;
 	$tempk = 8;
@@ -222,7 +222,7 @@ echo '</div>';
 echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie timer radiator slaapkamer Tobi';
 $tempw = 18;
 $tempk = 8;
-if($actie_timer_slaapkamertobi=='yes' && $switchstatus16=='on'){
+if($actie_timer_slaapkamertobi=='yes' && $actie_thuis=='yes'){
 	echo ' actief</b><br/><br/>';
 	if(date('W', time()) %2 == 0) {
 		echo 'Het is een even weeknummer.<br/>';
@@ -319,9 +319,9 @@ echo '</div>';
 
 //Thuis
 echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie thuis';
-if($actie_thuis=='yes'){
+if($$actie_thuis=='yes'){
 	echo ' actief</b><br/><br/>';
-	if($switchstatus16=='on') {
+	if($actie_thuis=='yes') {
 		echo 'We zijn thuis<br/>';
 	} else {
 		echo 'We zijn niet thuis<br/>';

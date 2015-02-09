@@ -9,6 +9,12 @@ if($authenticated == true) {
 	} 
 	if(isset($_POST['radiator']) && isset($_POST['set_temp'])) echo radiator($_POST['radiator'],$_POST['set_temp'],'m',null,null);
 	if (isset($_POST['schakelscene'])) echo scene($_POST['scene'],$_POST['schakelscene'],'m',null,null);
+	if (isset($_POST['updactie'])) {
+		$variable = $_POST['variable'];
+		if($_POST['updactie']=='off') $value = 'no'; else $value = 'yes';
+		$sql="update settings set value = '$value' where variable like '$variable';";
+		if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
+	}
 }
 include "data.php";
 echo '<div class="isotope">';
@@ -380,6 +386,42 @@ if($toon_energylink=='yes') {
 		}
 		echo "</table></div>";
 	}
+}
+
+//---ACTIES---
+if($toon_acties=='yes') {
+	echo '<div class="item gradient"><p class="number">'.$positie_acties.'</p>
+			<form id="showallacties" action="#" method="post">
+				<input type="hidden" name="showallacties" value="yes" />
+				<a href="#" onclick="document.getElementById(\'showallacties\').submit();" style="text-decoration:none"><h2 >Acties</h2></a>
+			</form>';
+	$sql="select variable, value from settings where variable like 'actie_%'";
+	$sql.=" order by variable";
+	if (!isset($_POST['showallacties'])) $sql.=" LIMIT 0,0";
+	if(!$result = $db->query($sql)){ echo('There was an error running the query [' . $db->error . ']');}
+	if($result->num_rows>0) {
+		$group = 0;
+ 		echo '
+		<table align="center"><tbody>';
+		while($row = $result->fetch_assoc()){
+			$switchon = "";
+			$tdstyle = '';
+			//if($group != $row['volgorde']) $tdstyle = 'style="'.$css_td_newgroup.'"';
+			//$group = $row['volgorde'];
+			if($row['value']=="yes") {$switchon = "off";} else {$switchon = "on";}
+			echo '<tr>
+				<td align="right" '.$tdstyle.'>'.ucwords(str_replace('_', ' ', ltrim($row['variable'],'actie'))).'</td>
+				<td width="115px" '.$tdstyle.' ><form method="post" action="#"><input type="hidden" name="updactie" value="'.$switchon.'"/><input type="hidden" name="variable" value="'.$row['variable'].'"/>
+				<section class="slider">	
+				<input type="checkbox" value="switch'.$row['variable'].'" id="switch'.$row['variable'].'" name="switch'.$row['variable'].'" '; if($switchon=="off") {print 'checked';} print ' onChange="this.form.submit()"/>
+				<label for="switch'.$row['variable'].'"></label>
+				</section>
+				</td></form></tr>';
+		}
+		echo "</tbody></table>";
+	}
+	$result->free();
+	echo '<br/><br/></div>';
 }
 ?>
 <script type="text/javascript">

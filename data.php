@@ -10,7 +10,10 @@ if($authenticated == true && $developermode != 'yes') {
 }
 $data = null;
 $data = json_decode($json,true);
-if($authenticated == true && $debug=='yes') {echo '<div class="error gradient">'.$json.'</div>';}
+if($authenticated == true && $debug=='yes') {
+	echo '<div class="error gradient">'.$json.'<hr>POST = ';
+	print_r($_POST);
+	echo '</div>';}
 
 $switches =  $data['response']['switches'];
 foreach($switches as $switch) {
