@@ -141,6 +141,7 @@ function laatsteschakeltijd($switch, $action, $who, $notify, $failonly) {
 	$sql .= " order by timestamp DESC limit 0,1;";
 	if(!$result = $db->query($sql)){ echo ('Error in sql '.$sql.'<br/> [' . $db->error . ']');}
 	$row = $result->fetch_assoc();
+	$result->free();
 	return $row;	
 }
 function laatstesensortijd($sensor, $status) {
@@ -150,16 +151,24 @@ function laatstesensortijd($sensor, $status) {
 	$sql .= " order by time DESC limit 0,1;";
 	if(!$result = $db->query($sql)){ echo ('Error in sql '.$sql.'<br/> [' . $db->error . ']');}
 	$row = $result->fetch_assoc();
+	$result->free();
 	return $row;	
 }
 function laatstecrontijd($cron, $actie) {
 	global $db, $debug;
-	$sql ="select cron, timestamp, actie from cronhistory WHERE cron = $cron";
+	$sql ="select cron, timestamp, actie from cronhistory WHERE cron = '$cron'";
 	if(isset($actie)) $sql .= " AND actie like '$actie'";
 	$sql .= " order by timestamp DESC limit 0,1;";
 	if(!$result = $db->query($sql)){ echo ('Error in sql '.$sql.'<br/> [' . $db->error . ']');}
 	$row = $result->fetch_assoc();
+	$result->free();
 	return $row;	
+}
+function insertcrontijd($cron, $actie) {
+	global $db, $debug;
+	$timestamp = time();
+	$sql ="INSERT IGNORE INTO cronhistory (`cron`, `timestamp`, `actie`) VALUES ('$cron', '$timestamp', '$actie');";
+	if(!$result = $db->query($sql)){ echo ('Error in sql '.$sql.'<br/> [' . $db->error . ']');}
 }
 function notificatie($notify, $onderwerp, $bericht) {
 	global $email_from, $email_notificatie;
