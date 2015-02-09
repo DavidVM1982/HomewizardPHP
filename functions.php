@@ -143,11 +143,20 @@ function laatsteschakeltijd($switch, $action, $who, $notify, $failonly) {
 	$row = $result->fetch_assoc();
 	return $row;	
 }
-function laatstesensortijd($sensor, $status, $notify, $failonly) {
+function laatstesensortijd($sensor, $status) {
 	global $jsonurl, $db, $debug;
 	$sql ="select time, status from history WHERE id_sensor = $sensor";
 	if(isset($status)) $sql .= " AND status like '$status'";
 	$sql .= " order by time DESC limit 0,1;";
+	if(!$result = $db->query($sql)){ echo ('Error in sql '.$sql.'<br/> [' . $db->error . ']');}
+	$row = $result->fetch_assoc();
+	return $row;	
+}
+function laatstecrontijd($cron, $actie) {
+	global $db, $debug;
+	$sql ="select cron, timestamp, actie from cronhistory WHERE cron = $cron";
+	if(isset($actie)) $sql .= " AND actie like '$actie'";
+	$sql .= " order by timestamp DESC limit 0,1;";
 	if(!$result = $db->query($sql)){ echo ('Error in sql '.$sql.'<br/> [' . $db->error . ']');}
 	$row = $result->fetch_assoc();
 	return $row;	

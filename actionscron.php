@@ -324,10 +324,10 @@ echo '</div>';
 //Thuis
 echo '<div class="item wide gradient" align="left"><p class="number">3</p><br/>Actie thuis';
 if($actie_thuis=='yes'){
-	echo ' niet actief</b><br/><br/>';
+	echo ' actief</b><br/><br/>We zijn thuis';
 } else {
 	echo ' actief<br/>';
-	echo 'We zijn thuis<br/>';
+	echo 'We zijn niet thuis<br/>';
 	if($sensorstatus0=='yes') notificatie($email_notificatie ,'ROOK gedetecteerd op zolder' ,'ROOK gedetecteerd op zolder' );
 	if($sensorstatus1=='yes') notificatie($email_notificatie ,'Poort is geopend' ,'Poort is geopend' );
 	if($sensorstatus2=='yes') notificatie($email_notificatie ,'Beweging gedetecteerd in garage' ,'Beweging gedetecteerd in garage' );
